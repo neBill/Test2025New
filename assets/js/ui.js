@@ -214,7 +214,7 @@ function updateQuestionBlock() {
 
   //alert("curQuestionNumber -- " + curQuestionNumber)
 
-  document.getElementById('counter').innerHTML = `Вопрос: ${currentIndex.index}/${currentTestLength}`;
+  document.getElementById('counter').innerHTML = `Вопрос: ${curQuestionNumber}/${currentTestLength}`;
 
 }
 
@@ -796,15 +796,19 @@ document.addEventListener("click", function(event) {
 
     const quNumber = Number(Object.keys(history)[0]);
 
-    curQuestionNumber = quNumber + 1;
+    // curQuestionNumber = quNumber + 1;
 
     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
 
     //alert(curQuestionNumber)
+
+
     //тест завершен
     if(quNumber === currentTestLength) {
 
       //alert(curQuestionNumber)
+
+      curQuestionNumber = 1;
 
       if(mistakesQuantity > 0) {
 
@@ -824,11 +828,13 @@ document.addEventListener("click", function(event) {
 
     }else {  //тест не завершен
 
-    //  alert('historyIndex');
+      alert('тест не завершен');
 
       //currentIndex.index = Number(curQuestionNumber) + 1;
 
       currentIndex.index = Number(Object.keys(history)[0]) + 1;
+
+      curQuestionNumber = currentIndex.index;
 
       //alert(currentIndex.index);
 
@@ -842,6 +848,8 @@ document.addEventListener("click", function(event) {
     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
 
     currentIndex.index = 1;
+
+    curQuestionNumber = 1;
 
   }
 
@@ -858,7 +866,7 @@ document.addEventListener("click", function(event) {
   
   }  
 
-  curQuestionNumber = 1;
+  //curQuestionNumber = 1;
 
   //currentTestLength = testsList[defaultRank][testId][0].length;
   
