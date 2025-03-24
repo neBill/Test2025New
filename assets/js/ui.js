@@ -1,0 +1,1073 @@
+'use strict';
+
+let rightOptionIndex;
+let isLearnMode;
+//let historyIndex;
+let isHistorySave = true;
+let isShuffle;
+let isAnswerDone = false;
+let defaultRank;
+let isDefaultSettings = false;
+const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
+let mistakes = {};
+
+let currentTestLength;
+
+let curQuestionNumber;
+
+
+
+
+
+
+const btnHome = document.getElementById('button_home');
+const navBlock = document.getElementById('nav_block');
+
+
+
+const divLavels = document.getElementById('levels');
+
+  // document.getElementById('errors').innerHTML = "";
+  // document.getElementById('test-title').innerHTML = "";
+  // document.getElementById('results').style.display = "none";
+const divTest = document.getElementById('test');
+const btnMenu = document.getElementById('button_menu');
+const headerBlock = document.getElementById('header_block');
+const listBlock = document.getElementById('list-block');
+
+
+class CurrentTest {
+   constructor(test, id) {
+     this.index = test
+     this.id = id
+   }
+}
+
+class Counter {
+  constructor(index) {    
+    this.index = index
+  }
+}
+
+class WrongAnswers {
+   constructor(answer) {
+     this.answer = answer
+   }
+}
+
+
+class Errors {  
+  errors = []  
+  addError(error) {   
+    this.errors.push(error)
+  }
+}
+
+const wrongAnswers = new Errors();
+const currentIndex = new Counter(0);
+const currentTest = new CurrentTest();
+
+
+function putToCache(elem, cache) {
+  if (cache.indexOf(elem) !== -1) {
+    return;
+  }
+  let i = Math.floor(Math.random() * (cache.length + 1));
+  cache.splice(i, 0, elem);
+}
+
+
+function madness() {
+  let cache = [];
+  return function(a, b) {
+    putToCache(a, cache);
+    putToCache(b, cache);
+    return cache.indexOf(b) - cache.indexOf(a);
+  };
+}
+
+
+function shuffle(arr) {  
+
+    let compare = madness();
+    return arr.sort(compare);
+
+}
+
+function showErrors(questionNumber) {
+
+  
+
+  //const questionElement = document.getElementById('question');
+  
+  divTest.style.display = 'block';
+  // Mistake for the current question
+  const chosenOption = mistakes[questionNumber]; 
+
+  // Loop through options to display correct and wrong answers
+  for (let i = 0; i < 4; ++i) {
+
+    const optionElement = document.getElementById('option' + i);
+
+   // alert(questionNumber - 1)
+
+    const answer = currentTest.test[questionNumber - 1][1][i];
+    // Check if the option is correct
+    const isCorrect = answer[1] === 1; 
+
+    optionElement.style.border = isCorrect ? 'var(--right-answer-border)' : 'none';
+
+    optionElement.innerHTML = answer[0];
+  // Disable the options after showing the error
+    optionElement.disabled = true; 
+
+  }
+
+  // Highlight the incorrect answer chosen by the user
+  document.getElementById('option' + chosenOption).style.border = 'var(--wrong-answer-border)';
+
+  //alert(currentTest.test[questionNumber][0])
+
+  // Display the question at the top
+  //questionElement.innerHTML = currentTest.test[questionNumber][0];
+
+}
+
+
+function updateQuestionBlock() {
+
+ // alert("cur_" + currentIndex.index)
+
+  //let currentQuestionBlock = currentTest.test[currentIndex.index -1]; 
+
+  //alert(Object.keys(mistakes)[1])
+
+  let currentQuestionBlock = testsList[defaultRank][currentTest.id][0][currentIndex.index - 1];
+
+
+  // const mistakesQuantity = Object.keys(mistakes).length;
+
+  // if(mistakesQuantity > 0) {
+    
+  //   //alert(mistakesQuantity)
+
+  //   alert(Object.keys(mistakes)[0])
+
+  //   currentQuestionBlock = testsList[defaultRank][currentTest.id][0][currentIndex.index - 1];
+
+
+  // } else {
+
+  //   currentQuestionBlock = testsList[defaultRank][currentTest.id][0][currentIndex.index - 1];
+
+  // }
+
+
+  //alert(currentQuestionBlock)
+
+  //Object.keys(mistakes).forEach((key) => {  
+
+
+  //currentTest.test = testsList[defaultRank][currentTest.id][0];
+
+  //alert(currentQuestionBlock)
+
+  
+
+  //document.getElementById('counter').innerHTML = "Вопрос: 1/" + testLength;
+
+  let optionsCount = currentQuestionBlock[1].length;  
+
+  if(optionsCount < 4) {
+
+    while(optionsCount < 4) {
+
+      currentQuestionBlock[1].push(["Нет варианта ответа (*)", 0]);
+
+      optionsCount++;
+
+    }
+
+  }  
+
+  //alert(currentTestLength)
+
+
+  shuffle(currentQuestionBlock[1]);  
+
+  for (var i = 0; i < 4; ++i) {
+
+    if (currentQuestionBlock[1][i][1] == 1) {
+
+      rightOptionIndex = i;
+
+    }
+
+    document.getElementById('option' + i).innerHTML = currentQuestionBlock[1][i][0];
+
+    document.getElementById('option' + i).style.border = 'none';
+
+    document.getElementById('option' + i).disabled = false;
+  }
+
+  document.getElementById('question').innerHTML = currentQuestionBlock[0];
+
+  //alert("curQuestionNumber -- " + curQuestionNumber)
+
+  document.getElementById('counter').innerHTML = `Вопрос: ${currentIndex.index}/${currentTestLength}`;
+
+}
+
+
+function setTrainingMode(optionIndex) {
+
+  document.getElementById('button_next').style.display = "inline-block";
+
+  let borderColor = '';
+
+  if (currentTest.test[currentIndex.index][1][optionIndex][1] == 1) {
+
+    borderColor = "var(--right-answer-border)";
+
+  } else {
+
+    borderColor = "var(--wrong-answer-border)";
+
+    document.getElementById('option' + rightOptionIndex).style.border = "var(--right-answer-border)";
+  }
+
+    document.getElementById('option' + optionIndex).style.border = borderColor;  
+
+  for (let element of divTest.children) {
+
+    element.disabled = true;
+
+  }
+
+}
+
+
+
+function calcRightAnswers(questionsQuantity, errorsQuantity ) { 
+
+  let rightAnswersQuantity = Math.round(questionsQuantity - errorsQuantity);
+
+  let percent = Math.round(rightAnswersQuantity * 100 / (questionsQuantity));
+
+  return { rightAnswers: rightAnswersQuantity, errorsPercent: percent };
+}
+
+
+
+
+function showTestResult() {
+
+  if(currentIndex.index === 1 || isAnswerDone === false) {
+
+    showLevels();
+
+    return;
+
+  } 
+
+ 
+
+  let testState = curQuestionNumber === currentTestLength ? 'завершен' : 'остановлен'
+
+
+    const history = JSON.parse(localStorage.getItem(currentTest.id))
+
+    
+    const questionQuantity = Number(Object.keys(history)[0])
+
+
+    mistakes = Object.values(history)[0]    
+
+
+    const mistakesQuantity = Object.keys(mistakes).length;
+
+    if (mistakesQuantity === 0 && testState === 'завершен') {
+
+      document.getElementById('result').innerHTML = testSuccess;
+
+     // alert(testSuccess)
+
+      localStorage.removeItem(currentTest.id)
+
+      return;
+      
+
+    }else{
+
+      
+
+
+      let testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
+
+
+      const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+    
+      
+    
+      let result = `${testInfo}Правильных ответов:  ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)<br>Ваши ошибки:<br>`;
+    
+     
+    
+      document.getElementById('result').innerHTML = result;
+
+    
+      let c = 1;
+
+      const btn = document.getElementById('errors');
+    
+      Object.keys(mistakes).forEach((key) => {  
+
+        btn.innerHTML += `<button id="${key}" class="error_button">${c}</button>`;
+
+        c++;    
+    
+      })
+    
+
+    }
+ 
+    
+}
+
+
+
+document.addEventListener("click", function(event) {
+
+  const buttonClass = event.target.className;
+
+  const buttonId = event.target.id;
+
+  if (buttonClass == "error_button") {
+
+    const links = document.querySelectorAll(".error_button");
+
+    showErrors(buttonId);
+
+    links.forEach(link => {
+
+      link.setAttribute("style", "background:`:root { --main-bg-color}`");
+
+    });
+
+    document.getElementById(buttonId).style.background = "var(--error-btn-color)";
+
+  }
+
+
+
+  if (buttonClass == "font-size-change") {
+
+     chageFontSize(buttonId);
+  }
+
+
+});
+
+
+//переход на главную страницу,нажата кнопка На главную или Завершить
+btnHome.addEventListener("click", function(event) {
+
+  const buttonText = event.target.textContent
+
+  if (buttonText == "Завершить") {
+
+    
+    showResultsPage();
+
+    showTestResult();
+
+  }
+
+  if (buttonText == "На главную") { 
+
+    isAnswerDone = false;
+
+    showLevels();
+
+  }
+
+
+  if(isShuffle) {
+
+    localStorage.removeItem(currentTest.id);
+
+    currentTest.id = '';
+
+  }
+
+  //currentIndex.index = 0;
+
+})
+
+button_next.addEventListener("click", function() {
+
+  updateQuestionBlock();
+
+  document.getElementById('button_next').style.display = "none";
+
+})
+
+
+
+function saveTestHistory(optionIndex) {    
+ 
+  const key = currentIndex.index;
+
+  let curItem = {};
+  
+  const testHistory = localStorage.getItem(currentTest.id);
+
+  if (testHistory) {
+
+    curItem = JSON.parse(testHistory);
+  }
+  
+  let value = Object.values(curItem)[0] || {};
+  
+  if (optionIndex !== rightOptionIndex) {
+    
+    value[key] = optionIndex;
+
+    //alert(value[key])
+
+  } else {
+
+    //delete user.city;
+
+    delete value[key];
+
+    //alert()
+
+  }
+  
+  curItem = { [key]: value };
+
+  localStorage.setItem(currentTest.id, JSON.stringify(curItem));
+
+}
+
+
+
+function check(optionIndex) {  
+
+  isAnswerDone = true;  
+
+  alert(curQuestionNumber + " -- " + currentTestLength)
+
+  if (curQuestionNumber === currentTestLength) {  
+
+    // let testState = currentIndex.index + 1 === currentTest.test.length ? 'завершен' : 'остановлен'
+    
+    saveTestHistory(optionIndex);
+ 
+    showResultsPage();
+
+    showTestResult();
+
+    currentIndex.index = 1;
+
+    // curQuestionNumber = 1;
+
+    return;
+
+  } 
+
+  if(isHistorySave){   
+
+    saveTestHistory(optionIndex);
+
+  }
+
+  //  LearnMode //////////////////////////
+  //при верном ответе автоматически преходит на следующий вопрос, в новой редакции переход осуществляется пользователем
+  //if (isLearnMode === true && optionIndex != rightOptionIndex) { 
+  ///////////////////////////////////////////////////////////////////////////
+ // if (isLearnMode === true) { 
+  if (isLearnMode === true && optionIndex != rightOptionIndex) { 
+
+    setTrainingMode(optionIndex);
+
+    currentIndex.index++;
+
+    return;
+
+  } 
+
+  currentIndex.index++;
+
+  curQuestionNumber++;
+
+  updateQuestionBlock();
+
+}
+
+
+
+function showMainPage() {
+
+  document.getElementById('main_page').style.display = "block";
+  document.getElementById('results').style.display = "none";
+  divLavels.style.display = "none";
+  document.getElementById('questions_counter').style.display = 'none';
+  divTest.style.display = "none";
+  navBlock.style.display = "none";
+  document.getElementById('result').style.display = "none";
+
+}
+
+function showLevels() {
+
+  //document.getElementById('button_home').style.display = "none";
+
+  btnHome.style.display = "none";
+
+  navBlock.style.display = "none";
+  divLavels.style.display = "block";
+  document.getElementById('errors').innerHTML = "";
+  document.getElementById('test-title').innerHTML = "";
+  document.getElementById('results').style.display = "none";
+  divTest.style.display = "none";
+  btnMenu.style.display = "block";
+  headerBlock.style.display = "block";
+  // document.getElementById('remove_history_block').style.display = "none";
+
+  wrongAnswers.errors.length = 0;
+
+  //currentQuestionIndex = 0;
+}
+
+function showTest() {
+
+  document.getElementById('questions_counter').style.display = 'block';
+  divLavels.style.display = "none";
+  document.getElementById('counter').style.display = "block";
+}
+
+
+
+
+
+
+// //choose test
+// document.addEventListener("click", function(event) {    
+
+//   if(event.target.className !== "test_button") return; 
+
+//   currentTest.id = event.target.id;   
+ 
+//   //let currentTestList = getTestList();  
+
+//   const testHistory = localStorage.getItem(currentTest.id); 
+
+
+//   currentIndex.index = 1;
+//   // const currentHistoryIndex = Object.keys(existingHistory)[0];
+
+//   //alert(currentHistoryIndex)
+
+//   if(testHistory) {      
+
+//     // const history = getTestHistory(testHistory)
+
+   
+//     //currentIndex.index = Object.keys(history)[0]
+
+//     //currentTestLength = testsList[defaultRank][currentTest.id][0].length
+
+    
+
+//     const history = JSON.parse(testHistory) ;   
+
+//     mistakes = Object.values(history)[0];  
+
+   
+
+//     const mistakesQuantity = Object.keys(mistakes).length;
+
+//     // currentTestLength = mistakesQuantity;
+
+//     // if(mistakesQuantity > 0) {
+
+//     //   alert()
+
+//     // {
+
+//     let savedNumber = Number(Object.keys(history)[0])
+
+
+//     // if(savedNumber === currentTest.test.length) {
+
+//     //   alert(savedNumber)
+
+//     // {
+
+//     //if(savedNumber === currentTest.test.length) {
+//     if(savedNumber === currentTestLength) {
+
+
+//       // currentTestLength = testsList[defaultRank][currentTest.id][0].length
+
+//       if(mistakesQuantity > 0) {
+
+
+
+//         currentTestLength = mistakesQuantity;
+
+//         //currentTest.test = testsList[defaultRank][currentTest.id][0];
+
+//         Object.keys(mistakes).forEach((key) => {  
+
+          
+//          //alert(key)
+//         //  currentIndex.index = key - 1;
+
+//          //let qu = testsList[defaultRank][currentTest.id][0][key - 1];
+
+//          //alert(qu)
+
+//          //currentTest.test = testsList[defaultRank][currentTest.id][0];
+           
+      
+//         })
+
+
+
+
+//       } else {
+
+//         currentIndex.index = 1;
+
+//         //currentTestLength
+
+//       }
+
+
+//       //alert(savedNumber)
+
+//       //localStorage.removeItem(currentTest.id);
+
+//     }
+
+//     //currentIndex.index = savedNumber + 1;
+
+//     //alert(currentIndex.index)
+
+//    // }
+
+//     // if(mistakesQuantity === 0) {
+
+//     //   currentIndex.index = 0;
+//     //   //alert('gg')
+
+//     // } else {
+
+
+//     //   //alert(Object.keys(history)[0])
+//     //   currentIndex.index = Object.keys(history)[0] - 1;
+
+//     // }
+
+//     //alert(Object.keys(mistakes).length)
+
+//     //mistakes = Object.values(history)[0]
+
+//     //currentIndex.index = Object.keys(history)[0]
+
+//    // alert(currentIndex.index)
+
+//     //alert(Object.keys(history)[0])
+
+//     //const currentHistoryIndex = Object.keys(existingHistory)[0];
+    
+    
+
+//     // alert(existingHistory)
+
+
+
+//     // const curQustionNumber = Object.keys(existingHistory).length
+
+//     // alert(curQustionNumber)
+
+
+
+   
+    
+     
+
+
+//   } else {
+
+//     // removeTestHistory(currentTest.id)
+//     //localStorage.removeItem(currentTest.id);
+
+//     //currentTest.test = testsList[defaultRank][currentTest.id][0];
+
+//     currentTestLength = testsList[defaultRank][currentTest.id][0].length
+//   }
+
+   
+
+//     // } else {
+
+    
+
+//     //currentTest.test = testsList[defaultRank][currentTest.id][0];
+
+//     //localStorage.setItem(currentTest.id, '')
+
+//     //alert(currentTest.test.length)
+
+//     //удаляется история теста если текущий индекс равен длине массива
+//     //currentIndex.index = getCurrentIndex(currentTest.id);
+
+//   //}
+
+ 
+
+  
+//   //currentTest.test = testsList[defaultRank][currentTest.id][0];
+
+//   //alert(currentTest.test.length)
+
+
+//   if (isShuffle) {
+
+//     shuffle(currentTest.test);
+
+//     currentTest.id += '$';
+
+//   } else if (isLearnMode) {
+
+//     currentTest.id += '*';
+  
+//   }
+
+  
+
+//   //удаляется история теста если текущий индекс равен длине массива
+//  // currentIndex.index = getCurrentIndex(currentTest.id);
+
+//   localStorage.removeItem(currentTest.id);
+
+  
+//   //show choosen test page
+//   // showChosenTest(event.target.textContent, currentTest.test.length); 
+
+//   //alert(currentTestLength)
+
+//   showChosenTest(event.target.textContent, currentTestLength);
+
+//   //alert(currentIndex.index)
+
+//   updateQuestionBlock();
+
+// });
+
+
+
+
+//choose test
+document.addEventListener("click", function(event) {    
+
+  if(event.target.className !== "test_button") return; 
+
+  currentTest.id = event.target.id;     
+
+  const testHistory = localStorage.getItem(currentTest.id);
+
+
+
+
+  
+  if(testHistory) {   
+
+
+    const history = JSON.parse(testHistory) ;   
+
+    mistakes = Object.values(history)[0];     
+
+    const mistakesQuantity = Object.keys(mistakes).length;
+
+    const quNumber = Number(Object.keys(history)[0]);
+
+    curQuestionNumber = quNumber + 1;
+
+    currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+
+    //alert(curQuestionNumber)
+    //тест завершен
+    if(quNumber === currentTestLength) {
+
+      //alert(curQuestionNumber)
+
+      if(mistakesQuantity > 0) {
+
+
+        currentIndex.index = Object.keys(mistakes)[0];
+        
+
+        currentTestLength = mistakesQuantity;
+
+  
+      } else {
+  
+        localStorage.removeItem(currentTest.id);
+  
+        currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+      }
+
+    }else {  //тест не завершен
+
+    //  alert('historyIndex');
+
+      //currentIndex.index = Number(curQuestionNumber) + 1;
+
+      currentIndex.index = Number(Object.keys(history)[0]) + 1;
+
+      //alert(currentIndex.index);
+
+
+    }
+
+    
+  } else {
+
+
+    currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+
+    currentIndex.index = 1;
+
+  }
+
+   
+  if (isShuffle) {
+
+    shuffle(currentTest.test);
+
+    currentTest.id += '$';
+
+  } else if (isLearnMode) {
+
+    currentTest.id += '*';
+  
+  }  
+
+  curQuestionNumber = 1;
+
+  //currentTestLength = testsList[defaultRank][testId][0].length;
+  
+  showChosenTest(event.target.textContent);  
+
+  updateQuestionBlock();
+
+});
+
+
+
+// function getTestLength(testId) {
+
+//   //currentTestLength = testsList[defaultRank][testId][0].length
+
+//   return testsList[defaultRank][testId][0].length
+
+
+// }
+
+
+
+function showResultsPage() {
+
+  //document.getElementById('button_home').style.display = "block";
+  btnHome.style.display = "block";
+
+  document.getElementById('button_next').style.display = "none";
+  document.getElementById('results').style.display = 'block';
+  divTest.style.display = "none";
+  document.getElementById('result').style.display = "block";
+  document.getElementById('counter').style.display = "none";
+  //document.getElementById('button_home').innerText = "На главную";
+
+  btnHome.innerText = "На главную";
+
+  // document.getElementById('remove_history_block').style.display = "none";
+}
+
+function showChosenTest(testName) {
+
+  //alert(testLength)
+
+  divTest.style.display = "block";
+  document.getElementById('counter').innerHTML = "Вопрос: 1/" + currentTestLength;
+  document.getElementById('counter').style.display = "block";
+  document.getElementById('questions_counter').style.display = 'block';
+  divLavels.style.display = "none";
+  navBlock.style.display = "block";
+  document.getElementById('button_next').style.display = "none";
+
+  btnHome.innerText = "Завершить";
+  btnHome.style.display = "block";
+
+ // document.getElementById('button_home').style.display = "block";
+
+
+  btnMenu.style.display = "none";
+  document.getElementById('test-title').innerHTML = testName;
+  headerBlock.style.display = "none";
+  // document.getElementById('remove_history_block').style.display = "block";
+  
+ 
+  // const testTitle = document.getElementById('test-title');
+
+  // testTitle.addEventListener("click", list)
+
+  // function list() {
+
+  //   listBlock.style.display = "block";
+
+  // }  
+  
+
+  // const btnHideList = document.getElementById('btn-hide-list')
+
+  // btnHideList.addEventListener("click", hideListBlock)
+
+  // function hideListBlock() {
+
+  //   listBlock.style.display = "none";
+
+  // }
+  
+  
+
+}
+
+//////////////////////////////////////////////////////////////////////list///////////////////
+
+const testTitle = document.getElementById('test-title');
+
+testTitle.addEventListener("click", list)
+
+function list() {
+
+
+  //alert(currentTest.test.length)
+
+
+  const parrentBlock = document.getElementById('q-list');
+
+
+  let i = 0;
+
+  currentTest.test.forEach((qBlock) => {
+
+    //alert(currentTest.test[0][0])
+    const line = document.createElement('p');
+    line.textContent = `${i + 1}) ${qBlock[0]}`;
+    line.id = i.toString();
+    line.className = "q-line"
+    parrentBlock.appendChild(line);
+    i++;
+
+
+  })
+
+  listBlock.style.display = "block";
+
+
+}  
+  
+
+const btnHideList = document.getElementById('btn-hide-list')
+
+btnHideList.addEventListener("click", hideListBlock)
+
+function hideListBlock() {
+
+  listBlock.style.display = "none";
+
+}
+
+document.addEventListener("click", function (event) {
+
+  let elemClass = event.target.className;
+
+  if(elemClass === 'q-line'){
+
+    let elemId = event.target.id;
+
+    let text = currentTest.test[elemId][1];   
+
+    const parrentBlock = document.getElementById('mod-content');    
+
+    while (parrentBlock.hasChildNodes()) {
+      parrentBlock.removeChild(parrentBlock.firstChild);
+    }
+
+   
+
+    let i = 0;
+  
+    text.forEach((answer) => {
+  
+
+     
+      const line = document.createElement('p');
+      // line.textContent = `${i + 1}) ${answer[0]}`;
+      line.id = i.toString();
+      line.className = "a-line";
+      line.innerHTML = '   ' + `${i + 1}) ${answer[0]}`;
+
+      
+      if(answer[1].toString() === "1")
+      {        
+        line.innerHTML = '&#10004;   ' + `${i + 1}) ${answer[0]}`;
+      }
+
+      parrentBlock.appendChild(line);
+      i++;
+  
+  
+    })
+  
+
+   // span.textContent = qs;
+    
+    modal.style.display = "block";
+
+   
+
+  }
+
+   
+
+
+});
+
+
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the <span> element that closes the modal
+ var span = document.getElementsByClassName("close")[0];
+
+
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+  
