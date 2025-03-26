@@ -109,7 +109,7 @@ function showErrors(questionNumber) {
 
     const optionElement = document.getElementById('option' + i);
 
-   // alert(questionNumber - 1)
+    alert(questionNumber - 1)
 
     const answer = currentTest.test[questionNumber - 1][1][i];
     // Check if the option is correct
