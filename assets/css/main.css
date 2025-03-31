@@ -417,7 +417,9 @@ svg{
 
 .a-line {
 
-  color:#04FB39;
+  color: var(--text-color);
+  border-color: var(--text-color);
+  border-radius: 6px;
 
 }
 

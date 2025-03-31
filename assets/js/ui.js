@@ -753,15 +753,22 @@ document.addEventListener("click", function (event) {
       const line = document.createElement('p');
       // line.textContent = `${i + 1}) ${answer[0]}`;
       line.id = i.toString();
-      line.className = "a-line";
+      //line.className = "a-line";
       line.innerHTML = '   ' + `${i + 1}) ${answer[0]}`;
       
       if(answer[1].toString() === "1")
       {        
-        line.innerHTML = '&#10004;   ' + `${i + 1}) ${answer[0]}`;
+        //line.innerHTML = '&#10004;   ' + `${i + 1}) ${answer[0]}`;
+
+        //line.className = "a-line";
+
+        line.classList.add('a-line')
+
+
       }
 
       parrentBlock.appendChild(line);
+
       i++;
   
   
