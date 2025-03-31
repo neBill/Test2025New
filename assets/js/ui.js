@@ -300,6 +300,7 @@ function showTestResult() {
     btnContainer.innerHTML = ''; 
 
     let count = 1;
+
     Object.keys(mistakes).forEach((key) => {
         const button = document.createElement('button');
         button.id = key;
@@ -689,22 +690,25 @@ function list() {
 
   const parrentBlock = document.getElementById('q-list');
 
+  let questions = testsList[defaultRank][currentTest.id][0]
+
   let i = 0;
 
-  currentTest.test.forEach((qBlock) => {
+  questions.forEach((question) => {
    
     const line = document.createElement('p');
-    line.textContent = `${i + 1}) ${qBlock[0]}`;
+    line.textContent = `${i + 1}) ${question[0]}`;
     line.id = i.toString();
     line.className = "q-line"
     parrentBlock.appendChild(line);
     i++;
 
 
-  })
+  })  
 
   listBlock.style.display = "block";
 
+  questions = []
 
 }  
   
@@ -723,17 +727,20 @@ document.addEventListener("click", function (event) {
 
   let elemClass = event.target.className;
 
+  let questions = testsList[defaultRank][currentTest.id][0]
+
   if(elemClass === 'q-line'){
 
     let elemId = event.target.id;
 
-    let text = currentTest.test[elemId][1];   
+    let text = questions[elemId][1];   
 
     const parrentBlock = document.getElementById('mod-content');    
 
     while (parrentBlock.hasChildNodes()) {
 
       parrentBlock.removeChild(parrentBlock.firstChild);
+
     }
 
    
