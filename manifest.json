@@ -1,6 +1,6 @@
 {
-    "name": "КиРП(без дублей)",
-    "short_name": "Тесты РП",
+    "name": "РП-2025",
+    "short_name": "РП-2025",
     "start_url": "index.html",
     "display": "standalone", 
     "background_color": "#025252",
