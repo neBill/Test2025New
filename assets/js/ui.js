@@ -705,6 +705,7 @@ function list() {
 
 
   })  
+ 
 
   listBlock.style.display = "block";
 
@@ -723,67 +724,73 @@ function hideListBlock() {
 
 }
 
-document.addEventListener("click", function (event) {
 
-  let elemClass = event.target.className;
+document.addEventListener("click", function (event) {
+ 
+
+  if(event.target.className !== 'q-line') return;
+
+ // let questions = testsList[defaultRank][currentTest.id][0]  
+
+  const parrentBlock = document.getElementById('mod-content'); 
+
+  const question = document.createElement('p');
+
+  const line = document.createElement('hr');
+
+  line.className = 'line'
 
   let questions = testsList[defaultRank][currentTest.id][0]
 
-  if(elemClass === 'q-line'){
+  question.textContent = questions[event.target.id][0];
 
-    let elemId = event.target.id;
+  
 
-    let text = questions[elemId][1];   
+  let text = questions[event.target.id][1];   
 
-    const parrentBlock = document.getElementById('mod-content');    
+  
+  
+  
 
-    while (parrentBlock.hasChildNodes()) {
+  while (parrentBlock.hasChildNodes()) {
 
-      parrentBlock.removeChild(parrentBlock.firstChild);
+    parrentBlock.removeChild(parrentBlock.firstChild);
 
-    }
+  }
 
-   
+  parrentBlock.appendChild(question);
+
+  parrentBlock.appendChild(line);
 
     let i = 0;
   
     text.forEach((answer) => {
+    
+      
+      const paragraph = document.createElement('p');
+      
+      paragraph .id = i.toString();
+      
 
-     
-      const line = document.createElement('p');
-      // line.textContent = `${i + 1}) ${answer[0]}`;
-      line.id = i.toString();
-      //line.className = "a-line";
-      line.innerHTML = '   ' + `${i + 1}) ${answer[0]}`;
+      paragraph .innerHTML = '   ' + `${i + 1}) ${answer[0]}`;
       
       if(answer[1].toString() === "1")
       {        
-        //line.innerHTML = '&#10004;   ' + `${i + 1}) ${answer[0]}`;
+        
 
-        //line.className = "a-line";
+        paragraph .className = 'right-option';
 
-        line.classList.add('a-line')
-
-
+        
       }
 
-      parrentBlock.appendChild(line);
+      parrentBlock.appendChild(paragraph );
 
       i++;
   
   
     })
-  
-
-   // span.textContent = qs;
     
     modal.style.display = "block";
-
-   
-
-  }
-
-   
 
 
 });

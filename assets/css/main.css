@@ -392,8 +392,8 @@ svg{
   color: var(--text-color);
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #7d8fb3;;
-  border-radius: 5px;
+  /* border: 1px solid #7d8fb3;;
+  border-radius: 5px; */
   pointer-events: none;
   font-size: 2em;
   font-family: var(--font-family);
@@ -415,11 +415,13 @@ svg{
   cursor: pointer;
 } */
 
-.a-line {
 
-  color: var(--text-color);
-  border-color: var(--text-color);
+
+.right-option {
+
+  border: var(--right-answer-border);
   border-radius: 6px;
+  padding: 10px;
 
 }
 
