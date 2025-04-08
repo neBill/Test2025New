@@ -23,7 +23,7 @@
         
         <div class="dropdown-block"> 
           <div >
-            <button onclick="toggleDropdownMenu()" class="dropbtn" id="button_menu">            
+            <button onclick="showHideMenu()" class="dropbtn" id="button_menu">            
               <svg>  
                 <rect class="svg-burger"></rect>
                 <rect class="svg-burger" y="8"></rect>
@@ -129,7 +129,7 @@
             
             <p><b>Оформление</b></p> 
             <div class="outline">
-              <label id="fontsize">-- Образец шрифта -- </label>
+              <label id="fontsizeSample">-- Образец шрифта -- </label>
             </div>
             <!-- <hr class="line"> -->
             <button class="font-size-change" id="font-increase" >Увеличить шрифт</button>              
@@ -166,7 +166,7 @@
             
                <button class="menu_button" id="history_remover" onclick="clearHistory()">Удалить историю</button><br>
 
-               <button class="menu_button" id="default-settings" onclick="setDefaultSettings()">Сбросить настройки</button><br>
+               <button class="menu_button" id="default-settings" onclick="removeSettings()">Сбросить настройки</button><br>
 
                <button class="menu_button" id="cashe_remover" onclick="clearCaches()">Очистить кэш</button><br> 
             
@@ -176,7 +176,7 @@
             <hr class="line">
 
             
-            <button class="close_button" id="button_hide" onclick="toggleDropdownMenu()">Закрыть</button>
+            <button class="close_button" id="button_hide" onclick="showHideMenu()">Закрыть</button>
             <br>
             
           </div>

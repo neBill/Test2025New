@@ -1,14 +1,15 @@
 'use strict';
 
 let rightOptionIndex;
-let isLearnMode;
+//let isLearnMode;
 let isHistorySave = true;
-let isShuffle;
+//let isShuffle;
 let isAnswerDone = false;
 let defaultRank;
-let isDefaultSettings = false;
+// let isDefaultSettings = false;
+
 const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
-// let mistakes = {};
+let mistakes = {};
 let currentTestLength;
 let curQuestionNumber;
 const btnHome = document.getElementById('button_home');
@@ -18,6 +19,10 @@ const divTest = document.getElementById('test');
 const btnMenu = document.getElementById('button_menu');
 const headerBlock = document.getElementById('header_block');
 const listBlock = document.getElementById('list-block');
+const tglLearnMode = document.getElementById('learn_mode');
+const tglShuffle = document.getElementById('shuffle');
+
+
 
 
 
@@ -313,21 +318,17 @@ function showTestResult() {
     
 
 
+function showSelectedMistake(id) {
 
+  // const buttonClass = event.target.className;
 
+  // const buttonId = event.target.id;
 
-
-document.addEventListener("click", function(event) {
-
-  const buttonClass = event.target.className;
-
-  const buttonId = event.target.id;
-
-  if (buttonClass == "error_button") {
+  // if (buttonClass == "error_button") {
 
     const links = document.querySelectorAll(".error_button");
 
-    showErrors(buttonId);
+    showErrors(id);
 
     links.forEach(link => {
 
@@ -335,16 +336,47 @@ document.addEventListener("click", function(event) {
 
     });
 
-    document.getElementById(buttonId).style.background = "var(--error-btn-color)";
+    document.getElementById(id).style.background = "var(--error-btn-color)";
 
-  }
+  //}
 
 
 
-  if (buttonClass == "font-size-change") {
+ 
 
-     chageFontSize(buttonId);
-  }
+
+}
+
+
+
+document.addEventListener("click", function(event) {
+
+  // const buttonClass = event.target.className;
+
+  // const buttonId = event.target.id;
+
+  // if (buttonClass == "error_button") {
+
+  //   const links = document.querySelectorAll(".error_button");
+
+  //   showErrors(buttonId);
+
+  //   links.forEach(link => {
+
+  //     link.setAttribute("style", "background:`:root { --main-bg-color}`");
+
+  //   });
+
+  //   document.getElementById(buttonId).style.background = "var(--error-btn-color)";
+
+  // }
+
+
+
+  // if (buttonClass == "font-size-change") {
+
+  //    chageFontSize(buttonId);
+  // }
 
 
 });
@@ -387,7 +419,7 @@ btnHome.addEventListener("click", function(event) {
 
 
 
-  if(isShuffle) {
+  if(tglShuffle.checked) {
 
     localStorage.removeItem(currentTest.id);
 
@@ -473,7 +505,9 @@ function check(optionIndex) {
   //if (isLearnMode === true && optionIndex != rightOptionIndex) { 
   ///////////////////////////////////////////////////////////////////////////
  // if (isLearnMode === true) { 
-  if (isLearnMode === true && optionIndex != rightOptionIndex) { 
+
+
+  if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
 
     setTrainingMode(optionIndex);
 
@@ -533,12 +567,139 @@ function showTest() {
 }
 
 
+
+
+  //if(event.target.className !== "test_button") return; 
+
+  //currentTest.id = event.target.id;  
+  
+
+
+  document.addEventListener("click", function(event) {
+
+    const id = event.target.id;
+
+    const classNamed = event.target.className;
+
+    if(classNamed === "test_button") {
+      
+      chooseTest(id);
+
+    } 
+
+    if (classNamed == "error_button") {
+
+      showSelectedMistake(id);
+
+    }
+
+  
+  })
+
+
+
 //choose test
-document.addEventListener("click", function(event) {    
+// document.addEventListener("click", function(event) {    
 
-  if(event.target.className !== "test_button") return; 
+//   if(event.target.className !== "test_button") return; 
 
-  currentTest.id = event.target.id;     
+//   currentTest.id = event.target.id;     
+
+//   //const testHistory = localStorage.getItem(currentTest.id);
+
+//   const history = getTestHistory(currentTest.id) 
+
+//   //const mistakes = Object.values(history)[0];  
+
+//   //alert(history)
+ 
+  
+//   // if(testHistory) {   
+//   if(history) {
+
+//     //const history = JSON.parse(testHistory) ;   
+
+//     //mistakes = Object.values(history)[0];   
+    
+//     //const mistakes = getMistakes(testHistory);  
+
+//     const mistakes = Object.values(history)[0]; 
+
+//     const mistakesQuantity = Object.keys(mistakes).length;
+
+//     const quNumber = Number(Object.keys(history)[0]);
+
+//     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+
+//     //тест завершен
+//     if(quNumber === currentTestLength) {     
+
+//       curQuestionNumber = 1;
+
+//       if(mistakesQuantity > 0) {
+
+//         currentIndex.index = Object.keys(mistakes)[0];        
+
+//         currentTestLength = mistakesQuantity;
+  
+//       } else {
+  
+//         localStorage.removeItem(currentTest.id);
+  
+//         currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+//       }
+
+//     }else {  //тест не завершен
+
+//       //alert('тест не завершен');      
+
+//       currentIndex.index = Number(Object.keys(history)[0]) + 1;
+
+//       curQuestionNumber = currentIndex.index;      
+
+
+//     }
+
+    
+//   } else {
+
+//     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+
+//     currentIndex.index = 1;
+
+//     curQuestionNumber = 1;
+
+//   }
+
+   
+//   if (isShuffle) {
+
+//     shuffle(currentTest.test);
+
+//     currentTest.id += '$';
+
+//   } else if (isLearnMode) {
+
+//     currentTest.id += '*';
+  
+//   }  
+ 
+//   showChosenTest(event.target.textContent);  
+
+//   updateQuestionBlock();
+
+// });
+
+
+function chooseTest(id) {
+
+  //if(event.target.className !== "test_button") return; 
+
+  //currentTest.id = event.target.id;  
+  
+  
+  currentTest.id = id;
+  
 
   //const testHistory = localStorage.getItem(currentTest.id);
 
@@ -607,13 +768,13 @@ document.addEventListener("click", function(event) {
   }
 
    
-  if (isShuffle) {
+  if (tglShuffle.checked) {
 
     shuffle(currentTest.test);
 
     currentTest.id += '$';
 
-  } else if (isLearnMode) {
+  } else if (tglLearnMode.checked) {
 
     currentTest.id += '*';
   
@@ -623,27 +784,8 @@ document.addEventListener("click", function(event) {
 
   updateQuestionBlock();
 
-});
 
-
-// function getMistakes(testHistory) {
-
-//  // const testHistory = localStorage.getItem(testId);
-
-//   if(!testHistory) return 
- 
-
-//   //  const history = JSON.parse(testHistory) ;   
-
-//   return  Object.values(JSON.parse(testHistory))[0];     
-
-//     //const mistakesQuantity = Object.keys(mistakes).length;
-
-//     //const quNumber = Number(Object.keys(history)[0]);
-
-
-
-// }
+}
 
 
 

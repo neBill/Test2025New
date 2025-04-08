@@ -1,48 +1,127 @@
+'use strict';
+
 const lev5Toggle = document.getElementById('lev5');
 const lev6Toggle = document.getElementById('lev6');
 const themeToggle =  document.getElementById('theme'); 
 const shuffleToggle = document.getElementById('shuffle');
 const learnmodeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("drop-down-menu");
-
 const divHelp = document.getElementById("help_block");
-
 const divTestsButtons = document.getElementById('levels');
+const btnIncreaseFontSize = document.getElementById('font-increase');
+const btnDecreaseFontSize = document.getElementById('font-decrease');
+const btnDefaultFontSize = document.getElementById('font-default');
+
+const fontSizeSample = document.getElementById('fontsizeSample');
 
 
 
+let currentFontSize;
 
+//let isDarkTheme = false;
 
+// if (buttonClass == "font-size-change") {
 
-'use strict';
+//   chageFontSize(buttonId);
+// }
 
-function chageFontSize(buttonId){  
+function increaseFontSize() {
 
-  const bodyStyles = window.getComputedStyle(document.body);
+  // const bodyStyles = window.getComputedStyle(document.body);
 
-  const oldSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
+  // const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
 
-  let newSize = 20;    
+  //const newFontSize = (parseFloat(currentFontSize) + 1).toFixed(2); 
+  const newFontSize = currentFontSize + 1; 
 
-  if(buttonId == "font-increase"){  
+  setFontSize(newFontSize);
 
-    newSize = (parseFloat(oldSize) + 1).toFixed(2);       
-  }
-
-  if(buttonId == "font-decrease"){
-
-    newSize = (parseFloat(oldSize) - 1).toFixed(2);
-  }   
-
-  if(newSize <= 23 && newSize >= 17){
-
-    document.body.style.setProperty("--btn-font-size", `${newSize}px`);//set
-
-    document.getElementById('fontsize').style.fontSize = `${newSize}`;
-
-    localStorage.setItem('size', newSize);
-  }
 }
+
+function decreaseFontSize() {
+
+  // const bodyStyles = window.getComputedStyle(document.body);
+
+  // const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get   
+
+  //const newFontSize = (parseFloat(currentFontSize) - 1).toFixed(2);
+
+  const newFontSize = currentFontSize - 1;
+
+  setFontSize(newFontSize);
+
+}
+
+function defaultFontSize() {
+
+  //const bodyStyles = window.getComputedStyle(document.body);
+
+  //const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
+
+  setFontSize(20)
+
+}
+
+
+function setFontSize(fontSize) {
+
+
+  //alert(fontSize)
+
+  if(fontSize > 23 || fontSize < 17) return;
+
+  //const bodyStyles = window.getComputedStyle(document.body);
+
+  //const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
+
+  document.body.style.setProperty("--btn-font-size", `${fontSize}px`);
+
+  // document.getElementById('fontsize').style.fontSize = `${fontSize}`;
+  fontSizeSample.style.fontSize = `${fontSize}`;
+
+  currentFontSize = fontSize;
+
+  //localStorage.setItem('size', newSize);
+
+
+}
+
+
+btnIncreaseFontSize.addEventListener('click', increaseFontSize);
+
+btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
+
+btnDefaultFontSize.addEventListener('click', defaultFontSize);
+
+
+
+// function chageFontSize(buttonId){  
+
+//   // const bodyStyles = window.getComputedStyle(document.body);
+
+//   // const oldSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
+
+//   // let newSize = 20;    
+
+//   if(buttonId == "font-increase"){  
+
+//     newSize = (parseFloat(oldSize) + 1).toFixed(2);       
+//   }
+
+//   if(buttonId == "font-decrease"){
+
+//     newSize = (parseFloat(oldSize) - 1).toFixed(2);
+//   }   
+
+//   if(newSize <= 23 && newSize >= 17){
+
+//     document.body.style.setProperty("--btn-font-size", `${newSize}px`);//set
+
+//     document.getElementById('fontsize').style.fontSize = `${newSize}`;
+
+//     localStorage.setItem('size', newSize);
+//   }
+// }
 
 
 
@@ -71,15 +150,18 @@ function clearHistory() {
 }
 
 
-window.addEventListener("load", ()=>{    
-  
+window.addEventListener("load", ()=>{  
+
+  //set saved  settings
   if(localStorage.getItem('settings')) {   
 
-    setSettings(JSON.parse(localStorage.getItem('settings')));   
+    setSettings(JSON.parse(localStorage.getItem('settings')));  
         
   } else {
-    
-    setSettings(defaultSettings);
+
+    //set end save default settings
+    setSettings(defaultSettings);  
+    localStorage.setItem("settings", JSON.stringify(defaultSettings));
     
   }    
  
@@ -155,7 +237,6 @@ function createTestButtons(){
 
     divTestsButtons.appendChild(testButton);
 
-
   });
 
 }
@@ -167,21 +248,31 @@ function removeButtons() {
 }
 
 
-function toggleDropdownMenu() {
+function showHideMenu() {
 
-  if(isDefaultSettings) {
+  const visibility = window.getComputedStyle(divDropdownMenu).display;  
 
-    setSettings(defaultSettings);
+  divDropdownMenu.style.display = visibility === "none" ? 'block' : 'none';
+  
+  if(divDropdownMenu.style.display === "none") {   
 
-    isDefaultSettings = false;
+    const currentSettings = {
 
-  }   
+      isLearn : learnmodeToggle.checked,
+      isShuffle : shuffleToggle.checked,
+      isDarkTheme : themeToggle.checked,
+      defRank : defaultRank,
+      fontSize : currentFontSize,
+      
+    }
 
-  divDropdownMenu.style.display = window.getComputedStyle(divDropdownMenu).display === "none" ? 'block' : 'none';
+    const isSettings = localStorage.getItem("settings");
 
-  if(divDropdownMenu.style.display === "none"){
+    const settings = isSettings ? currentSettings : defaultSettings
 
-    saveSettings();
+    setSettings(settings)
+
+    saveSettings(settings);    
 
     removeButtons();
 
@@ -189,13 +280,11 @@ function toggleDropdownMenu() {
 
   }
 
-
-
 }
 
-function setDefaultSettings() {
-
-   isDefaultSettings = true;
+function removeSettings() {
+  
+  localStorage.removeItem("settings");
 
 }
 
@@ -210,12 +299,49 @@ function showHelpPage() {
 
   divHelp.style.display = "block"; 
 
-  toggleDropdownMenu();
+  showHideMenu();
 
 }
 
 
-function setSettings(settings){    
+// function setSettings(settings){    
+
+//   //alert(settings.isDarkTheme)
+
+//   themeToggle.checked = settings.isDarkTheme; 
+  
+//   shuffleToggle.checked = settings.isShuffle;
+
+//   learnmodeToggle.checked = settings.isLearn;  
+
+//   defaultRank = settings.defRank;
+ 
+//   isLearnMode = settings.isLearn;
+
+//   isShuffle = settings.isShuffle;
+
+//   isDarkTheme = settings.isDarkTheme;
+
+//   currentFontSize = settings.fontSize;
+
+//   let theme;
+
+//   settings.isDarkTheme == true  ? theme = 'dark-theme' : theme = 'light-theme';  
+
+//   document.body.className = theme;
+
+//   setRankToggles(defaultRank)
+
+// }
+
+function saveSettings(togglesState){   
+
+  localStorage.setItem("settings", JSON.stringify(togglesState));
+
+}
+
+
+function setSettings(settings) {
 
   themeToggle.checked = settings.isDarkTheme; 
   
@@ -224,61 +350,23 @@ function setSettings(settings){
   learnmodeToggle.checked = settings.isLearn;  
 
   defaultRank = settings.defRank;
- 
-  isLearnMode = settings.isLearn;
 
-  isShuffle = settings.isShuffle;
-
-  isDarkTheme = settings.isDarkTheme;
+  currentFontSize = settings.fontSize;
 
   let theme;
 
-  settings.isDarkTheme == true  ? theme = 'dark-theme' : theme = 'light-theme';  
+  themeToggle.checked == true  ? theme = 'dark-theme' : theme = 'light-theme';  
 
   document.body.className = theme;
 
-  setRankToggles(defaultRank)
-
-}
-
-function saveSettings(){  
-
-  const togglesState = {
-  
-    isLearn : learnmodeToggle.checked,
-    isShuffle : shuffleToggle.checked,
-    isDarkTheme : themeToggle.checked,
-    defRank : defaultRank,
-  }
-
-  setSettings(togglesState);
-
-  localStorage.setItem("settings", JSON.stringify(togglesState));
 }
 
 
-
-function setRankToggles(rank){
-
-  // if(rank === 'rank6') {
-
-  //   lev6Toggle.checked = true;
-  //   lev5Toggle.checked = false;    
-
-  // }else{
-
-  //   lev5Toggle.checked = true;
-  //   lev6Toggle.checked = false;
-    
-  // }   
+function setRankToggles(rank){  
 
   lev6Toggle.checked = rank === 'rank6';
   lev5Toggle.checked = rank !== 'rank6';
-
   defaultRank = rank;
-
-
-
 }
 
 const defaultSettings = {
@@ -287,6 +375,7 @@ const defaultSettings = {
   isShuffle : false,
   isDarkTheme : false,
   defRank : 'rank6', 
-
+  fontSize : 20,
+  
 }
 
