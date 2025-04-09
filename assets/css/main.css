@@ -419,8 +419,8 @@ svg{
 
 .right-option {
 
-  border: var(--right-answer-border);
-  border-radius: 6px;
+  border: 1px solid #7d8fb3;
+  border-radius: 4px;
   padding: 10px;
 
 }

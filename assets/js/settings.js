@@ -11,7 +11,6 @@ const divTestsButtons = document.getElementById('levels');
 const btnIncreaseFontSize = document.getElementById('font-increase');
 const btnDecreaseFontSize = document.getElementById('font-decrease');
 const btnDefaultFontSize = document.getElementById('font-default');
-
 const fontSizeSample = document.getElementById('fontsizeSample');
 
 
@@ -85,6 +84,8 @@ function setFontSize(fontSize) {
 
 
 }
+
+
 
 
 btnIncreaseFontSize.addEventListener('click', increaseFontSize);
@@ -352,6 +353,8 @@ function setSettings(settings) {
   defaultRank = settings.defRank;
 
   currentFontSize = settings.fontSize;
+
+  document.body.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
 
   let theme;
 
