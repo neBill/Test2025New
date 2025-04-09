@@ -4,7 +4,7 @@ const lev5Toggle = document.getElementById('lev5');
 const lev6Toggle = document.getElementById('lev6');
 const themeToggle =  document.getElementById('theme'); 
 const shuffleToggle = document.getElementById('shuffle');
-const learnmodeToggle = document.getElementById('learn_mode');
+const learnModeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("drop-down-menu");
 const divHelp = document.getElementById("help_block");
 const divTestsButtons = document.getElementById('levels');
@@ -17,33 +17,16 @@ const fontSizeSample = document.getElementById('fontsizeSample');
 
 let currentFontSize;
 
-//let isDarkTheme = false;
-
-// if (buttonClass == "font-size-change") {
-
-//   chageFontSize(buttonId);
-// }
 
 function increaseFontSize() {
-
-  // const bodyStyles = window.getComputedStyle(document.body);
-
-  // const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
-
-  //const newFontSize = (parseFloat(currentFontSize) + 1).toFixed(2); 
+  
   const newFontSize = currentFontSize + 1; 
 
   setFontSize(newFontSize);
 
 }
 
-function decreaseFontSize() {
-
-  // const bodyStyles = window.getComputedStyle(document.body);
-
-  // const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get   
-
-  //const newFontSize = (parseFloat(currentFontSize) - 1).toFixed(2);
+function decreaseFontSize() { 
 
   const newFontSize = currentFontSize - 1;
 
@@ -51,11 +34,7 @@ function decreaseFontSize() {
 
 }
 
-function defaultFontSize() {
-
-  //const bodyStyles = window.getComputedStyle(document.body);
-
-  //const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
+function defaultFontSize() {  
 
   setFontSize(20)
 
@@ -64,28 +43,14 @@ function defaultFontSize() {
 
 function setFontSize(fontSize) {
 
-
-  //alert(fontSize)
-
-  if(fontSize > 23 || fontSize < 17) return;
-
-  //const bodyStyles = window.getComputedStyle(document.body);
-
-  //const currentFontSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
+  if(fontSize > 23 || fontSize < 17) return;  
 
   document.body.style.setProperty("--btn-font-size", `${fontSize}px`);
-
-  // document.getElementById('fontsize').style.fontSize = `${fontSize}`;
-  fontSizeSample.style.fontSize = `${fontSize}`;
+ 
+  fontSizeSample.style.fontSize = `${fontSize}px`;
 
   currentFontSize = fontSize;
-
-  //localStorage.setItem('size', newSize);
-
-
 }
-
-
 
 
 btnIncreaseFontSize.addEventListener('click', increaseFontSize);
@@ -93,37 +58,6 @@ btnIncreaseFontSize.addEventListener('click', increaseFontSize);
 btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
-
-
-
-// function chageFontSize(buttonId){  
-
-//   // const bodyStyles = window.getComputedStyle(document.body);
-
-//   // const oldSize = bodyStyles.getPropertyValue('--btn-font-size'); //get
-
-//   // let newSize = 20;    
-
-//   if(buttonId == "font-increase"){  
-
-//     newSize = (parseFloat(oldSize) + 1).toFixed(2);       
-//   }
-
-//   if(buttonId == "font-decrease"){
-
-//     newSize = (parseFloat(oldSize) - 1).toFixed(2);
-//   }   
-
-//   if(newSize <= 23 && newSize >= 17){
-
-//     document.body.style.setProperty("--btn-font-size", `${newSize}px`);//set
-
-//     document.getElementById('fontsize').style.fontSize = `${newSize}`;
-
-//     localStorage.setItem('size', newSize);
-//   }
-// }
-
 
 
 
@@ -144,7 +78,7 @@ function clearHistory() {
     
     if(localStorage.key(i) === "settings") continue
 
-     localStorage.removeItem(localStorage.key(i));
+    localStorage.removeItem(localStorage.key(i));
 
   }
 
@@ -259,7 +193,7 @@ function showHideMenu() {
 
     const currentSettings = {
 
-      isLearn : learnmodeToggle.checked,
+      isLearnMode : learnModeToggle.checked,
       isShuffle : shuffleToggle.checked,
       isDarkTheme : themeToggle.checked,
       defRank : defaultRank,
@@ -305,35 +239,7 @@ function showHelpPage() {
 }
 
 
-// function setSettings(settings){    
 
-//   //alert(settings.isDarkTheme)
-
-//   themeToggle.checked = settings.isDarkTheme; 
-  
-//   shuffleToggle.checked = settings.isShuffle;
-
-//   learnmodeToggle.checked = settings.isLearn;  
-
-//   defaultRank = settings.defRank;
- 
-//   isLearnMode = settings.isLearn;
-
-//   isShuffle = settings.isShuffle;
-
-//   isDarkTheme = settings.isDarkTheme;
-
-//   currentFontSize = settings.fontSize;
-
-//   let theme;
-
-//   settings.isDarkTheme == true  ? theme = 'dark-theme' : theme = 'light-theme';  
-
-//   document.body.className = theme;
-
-//   setRankToggles(defaultRank)
-
-// }
 
 function saveSettings(togglesState){   
 
@@ -348,7 +254,7 @@ function setSettings(settings) {
   
   shuffleToggle.checked = settings.isShuffle;
 
-  learnmodeToggle.checked = settings.isLearn;  
+  learnModeToggle.checked = settings.isLearnMode;  
 
   defaultRank = settings.defRank;
 
@@ -374,7 +280,7 @@ function setRankToggles(rank){
 
 const defaultSettings = {
 
-  islearnMode : false,
+  isLearnMode : false,
   isShuffle : false,
   isDarkTheme : false,
   defRank : 'rank6', 
