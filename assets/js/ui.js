@@ -161,6 +161,8 @@ function updateQuestionBlock() {
   }
 
   document.getElementById('question').innerHTML = currentQuestionBlock[0];
+
+  // alert(`Вопрос: ${curQuestionNumber}/${currentTestLength}`)
   
   document.getElementById('counter').innerHTML = `Вопрос: ${curQuestionNumber}/${currentTestLength}`;
 
@@ -291,6 +293,8 @@ function showTestResult() {
         localStorage.removeItem(currentTest.id);
         return;
     }
+
+    alert( `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`)
 
     const testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
     const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
@@ -737,6 +741,16 @@ function chooseTest(id) {
         currentIndex.index = Object.keys(mistakes)[0];        
 
         currentTestLength = mistakesQuantity;
+
+        //////////////////////////
+
+        // const { oldKey, ...rest } = obj;
+
+        // obj = { newKey: oldKey, ...rest };
+
+        
+
+        /////////////////////////////////////////
   
       } else {
   
