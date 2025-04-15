@@ -15,7 +15,8 @@ const fontSizeSample = document.getElementById('fontsizeSample');
 
 
 
-let currentFontSize;
+
+let currentFontSize = 20; // default fallback
 
 
 function increaseFontSize() {
@@ -43,7 +44,12 @@ function defaultFontSize() {
 
 function setFontSize(fontSize) {
 
-  if(fontSize > 23 || fontSize < 17) return;  
+  const MIN_FONT_SIZE = 17;
+  const MAX_FONT_SIZE = 23;
+
+  if (fontSize > MAX_FONT_SIZE || fontSize < MIN_FONT_SIZE) return;
+
+  // if(fontSize > 23 || fontSize < 17) return;  
 
   document.body.style.setProperty("--btn-font-size", `${fontSize}px`);
  
@@ -266,6 +272,8 @@ function setSettings(settings) {
 
   themeToggle.checked == true  ? theme = 'dark-theme' : theme = 'light-theme';  
 
+  //const theme = settings.isDarkTheme ? 'dark-theme' : 'light-theme';
+
   document.body.className = theme;
 
 }
@@ -276,6 +284,12 @@ function setRankToggles(rank){
   lev6Toggle.checked = rank === 'rank6';
   lev5Toggle.checked = rank !== 'rank6';
   defaultRank = rank;
+
+  // const isRank6 = rank === 'rank6';
+  // lev6Toggle.checked = isRank6;
+  // lev5Toggle.checked = !isRank6;
+  // defaultRank = rank;
+
 }
 
 const defaultSettings = {
