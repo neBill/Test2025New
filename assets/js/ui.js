@@ -294,7 +294,7 @@ function showTestResult() {
         return;
     }
 
-    alert( `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`)
+   // alert( `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`)
 
     const testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
     const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
@@ -448,6 +448,9 @@ function saveTestHistory(optionIndex) {
  
   const key = currentIndex.index;
 
+  //alert(key)
+  
+
   let curItem = {};
   
   const testHistory = localStorage.getItem(currentTest.id);
@@ -456,8 +459,12 @@ function saveTestHistory(optionIndex) {
 
     curItem = JSON.parse(testHistory);
   }
+
+  alert(Object.keys(curItem)[0])
   
   let value = Object.values(curItem)[0] || {};
+
+  //alert(Object.keys(curItem)[0])
   
   if (optionIndex !== rightOptionIndex) {
     
@@ -469,10 +476,18 @@ function saveTestHistory(optionIndex) {
     
 
   }
+
+  //alert(value)
   
   curItem = { [key]: value };
 
+ 
+
+  //alert(Object.keys(curItem)[0])
+
   localStorage.setItem(currentTest.id, JSON.stringify(curItem));
+
+  alert(Object.keys(curItem)[0])
 
 }
 
@@ -484,21 +499,29 @@ function check(optionIndex) {
 
   //alert(curQuestionNumber + " -- " + currentTestLength)
 
+  //alert('hear')
+
   if (curQuestionNumber === currentTestLength) {      
     
     saveTestHistory(optionIndex);
+
+    //alert('optionIndex')
  
     showResultsPage();
 
     showTestResult();
 
-    currentIndex.index = 1;    
+   // currentIndex.index = 1; 
+   
+    alert('optionIndex')
 
     return;
 
   } 
 
   if(isHistorySave){   
+
+    // alert('nen')
 
     saveTestHistory(optionIndex);
 
@@ -731,8 +754,13 @@ function chooseTest(id) {
 
     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
 
+
+   // alert(currentTestLength + " -- " + quNumber); 
+
     //тест завершен
-    if(quNumber === currentTestLength) {     
+    if(quNumber === currentTestLength) {   
+      
+      alert('тест завершен'); 
 
       curQuestionNumber = 1;
 
@@ -752,16 +780,25 @@ function chooseTest(id) {
 
         /////////////////////////////////////////
   
-      } else {
+      } 
+      
+      // else {
+
+
+      //   alert(currentTestLength);
   
-        localStorage.removeItem(currentTest.id);
+      //   //localStorage.removeItem(currentTest.id);
+
+       
   
-        currentTestLength = testsList[defaultRank][currentTest.id][0].length;
-      }
+      //   currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+
+      //   alert(currentTestLength);
+      // }
 
     }else {  //тест не завершен
 
-      //alert('тест не завершен');      
+        
 
       currentIndex.index = Number(Object.keys(history)[0]) + 1;
 
@@ -778,6 +815,8 @@ function chooseTest(id) {
     currentIndex.index = 1;
 
     curQuestionNumber = 1;
+
+    //alert(" ne ---   " + currentIndex.index);    
 
   }
 
