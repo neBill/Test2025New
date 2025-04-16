@@ -446,9 +446,11 @@ button_next.addEventListener("click", function() {
 
 function saveTestHistory(optionIndex) {    
  
-  const key = currentIndex.index;
+  //const key = currentIndex.index;
 
-  //alert(key)
+  const key = curQuestionNumber;
+
+  //alert(curQuestionNumber)
   
 
   let curItem = {};
@@ -460,7 +462,7 @@ function saveTestHistory(optionIndex) {
     curItem = JSON.parse(testHistory);
   }
 
-  alert(Object.keys(curItem)[0])
+  //alert(Object.keys(curItem)[0])
   
   let value = Object.values(curItem)[0] || {};
 
@@ -477,7 +479,7 @@ function saveTestHistory(optionIndex) {
 
   }
 
-  //alert(value)
+  //alert(key)
   
   curItem = { [key]: value };
 
@@ -487,7 +489,7 @@ function saveTestHistory(optionIndex) {
 
   localStorage.setItem(currentTest.id, JSON.stringify(curItem));
 
-  alert(Object.keys(curItem)[0])
+  //alert(Object.keys(curItem)[0])
 
 }
 
@@ -513,7 +515,7 @@ function check(optionIndex) {
 
    // currentIndex.index = 1; 
    
-    alert('optionIndex')
+    alert(currentIndex.index)
 
     return;
 
