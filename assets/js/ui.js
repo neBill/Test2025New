@@ -8,6 +8,8 @@ let isAnswerDone = false;
 let defaultRank;
 // let isDefaultSettings = false;
 
+let isMistakes = false;
+
 const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
 let mistakes = {};
 let currentTestLength;
@@ -447,22 +449,57 @@ button_next.addEventListener("click", function() {
 function saveTestHistory(optionIndex) {    
  
   //const key = currentIndex.index;
+  
 
-  const key = curQuestionNumber;
+ // const key = curQuestionNumber;
 
-  //alert(curQuestionNumber)
+  //alert("first")
+
+  //let isMistakes = true;
   
 
   let curItem = {};
   
-  const testHistory = localStorage.getItem(currentTest.id);
+  const history = localStorage.getItem(currentTest.id);
 
-  if (testHistory) {
 
-    curItem = JSON.parse(testHistory);
+  let mistakesQuantity = 0;
+ 
+
+
+//ubrat
+  if (history) {
+
+     curItem = JSON.parse(history);
+
+    const mistakes = Object.values(curItem)[0]; 
+
+    mistakesQuantity = Object.keys(mistakes).length;
+  
+  
+    // alert(mistakesQuantity)
+
+   }
+
+  
+
+  let key;
+
+  if(mistakesQuantity > 0) {
+
+    key = Object.keys(curItem)[0];
+   
+  }else{
+
+    key = currentIndex.index;
+
   }
 
-  //alert(Object.keys(curItem)[0])
+
+
+
+
+ // alert(key)
   
   let value = Object.values(curItem)[0] || {};
 
@@ -481,7 +518,7 @@ function saveTestHistory(optionIndex) {
 
   //alert(key)
   
-  curItem = { [key]: value };
+  curItem = { [key]: value};
 
  
 
@@ -515,7 +552,7 @@ function check(optionIndex) {
 
    // currentIndex.index = 1; 
    
-    alert(currentIndex.index)
+    //alert(currentIndex.index)
 
     return;
 
