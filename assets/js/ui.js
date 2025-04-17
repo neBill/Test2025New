@@ -292,6 +292,10 @@ function showTestResult() {
 
     if (mistakesQuantity === 0 && testState === 'завершен') {
         document.getElementById('result').innerHTML = testSuccess;
+
+        isMistakes = false;
+
+
         localStorage.removeItem(currentTest.id);
         return;
     }
@@ -463,7 +467,7 @@ function saveTestHistory(optionIndex) {
   const history = localStorage.getItem(currentTest.id);
 
 
-  let mistakesQuantity = 0;
+  //let mistakesQuantity = 0;
  
 
 
@@ -472,9 +476,9 @@ function saveTestHistory(optionIndex) {
 
      curItem = JSON.parse(history);
 
-    const mistakes = Object.values(curItem)[0]; 
+    //const mistakes = Object.values(curItem)[0]; 
 
-    mistakesQuantity = Object.keys(mistakes).length;
+    //mistakesQuantity = Object.keys(mistakes).length;
   
   
     // alert(mistakesQuantity)
@@ -485,7 +489,7 @@ function saveTestHistory(optionIndex) {
 
   let key;
 
-  if(mistakesQuantity > 0) {
+  if(isMistakes) {
 
     key = Object.keys(curItem)[0];
    
@@ -799,7 +803,7 @@ function chooseTest(id) {
     //тест завершен
     if(quNumber === currentTestLength) {   
       
-      alert('тест завершен'); 
+      //alert('тест завершен'); 
 
       curQuestionNumber = 1;
 
@@ -816,7 +820,7 @@ function chooseTest(id) {
         // obj = { newKey: oldKey, ...rest };
 
         
-
+        isMistakes = true;
         /////////////////////////////////////////
   
       } 
