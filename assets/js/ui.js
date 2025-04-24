@@ -8,7 +8,9 @@ let isAnswerDone = false;
 let defaultRank;
 // let isDefaultSettings = false;
 
-let isMistakes = false;
+
+
+let isTestFinished = false;
 
 const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
 let mistakes = {};
@@ -290,14 +292,24 @@ function showTestResult() {
     const mistakesQuantity = Object.keys(mistakes).length;
     const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
 
-    if (mistakesQuantity === 0 && testState === 'завершен') {
+    // if (mistakesQuantity === 0 && testState === 'завершен') {
+    if (testState === 'завершен') {
+
+      if(mistakesQuantity === 0) {
+
         document.getElementById('result').innerHTML = testSuccess;
 
-        isMistakes = false;
+        isTestFinished = false;
 
 
         localStorage.removeItem(currentTest.id);
         return;
+
+      } else {
+
+        isTestFinished = true;
+
+      }
     }
 
    // alert( `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`)
@@ -450,7 +462,7 @@ button_next.addEventListener("click", function() {
 
 
 
-function saveTestHistory(optionIndex) {    
+function saveTestHistory(optionIndex, currentIndex) {    
  
   //const key = currentIndex.index;
   
@@ -464,12 +476,14 @@ function saveTestHistory(optionIndex) {
 
   let curItem = {};
   
-  const history = localStorage.getItem(currentTest.id);
+ // const history = localStorage.getItem(currentTest.id);
+
+ const history = getTestHistory(currentTest.id);
 
 
   //let mistakesQuantity = 0;
  
-
+  let key
 
 //ubrat
   if (history) {
@@ -483,27 +497,41 @@ function saveTestHistory(optionIndex) {
   
     // alert(mistakesQuantity)
 
+    // if(isTestFinished) {
+
+    //   key = currentIndex;
+     
+    // }else{
+  
+     
+  
+    //   key = Object.keys(curItem)[0];
+  
+    // }
+
    }
 
   
+   key = Object.keys(curItem)[0];
+  
 
-  let key;
+  // if(isTestFinished) {
 
-  if(isMistakes) {
-
-    key = Object.keys(curItem)[0];
+  //   key = currentIndex;
    
-  }else{
+  // }else{
 
-    key = currentIndex.index;
+   
 
-  }
+  //   key = Object.keys(curItem)[0];
+
+  // }
 
 
 
 
 
- // alert(key)
+  alert(key)
   
   let value = Object.values(curItem)[0] || {};
 
@@ -528,7 +556,9 @@ function saveTestHistory(optionIndex) {
 
   //alert(Object.keys(curItem)[0])
 
-  localStorage.setItem(currentTest.id, JSON.stringify(curItem));
+ // localStorage.setItem(currentTest.id, JSON.stringify(curItem));
+
+  saveData(currentTest.id, JSON.stringify(curItem))
 
   //alert(Object.keys(curItem)[0])
 
@@ -544,9 +574,21 @@ function check(optionIndex) {
 
   //alert('hear')
 
+  let currentIndex = currentIndex.index;
+
+
+
+  
+
+
+
   if (curQuestionNumber === currentTestLength) {      
     
-    saveTestHistory(optionIndex);
+    saveTestHistory(optionIndex, currentIndex);
+
+
+
+
 
     //alert('optionIndex')
  
@@ -566,7 +608,7 @@ function check(optionIndex) {
 
     // alert('nen')
 
-    saveTestHistory(optionIndex);
+    saveTestHistory(optionIndex, currentIndex.index);
 
   }
 
@@ -594,6 +636,9 @@ function check(optionIndex) {
   updateQuestionBlock();
 
 }
+
+
+
 
 
 
@@ -647,13 +692,16 @@ function showTest() {
 
   document.addEventListener("click", function(event) {
 
-    const id = event.target.id;
+    const testId = event.target.id;
 
     const classNamed = event.target.className;
 
     if(classNamed === "test_button") {
       
-      chooseTest(id);
+
+      //const testName = event.target.textContent;
+
+      chooseTest(testId, event.target.textContent);
 
     } 
 
@@ -761,19 +809,19 @@ function showTest() {
 // });
 
 
-function chooseTest(id) {
+function chooseTest(testId, testName) {
 
   //if(event.target.className !== "test_button") return; 
 
   //currentTest.id = event.target.id;  
   
   
-  currentTest.id = id;
+  currentTest.id = testId;
   
 
   //const testHistory = localStorage.getItem(currentTest.id);
 
-  const history = getTestHistory(currentTest.id) 
+  const history = getTestHistory(testId) 
 
   //const mistakes = Object.values(history)[0];  
 
@@ -789,41 +837,36 @@ function chooseTest(id) {
     
     //const mistakes = getMistakes(testHistory);  
 
+    alert(isTestFinished)
+
     const mistakes = Object.values(history)[0]; 
 
     const mistakesQuantity = Object.keys(mistakes).length;
 
     const quNumber = Number(Object.keys(history)[0]);
 
-    currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+    currentTestLength = testsList[defaultRank][testId][0].length;
 
 
    // alert(currentTestLength + " -- " + quNumber); 
 
     //тест завершен
-    if(quNumber === currentTestLength) {   
+    //if(quNumber === currentTestLength) {   
+    if(isTestFinished) { 
       
       //alert('тест завершен'); 
 
       curQuestionNumber = 1;
 
-      if(mistakesQuantity > 0) {
+      //if(mistakesQuantity > 0) {
 
         currentIndex.index = Object.keys(mistakes)[0];        
 
         currentTestLength = mistakesQuantity;
 
-        //////////////////////////
-
-        // const { oldKey, ...rest } = obj;
-
-        // obj = { newKey: oldKey, ...rest };
-
-        
-        isMistakes = true;
-        /////////////////////////////////////////
+       
   
-      } 
+      //} 
       
       // else {
 
@@ -853,7 +896,7 @@ function chooseTest(id) {
     
   } else {
 
-    currentTestLength = testsList[defaultRank][currentTest.id][0].length;
+    currentTestLength = testsList[defaultRank][testId][0].length;
 
     currentIndex.index = 1;
 
@@ -875,8 +918,10 @@ function chooseTest(id) {
     currentTest.id += '*';
   
   }  
+
+  //alert(target.textContent)
  
-  showChosenTest(event.target.textContent);  
+  showChosenTest(testName);  
 
   updateQuestionBlock();
 

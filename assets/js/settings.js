@@ -213,7 +213,7 @@ function showHideMenu() {
 
     setSettings(settings)
 
-    saveSettings(settings);    
+    saveData('settings', settings);    
 
     removeButtons();
 
@@ -247,9 +247,9 @@ function showHelpPage() {
 
 
 
-function saveSettings(togglesState){   
+function saveData(key, valueObject ){   
 
-  localStorage.setItem("settings", JSON.stringify(togglesState));
+  localStorage.setItem(key, JSON.stringify(valueObject));
 
 }
 
