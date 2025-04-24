@@ -128,9 +128,9 @@ function showErrors(questionNumber) {
 }
 
 
-function updateQuestionBlock() { 
+function updateQuestionBlock(currentIndex, testId, testLength) { 
 
-  let currentQuestionBlock = testsList[defaultRank][currentTest.id][0][currentIndex.index - 1];
+  let currentQuestionBlock = testsList[defaultRank][testId][0][currentIndex - 1];
 
   let optionsCount = currentQuestionBlock[1].length;  
 
@@ -157,18 +157,18 @@ function updateQuestionBlock() {
 
     }
 
-    document.getElementById('option' + i).innerHTML = currentQuestionBlock[1][i][0];
+    document.getElementById(i.toString()).innerHTML = currentQuestionBlock[1][i][0];
 
-    document.getElementById('option' + i).style.border = 'none';
+    document.getElementById(i.toString()).style.border = 'none';
 
-    document.getElementById('option' + i).disabled = false;
+    document.getElementById(i.toString()).disabled = false;
   }
 
   document.getElementById('question').innerHTML = currentQuestionBlock[0];
 
   // alert(`Вопрос: ${curQuestionNumber}/${currentTestLength}`)
   
-  document.getElementById('counter').innerHTML = `Вопрос: ${curQuestionNumber}/${currentTestLength}`;
+  document.getElementById('counter').innerHTML = `Вопрос: ${currentIndex}/${testLength}`;
 
 }
 
@@ -692,16 +692,13 @@ function showTest() {
 
   document.addEventListener("click", function(event) {
 
-    const testId = event.target.id;
+    const id = event.target.id;
 
     const classNamed = event.target.className;
 
-    if(classNamed === "test_button") {
-      
+    if(classNamed === "test_button") {     
 
-      //const testName = event.target.textContent;
-
-      chooseTest(testId, event.target.textContent);
+      chooseTest(id, event.target.textContent);
 
     } 
 
@@ -711,8 +708,17 @@ function showTest() {
 
     }
 
+    if (classNamed == "option_button") {
+
+      check(id);
+
+    }
+
   
   })
+
+
+
 
 
 
@@ -821,7 +827,11 @@ function chooseTest(testId, testName) {
 
   //const testHistory = localStorage.getItem(currentTest.id);
 
-  const history = getTestHistory(testId) 
+  const history = getTestHistory(testId);
+
+  currentTestLength = testsList[defaultRank][testId][0].length;//////////remove?
+
+  const testLength = testsList[defaultRank][testId][0].length;
 
   //const mistakes = Object.values(history)[0];  
 
@@ -845,7 +855,9 @@ function chooseTest(testId, testName) {
 
     const quNumber = Number(Object.keys(history)[0]);
 
-    currentTestLength = testsList[defaultRank][testId][0].length;
+    // currentTestLength = testsList[defaultRank][testId][0].length;
+
+    // currentTestLength = testsList[defaultRank][testId][0].length;
 
 
    // alert(currentTestLength + " -- " + quNumber); 
@@ -886,9 +898,9 @@ function chooseTest(testId, testName) {
 
         
 
-      currentIndex.index = Number(Object.keys(history)[0]) + 1;
+      //currentIndex.index = Number(Object.keys(history)[0]) + 1;
 
-      curQuestionNumber = currentIndex.index;      
+      curQuestionNumber = Number(Object.keys(history)[0]) + 1;      
 
 
     }
@@ -896,9 +908,9 @@ function chooseTest(testId, testName) {
     
   } else {
 
-    currentTestLength = testsList[defaultRank][testId][0].length;
+    //currentTestLength = testsList[defaultRank][testId][0].length;
 
-    currentIndex.index = 1;
+   // currentIndex.index = 1;
 
     curQuestionNumber = 1;
 
@@ -923,7 +935,7 @@ function chooseTest(testId, testName) {
  
   showChosenTest(testName);  
 
-  updateQuestionBlock();
+  updateQuestionBlock(curQuestionNumber, testId, testLength);
 
 
 }
