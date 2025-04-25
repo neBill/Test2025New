@@ -6,7 +6,7 @@ let isHistorySave = true;
 //let isShuffle;
 let isAnswerDone = false;
 let defaultRank;
-// let isDefaultSettings = false;
+let currentIndex;
 
 
 
@@ -37,11 +37,7 @@ class CurrentTest {
    }
 }
 
-class Counter {
-  constructor(index) {    
-    this.index = index
-  }
-}
+
 
 // class WrongAnswers {
 //    constructor(answer) {
@@ -58,7 +54,7 @@ class Counter {
 // }
 
 // const wrongAnswers = new Errors();
-const currentIndex = new Counter(0);
+// const currentIndex = new Counter(0);
 const currentTest = new CurrentTest();
 
 
@@ -128,7 +124,9 @@ function showErrors(questionNumber) {
 }
 
 
-function updateQuestionBlock(currentIndex, testId, testLength) { 
+function updateQuestionBlock(testId) { 
+
+ // alert(currentIndex)
 
   let currentQuestionBlock = testsList[defaultRank][testId][0][currentIndex - 1];
 
@@ -168,7 +166,7 @@ function updateQuestionBlock(currentIndex, testId, testLength) {
 
   // alert(`Вопрос: ${curQuestionNumber}/${currentTestLength}`)
   
-  document.getElementById('counter').innerHTML = `Вопрос: ${currentIndex}/${testLength}`;
+  document.getElementById('counter').innerHTML = `Вопрос: ${currentIndex}/${currentTestLength}`;
 
 }
 
@@ -179,7 +177,7 @@ function setTrainingMode(optionIndex) {
 
   let borderColor = '';
 
-  if (currentTest.test[currentIndex.index][1][optionIndex][1] == 1) {
+  if (currentTest.test[currentIndex][1][optionIndex][1] == 1) {
 
     borderColor = "var(--right-answer-border)";
 
@@ -414,7 +412,7 @@ btnHome.addEventListener("click", function(event) {
 
   if (buttonText == "Завершить") {
 
-    if(currentIndex.index === 1 || !isAnswerDone) {
+    if(currentIndex === 1 || !isAnswerDone) {
 
         showLevels();    
         return;
@@ -531,7 +529,7 @@ function saveTestHistory(optionIndex, currentIndex) {
 
 
 
-  alert(key)
+ // alert(key)
   
   let value = Object.values(curItem)[0] || {};
 
@@ -568,37 +566,15 @@ function saveTestHistory(optionIndex, currentIndex) {
 
 function check(optionIndex) {  
 
-  isAnswerDone = true;  
+  isAnswerDone = true;     
 
-  //alert(curQuestionNumber + " -- " + currentTestLength)
-
-  //alert('hear')
-
-  let currentIndex = currentIndex.index;
-
-
-
-  
-
-
-
-  if (curQuestionNumber === currentTestLength) {      
+  if (currentIndex === currentTestLength) {      
     
-    saveTestHistory(optionIndex, currentIndex);
-
-
-
-
-
-    //alert('optionIndex')
+    saveTestHistory(optionIndex, currentIndex);    
  
     showResultsPage();
 
-    showTestResult();
-
-   // currentIndex.index = 1; 
-   
-    //alert(currentIndex.index)
+    showTestResult();   
 
     return;
 
@@ -608,16 +584,11 @@ function check(optionIndex) {
 
     // alert('nen')
 
-    saveTestHistory(optionIndex, currentIndex.index);
+    saveTestHistory(optionIndex, currentIndex);
 
   }
 
-  //  LearnMode //////////////////////////
-  //при верном ответе автоматически преходит на следующий вопрос, в новой редакции переход осуществляется пользователем
-  //if (isLearnMode === true && optionIndex != rightOptionIndex) { 
-  ///////////////////////////////////////////////////////////////////////////
- // if (isLearnMode === true) { 
-
+  
 
   if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
 
@@ -629,7 +600,8 @@ function check(optionIndex) {
 
   } 
 
-  currentIndex.index++;
+  //currentIndex.index++;
+  currentIndex++;
 
   curQuestionNumber++;
 
@@ -637,7 +609,17 @@ function check(optionIndex) {
 
 }
 
+// function checkIsTestFinished(currentIndex) {
+  
+//   return  currentIndex === currentTestLength ? true : false;
 
+// }
+
+function checkAnswer(chosenOption) {
+
+
+
+}
 
 
 
@@ -721,100 +703,6 @@ function showTest() {
 
 
 
-
-//choose test
-// document.addEventListener("click", function(event) {    
-
-//   if(event.target.className !== "test_button") return; 
-
-//   currentTest.id = event.target.id;     
-
-//   //const testHistory = localStorage.getItem(currentTest.id);
-
-//   const history = getTestHistory(currentTest.id) 
-
-//   //const mistakes = Object.values(history)[0];  
-
-//   //alert(history)
- 
-  
-//   // if(testHistory) {   
-//   if(history) {
-
-//     //const history = JSON.parse(testHistory) ;   
-
-//     //mistakes = Object.values(history)[0];   
-    
-//     //const mistakes = getMistakes(testHistory);  
-
-//     const mistakes = Object.values(history)[0]; 
-
-//     const mistakesQuantity = Object.keys(mistakes).length;
-
-//     const quNumber = Number(Object.keys(history)[0]);
-
-//     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
-
-//     //тест завершен
-//     if(quNumber === currentTestLength) {     
-
-//       curQuestionNumber = 1;
-
-//       if(mistakesQuantity > 0) {
-
-//         currentIndex.index = Object.keys(mistakes)[0];        
-
-//         currentTestLength = mistakesQuantity;
-  
-//       } else {
-  
-//         localStorage.removeItem(currentTest.id);
-  
-//         currentTestLength = testsList[defaultRank][currentTest.id][0].length;
-//       }
-
-//     }else {  //тест не завершен
-
-//       //alert('тест не завершен');      
-
-//       currentIndex.index = Number(Object.keys(history)[0]) + 1;
-
-//       curQuestionNumber = currentIndex.index;      
-
-
-//     }
-
-    
-//   } else {
-
-//     currentTestLength = testsList[defaultRank][currentTest.id][0].length;
-
-//     currentIndex.index = 1;
-
-//     curQuestionNumber = 1;
-
-//   }
-
-   
-//   if (isShuffle) {
-
-//     shuffle(currentTest.test);
-
-//     currentTest.id += '$';
-
-//   } else if (isLearnMode) {
-
-//     currentTest.id += '*';
-  
-//   }  
- 
-//   showChosenTest(event.target.textContent);  
-
-//   updateQuestionBlock();
-
-// });
-
-
 function chooseTest(testId, testName) {
 
   //if(event.target.className !== "test_button") return; 
@@ -829,9 +717,9 @@ function chooseTest(testId, testName) {
 
   const history = getTestHistory(testId);
 
-  currentTestLength = testsList[defaultRank][testId][0].length;//////////remove?
+  currentTestLength = testsList[defaultRank][testId][0].length;
 
-  const testLength = testsList[defaultRank][testId][0].length;
+ // const testLength = testsList[defaultRank][testId][0].length;
 
   //const mistakes = Object.values(history)[0];  
 
@@ -868,11 +756,11 @@ function chooseTest(testId, testName) {
       
       //alert('тест завершен'); 
 
-      curQuestionNumber = 1;
+      //curQuestionNumber = 1;
 
       //if(mistakesQuantity > 0) {
 
-        currentIndex.index = Object.keys(mistakes)[0];        
+        currentIndex = Object.keys(mistakes)[0];        
 
         currentTestLength = mistakesQuantity;
 
@@ -898,9 +786,9 @@ function chooseTest(testId, testName) {
 
         
 
-      //currentIndex.index = Number(Object.keys(history)[0]) + 1;
+      currentIndex = Number(Object.keys(history)[0]) + 1;
 
-      curQuestionNumber = Number(Object.keys(history)[0]) + 1;      
+      //curQuestionNumber = Number(Object.keys(history)[0]) + 1;      
 
 
     }
@@ -910,9 +798,9 @@ function chooseTest(testId, testName) {
 
     //currentTestLength = testsList[defaultRank][testId][0].length;
 
-   // currentIndex.index = 1;
+   currentIndex = 1;
 
-    curQuestionNumber = 1;
+    //curQuestionNumber = 1;
 
     //alert(" ne ---   " + currentIndex.index);    
 
@@ -935,7 +823,7 @@ function chooseTest(testId, testName) {
  
   showChosenTest(testName);  
 
-  updateQuestionBlock(curQuestionNumber, testId, testLength);
+  updateQuestionBlock(testId);
 
 
 }
