@@ -226,6 +226,7 @@ function showHideMenu() {
 function removeSettings() {
   
   localStorage.removeItem("settings");
+  
 
 }
 
