@@ -7,15 +7,17 @@ let isHistorySave = true;
 let isAnswerDone = false;
 let defaultRank;
 let currentIndex;
+//let testMistakes;
 
 let state = {
   currentIndex: 0,
-  wrongAnswers: []
+  wrongAnswers: [],
+  isMistakes: false
 };
 
 
 
-let isTestFinished = false;
+//let isTestFinished = false;
 
 const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
 //let mistakes = {};
@@ -92,7 +94,7 @@ function shuffle(arr) {
 
 function showErrors(btnValue){
 
- // alert(btnValue)
+
 
  // let val = Number(btnValue)
   
@@ -126,11 +128,54 @@ function showErrors(btnValue){
 
 
 
-function updateQuestionBlock(questionIndex) { 
+function updateQuestionBlock() { 
 
-  // let currentQuestionBlock = testsList[defaultRank][testId][0][currentIndex - 1];  
 
-  let currentQuestionBlock = testsList[defaultRank][currentTest.id][0][questionIndex];
+
+  let currentQuestionBlock;
+
+  let qQuantity;
+
+  
+ 
+
+
+  if(state.isMistakes) {
+  
+
+  
+
+   
+
+    state.wrongAnswers = getTestHistory(currentTest.id).wrongAnswers;
+
+    let qIndex = state.wrongAnswers[state.currentIndex][0];
+
+
+    alert(qIndex)
+   
+
+    qQuantity = state.wrongAnswers.length;
+ 
+    
+
+    currentQuestionBlock = testsList[defaultRank][currentTest.id][0][qIndex];
+
+    
+
+
+  } else {
+
+
+    
+
+    currentQuestionBlock = testsList[defaultRank][currentTest.id][0][state.currentIndex];
+
+    qQuantity = testsList[defaultRank][currentTest.id][0].length;
+
+  }
+
+   //currentQuestionBlock = testsList[defaultRank][currentTest.id][0][questionIndex];
 
   let optionsCount = currentQuestionBlock.answers.length;  
 
@@ -165,7 +210,7 @@ function updateQuestionBlock(questionIndex) {
 
   document.getElementById('question').innerHTML = currentQuestionBlock.question;
   
-  document.getElementById('counter').innerHTML = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`;
+  document.getElementById('counter').innerHTML = `Вопрос: ${state.currentIndex + 1}/${qQuantity}`;
 
   var ul = document.getElementById('testButtons');
 
@@ -238,10 +283,10 @@ function showTestResult() {
         return;
     }
 
-    const questionQuantity = Object.values(history)[0] + 1;
+    const questionQuantity = Object.values(history)[0];
     const mistakes = Object.values(history)[1];
 
-    //alert(mistakes[0])
+    
 
     // if (!mistakes || typeof mistakes !== 'object') {
     //     console.error("Mistakes data is invalid");
@@ -250,26 +295,38 @@ function showTestResult() {
 
     const mistakesQuantity = Object.keys(mistakes).length;
 
+    //alert(currentTestLength)
+
     const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
 
     // if (mistakesQuantity === 0 && testState === 'завершен') {
     if (testState === 'завершен') {
 
+      //тест пройден без ошибок
       if(mistakesQuantity === 0) {
 
         document.getElementById('result').innerHTML = testSuccess;
 
-        isTestFinished = false;
+        state.isMistakes = false;
 
 
         localStorage.removeItem(currentTest.id);
         return;
 
-      } else {
+      } else {//есть ошибки
 
-        isTestFinished = true;
+      
+
+        state.isMistakes = true;
+
+        state.currentIndex = 0;
+
+        saveTestHistory();
+
 
       }
+
+
     }
 
    
@@ -280,12 +337,13 @@ function showTestResult() {
     const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
 
     const resultHTML = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
+
     document.getElementById('result').innerHTML = resultHTML;
 
     // Clear previous buttons before adding new ones
     const btnContainer = document.getElementById('errors');
-    btnContainer.innerHTML = ''; 
 
+    btnContainer.innerHTML = ''; 
     
     //let count = 0;
 
@@ -305,14 +363,13 @@ function showTestResult() {
  
     
 
-
 function showSelectedMistake(id) {  
 
   const links = document.querySelectorAll(".error_button");
 
   const btnValue = document.getElementById(id).value;
 
-  //alert(erBtnId)
+ 
 
   showErrors(btnValue);
 
@@ -373,10 +430,10 @@ btnHome.addEventListener("click", function(event) {
 
     if(currentIndex === 1 || !isAnswerDone) {
 
-        showLevels();    
-        return;
+      showLevels();    
+      return;
     
-      } 
+    } 
     
     showResultsPage();
 
@@ -433,118 +490,146 @@ function saveTestHistory() {
 
 function check(optionIndex) {  
 
-  
-  // alert(optionIndex)
 
-  // if (state.currentIndex === currentTestLength - 1) {      
-    
-  //   saveTestHistory();    
+ let el = [state.currentIndex, optionIndex];
+
  
-  // //  showResultsPage();
+  //обработка ошибок
+  if(state.isMistakes) {  
 
-  // //  showTestResult();   
+ 
+    
+     let qIndex = state.wrongAnswers[state.currentIndex][0];
 
-  //   alert('Fin')
+     el = [qIndex, optionIndex];
 
-  //   return;
+    //alert(qIndex)
 
-  // } 
-
-
-  //alert(testsList[defaultRank][currentTest.id][0][0][1][0][1])
-
- // let selectedIndex = testsList[defaultRank][currentTest.id][0][0][1][optionIndex][1];
-
- ///////////////////////////////
-
-  //let answerText = document.getElementById(optionIndex).textContent
-
-  //let currentQuestionBlock = testsList[defaultRank][currentTest.id][0][0].answers;
-
-  //let answerKey = testsList[defaultRank][currentTest.id][0][0].answers[optionIndex][1];
-
-  //let ans = answerText + answerKey 
-
-// alert(currentQuestionBlock)
-
- // alert(currentQuestionBlock.indexOf(ans))
+   
 
 
-
-  /////////////////////////////////////
-
- //alert(testsList[defaultRank][currentTest.id][0][0].answers[optionIndex][1])
-
-// let answerKey = testsList[defaultRank][currentTest.id][0][0].answers[optionIndex][1];
-
-  //alert(answerKey)
-
-  if(optionIndex != 0){
-
-  // alert(state.currentIndex)
-
-    // mistake.questionNumber = (currentIndex -1).toString();
-    // mistake.userAnswer = optionIndex;
-
-    //alert(mistake.questionNumber)
-
-    //const mistake = [state.currentIndex, optionIndex]
-
-    // let fruits = ['яблоко', 'банан', 'вишня'];
-    // fruits.splice(1, 1, 'голубика');
-    // console.log(fruits); // ['яблоко', 'голубика', 'вишня']
+    let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);
 
     
 
-    //state.wrongAnswers.push([state.currentIndex, optionIndex])
+    //не прав
+    if(optionIndex != 0){
 
-    if(state.wrongAnswers.length > 0) {
+      //alert(el)
 
-      state.wrongAnswers.forEach((el) => {
+      // if(idx < 0) {
+        
+      //   if(optionIndex != 0){
+
+      //     state.wrongAnswers.push(el)
+
+      //   } else {
+
+      //     state.wrongAnswers.splice(idx, 1, el)
+
+      //   }
+
+      //alert("w")
       
-        alert(el[0])
+      state.wrongAnswers.splice(idx, 1, el)
 
-      })
+      state.currentIndex++;
 
-      // alert(state.wrongAnswers[state.currentIndex])
 
-    } else {
+      //прав
+    }else{
 
-      state.wrongAnswers.push([state.currentIndex, optionIndex]);
+        //alert("r")
+
+       // state.wrongAnswers.splice(idx, 1);
+
+        state.wrongAnswers.splice(state.currentIndex, 1);
+
+        // if(state.currentIndex > 0) {
+
+        //   state.currentIndex--;
+
+
+        // }
+        
+        currentTestLength--;
+
+        //alert(currentTestLength)
+
+        //return;
+
+        if(state.wrongAnswers.length <= 0) {
+
+          //alert('Fin')
+
+          //state.currentIndex = 0;
+
+          saveTestHistory();    
+      
+          showResultsPage();
+
+          showTestResult();   
+
+         // saveTestHistory();
+         
+
+         
+
+          return;
+
+        }
+
+
+       // state.currentIndex = 0;
+
 
     }
 
+      //state.currentIndex++;
+
+      saveTestHistory();
+
+
+   
+    //основной тест
+  } else { 
+
+      if(optionIndex != 0){
+
+        state.wrongAnswers.push(el); 
     
-  //  saveTestHistory(); 
+      };
 
-  } else {
+      saveTestHistory();
 
-   //alert("right")
-   //state.currentIndex
-   //saveTestHistory();
-
+      state.currentIndex++;
 
   }
 
-  
 
   
-
+  // state.currentIndex++;
   
 
-  saveTestHistory();
+ // saveTestHistory();
 
 
-  if (state.currentIndex === currentTestLength - 1) {      
+  if (state.currentIndex === currentTestLength) {   
     
+    //alert('Fin')
+
+    // state.currentIndex = 0;
+
     saveTestHistory();    
  
     showResultsPage();
 
     showTestResult();   
 
-    //alert('Fin')
-    state.currentIndex = 0;
+    
+    //state.currentIndex = 0;
+
+    state.isMistakes = false;
 
     return;
 
@@ -564,29 +649,12 @@ function check(optionIndex) {
 
   } 
 
-  //currentIndex.index++;
- // currentIndex++;
 
-  //curQuestionNumber++;
+  updateQuestionBlock();
 
-  //alert(currentIndex++)
 
-  state.currentIndex++;
-
-  //alert(state.currentIndex)
-
- // localStorage.setItem("quizState", JSON.stringify(state));
-
-  updateQuestionBlock(state.currentIndex);
 
 }
-
-// function checkIsTestFinished(currentIndex) {
-  
-//   return  currentIndex === currentTestLength ? true : false;
-
-// }
-
 
 
 
@@ -604,7 +672,7 @@ function showMainPage() {
 
 function showLevels() {
 
-  //alert(document.getElementById('results').style.display)
+  
 
   btnHome.style.display = "none";
   navBlock.style.display = "none";
@@ -618,7 +686,7 @@ function showLevels() {
   document.getElementById('counter').style.display = "none";
   //wrongAnswers.errors.length = 0;
 
-  //alert(document.getElementById('results').style.display)
+ 
 
 }
 
@@ -646,9 +714,18 @@ function showTest() {
 
     if(classNamed == "test_button") {   
       
-      //alert(id)
+    
 
-      chooseTest(id, event.target.textContent);
+      if(id == "tempRemove") {
+
+        clearHistory();
+
+
+      } else {
+
+        chooseTest(id, event.target.textContent);
+
+      }
 
     } 
 
@@ -661,7 +738,7 @@ function showTest() {
     if (classNamed == "option_button") {
 
 
-      //alert(typeof(value))
+      
 
       check(event.target.value);
 
@@ -680,27 +757,25 @@ function chooseTest(testId, testName) {
 
   //currentTest.id = event.target.id;  
 
-  //alert(testId)
-  
-  //alert(testName)
+ 
   currentTest.id = testId;
 
-  //alert(testsList[defaultRank][testId][0].length)
+ 
   
 
   //const testHistory = localStorage.getItem(currentTest.id);
 
   const history = getTestHistory(testId);
 
-  //alert(history.currentIndex)
+  
 
-  currentTestLength = testsList[defaultRank][testId][0].length;
+ // currentTestLength = testsList[defaultRank][testId][0].length;
 
  // const testLength = testsList[defaultRank][testId][0].length;
 
   //const mistakes = Object.values(history)[0];  
 
-  //alert(currentTestLength)
+ 
  
   
   // if(testHistory) {   
@@ -712,52 +787,82 @@ function chooseTest(testId, testName) {
     
     //const mistakes = getMistakes(testHistory);  
 
-    //alert("isTestFinished")
+    
+
+   
 
     //const mistakes = Object.values(history)[0]; 
 
     //const mistakesQuantity = Object.keys(mistakes).length;
 
-   // alert(history.wrongAnswers.length)
+   
 
     // const mistakesQuantity = Object.keys(mistakes).length;
 
-    const quNumber = history.currentIndex + 1;
+    
 
-    // currentTestLength = testsList[defaultRank][testId][0].length;
+    state = history;
 
-    if(quNumber === currentTestLength) { 
-
-
-      //...................здесь логика проработки допущенных ошибок..........................................................
+    
 
 
-      alert('ошибки'); 
-       
-      currentTestLength = history.wrongAnswers.length;
-
-      state.currentIndex = 0;
-
-      saveTestHistory();
+    if(state.isMistakes) {
+     
 
 
+      //alert('ошибки'); 
+
+     // state.wrongAnswers = history.wrongAnswers;
+
+     
 
     } else {
 
   
-      alert('тест '); 
+      //alert('тест '); 
 
 
-      state.currentIndex = quNumber;
+    
 
     }
+
+   // const quNumber = history.currentIndex + 1;
+
+    // currentTestLength = testsList[defaultRank][testId][0].length;
+
+    // if(quNumber === currentTestLength) { 
+
+
+    //   //...................здесь логика проработки допущенных ошибок..........................................................
+
+
+   
+    //   currentTestLength = history.wrongAnswers.length;
+
+    //   state.currentIndex = 0;
+
+    //   saveTestHistory();
+
+
+
+    // } else {
+
+  
+    
+
+
+    //   //state.currentIndex = quNumber;
+
+    // }
 
     
 
    
   } else {   
 
-   state.currentIndex = 0;    
+   state.currentIndex = 0;   
+   
+   currentTestLength = testsList[defaultRank][testId][0].length;
 
   }
 
@@ -774,12 +879,12 @@ function chooseTest(testId, testName) {
   
   }  
 
-  //alert(target.textContent)
+  
  
   showChosenTest(testName);  
 
-  updateQuestionBlock(state.currentIndex);
-
+  //updateQuestionBlock(state.currentIndex);
+  updateQuestionBlock();
 
 }
 

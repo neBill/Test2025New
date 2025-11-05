@@ -180,6 +180,23 @@ function createTestButtons(){
 
   });
 
+  ///////////////////////
+  //divTestsButtons.appendChild(testButton);
+
+  const testButton = document.createElement('button');
+
+  testButton.id = "tempRemove";
+
+  testButton.className = "test_button";
+
+  testButton.textContent = "DelHistory";
+
+  // testButton.onclick = clearHistory();
+
+  divTestsButtons.appendChild(testButton);
+
+
+
 }
 
 function removeButtons() {
