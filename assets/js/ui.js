@@ -94,6 +94,8 @@ function shuffle(arr) {
 
 function showErrors(btnValue){
 
+  //alert(btnValue)
+
 
 
  // let val = Number(btnValue)
@@ -105,9 +107,16 @@ function showErrors(btnValue){
   //проверить есть ли ошибки
   const userAnswer = mistakes[btnValue][1]; 
 
+ // alert(userAnswer)
+
   const questNumber = mistakes[btnValue][0];
 
-  updateQuestionBlock(questNumber)
+  //alert(questNumber)
+
+  //updateQuestionBlock(questNumber)
+  updateQuestionBlock()
+
+  // alert()
 
   divTest.style.display = 'block'; 
 
@@ -144,7 +153,7 @@ function updateQuestionBlock() {
   
 
   
-
+    //alert(state.isMistakes)
    
 
     state.wrongAnswers = getTestHistory(currentTest.id).wrongAnswers;
@@ -152,14 +161,16 @@ function updateQuestionBlock() {
     let qIndex = state.wrongAnswers[state.currentIndex][0];
 
 
-    alert(qIndex)
+   // alert(qIndex)
    
 
     qQuantity = state.wrongAnswers.length;
  
     
 
-    currentQuestionBlock = testsList[defaultRank][currentTest.id][0][qIndex];
+    //currentQuestionBlock = testsList[defaultRank][currentTest.id][0][qIndex];
+
+    currentQuestionBlock = testBases[currentTest.id].testBody[state.currentIndex];
 
     
 
@@ -169,9 +180,19 @@ function updateQuestionBlock() {
 
     
 
-    currentQuestionBlock = testsList[defaultRank][currentTest.id][0][state.currentIndex];
+    // currentQuestionBlock = testsList[defaultRank][currentTest.id][0][state.currentIndex];
 
-    qQuantity = testsList[defaultRank][currentTest.id][0].length;
+    alert(state.currentIndex)
+
+    currentQuestionBlock = testBases[currentTest.id].testBody[state.currentIndex];
+
+    
+   // alert(testBases[currentTest.id].testBody[state.currentIndex].answers.length)
+
+
+    //qQuantity = testsList[defaultRank][currentTest.id][0].length;
+
+    qQuantity = testBases[currentTest.id].testBody[state.currentIndex].answers.length;
 
   }
 
@@ -428,14 +449,22 @@ btnHome.addEventListener("click", function(event) {
 
   if (buttonText == "Завершить") {
 
-    if(currentIndex === 1 || !isAnswerDone) {
+    //alert(state.currentIndex)
+
+    if(state.currentIndex === 1 || !isAnswerDone) {
+
+      //alert(isAnswerDone)
 
       showLevels();    
       return;
     
     } 
+
+    state = {};
     
     showResultsPage();
+
+    //alert("Ok")
 
     showTestResult();
 
@@ -472,7 +501,7 @@ btnHome.addEventListener("click", function(event) {
 
 button_next.addEventListener("click", function() {
 
-  updateQuestionBlock(state.currentIndex);
+  updateQuestionBlock();
 
   document.getElementById('button_next').style.display = "none";
 
@@ -710,11 +739,31 @@ function showTest() {
 
     const id = event.target.id;
 
+
+     //alert(id)
+
+    
+
     const classNamed = event.target.className;
 
     if(classNamed == "test_button") {   
       
     
+      // if(id == "tempBtn") {
+
+      //   //const tm = new2026
+
+      //   const tm = Object.keys(testBases)
+
+      //  // currentTestLength = tm[0].length;
+
+      //  const d = tm[1]
+
+
+      //   alert(testBases[d][0].question)
+
+
+      // } 
 
       if(id == "tempRemove") {
 
@@ -723,13 +772,19 @@ function showTest() {
 
       } else {
 
+       // alert(id)
+
         chooseTest(id, event.target.textContent);
+
+        //chooseTest(id, event.target.textContent);
 
       }
 
     } 
 
     if (classNamed == "error_button") {
+
+      //alert("jjjj")
 
       showSelectedMistake(id);
 
@@ -741,6 +796,8 @@ function showTest() {
       
 
       check(event.target.value);
+
+      isAnswerDone = true;
 
     }
 
@@ -759,6 +816,8 @@ function chooseTest(testId, testName) {
 
  
   currentTest.id = testId;
+
+  //alert(testName)
 
  
   
@@ -860,9 +919,15 @@ function chooseTest(testId, testName) {
    
   } else {   
 
+
+
    state.currentIndex = 0;   
+
+   //alert(testBases[testId].testBody.length)
    
-   currentTestLength = testsList[defaultRank][testId][0].length;
+   //currentTestLength = testBases[testId][0].length;
+
+   currentTestLength = testBases[testId].testBody.length;
 
   }
 

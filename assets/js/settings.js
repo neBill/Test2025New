@@ -164,36 +164,83 @@ const testsList = {
 }
 
 
+// function createTestButtons(){ 
+  
+//   Object.keys(testsList[defaultRank]).forEach(key => {
+
+//     const testButton = document.createElement('button');
+
+//     testButton.id = key;
+
+//     testButton.className = "test_button";
+
+//     testButton.textContent = testsList[defaultRank][key][1]
+
+//     divTestsButtons.appendChild(testButton);
+
+//   });
+
+//   ///////////////////////
+//   //divTestsButtons.appendChild(testButton);
+
+//   const testButton = document.createElement('button');
+
+//   testButton.id = "tempRemove";
+
+//   testButton.className = "test_button";
+
+//   testButton.textContent = "DelHistory";
+
+//   // testButton.onclick = clearHistory();
+
+//   divTestsButtons.appendChild(testButton);
+
+
+//   /////////////////////////////////
+
+//   const tempButton = document.createElement('button');
+
+//   tempButton.id = "tempBtn";
+
+//   tempButton.className = "test_button";
+
+//   tempButton.textContent = "New";
+
+//   // testButton.onclick = clearHistory();
+
+//   divTestsButtons.appendChild(tempButton);
+
+//   //const tm = Object.keys(testBases)
+
+
+
+// }
+
+
 function createTestButtons(){ 
   
-  Object.keys(testsList[defaultRank]).forEach(key => {
+  Object.keys(testBases).forEach(key => {
 
     const testButton = document.createElement('button');
+
+   // alert(testBases[key].testTitle)
 
     testButton.id = key;
 
     testButton.className = "test_button";
 
-    testButton.textContent = testsList[defaultRank][key][1]
+
+    //alert(testBases[key][0])
+
+    testButton.textContent = testBases[key].testTitle;
 
     divTestsButtons.appendChild(testButton);
 
   });
 
-  ///////////////////////
-  //divTestsButtons.appendChild(testButton);
+ 
 
-  const testButton = document.createElement('button');
-
-  testButton.id = "tempRemove";
-
-  testButton.className = "test_button";
-
-  testButton.textContent = "DelHistory";
-
-  // testButton.onclick = clearHistory();
-
-  divTestsButtons.appendChild(testButton);
+  //const tm = Object.keys(testBases)
 
 
 
