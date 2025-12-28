@@ -69,7 +69,7 @@ btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
 function clearCaches(){   
 
-  caches.open('s-app-v1').then(cache => {
+  caches.open('offline-cache-v1').then(cache => {
     cache.keys().then(keys => {
       keys.forEach(request => {
         cache.delete(request);

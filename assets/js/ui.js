@@ -3,7 +3,7 @@
 let rightOptionIndex;
 //let isLearnMode;
 let isHistorySave = true;
-//let isShuffle;
+
 let isAnswerDone = false;
 let defaultRank;
 let currentIndex;
@@ -31,10 +31,24 @@ const btnMenu = document.getElementById('button_menu');
 const headerBlock = document.getElementById('header_block');
 const listBlock = document.getElementById('list-block');
 const tglLearnMode = document.getElementById('learn_mode');
-const tglShuffle = document.getElementById('shuffle');
+const tglShuffle = document.getElementById('shuffle'); 
+const questionElement = document.getElementById('question');
+const questionCounter = document.getElementById('counter');
+const testResult = document.getElementById('result');
 
 
+ // document.getElementById('results').style.display = NONE;
+  //divLavels.style.display = NONE;
+ // document.getElementById('questions_counter').style.display = NONE;
 
+
+const BLOCK = 'block';
+const NONE = 'none';
+
+
+const mainPage = document.getElementById('main_page');
+const resultBlock = document.getElementById('results');
+const counterBlock = document.getElementById('questions_counter');
 
 
 class CurrentTest {
@@ -44,203 +58,121 @@ class CurrentTest {
    }
 }
 
-
-
-// class WrongAnswers {
-//    constructor(answer) {
-//      this.answer = answer
-//    }
-// }
-
-
-// class Errors {  
-//   errors = []  
-//   addError(error) {   
-//     this.errors.push(error)
-//   }
-// }
-
-// const wrongAnswers = new Errors();
-// const currentIndex = new Counter(0);
 const currentTest = new CurrentTest();
 
 
-function putToCache(elem, cache) {
-  if (cache.indexOf(elem) !== -1) {
-    return;
-  }
-  let i = Math.floor(Math.random() * (cache.length + 1));
-  cache.splice(i, 0, elem);
-}
-
-
-function madness() {
-  let cache = [];
-  return function(a, b) {
-    putToCache(a, cache);
-    putToCache(b, cache);
-    return cache.indexOf(b) - cache.indexOf(a);
-  };
-}
-
-
-function shuffle(arr) {  
-
-    let compare = madness();
-    return arr.sort(compare);
-
-}
-
-
-function showErrors(btnValue){
-
-  //alert(btnValue)
-
-
-
- // let val = Number(btnValue)
-  
-  const history = getTestHistory(currentTest.id) 
-
-  const mistakes = Object.values(history)[1];   
-
-  //проверить есть ли ошибки
-  const userAnswer = mistakes[btnValue][1]; 
-
- // alert(userAnswer)
-
-  const questNumber = mistakes[btnValue][0];
-
-  //alert(questNumber)
-
-  //updateQuestionBlock(questNumber)
-  updateQuestionBlock()
-
-  // alert()
-
-  divTest.style.display = 'block'; 
-
-  document.getElementById('option0').style.border = 'var(--right-answer-border)';
-
-  document.getElementById('option' + userAnswer).style.border = 'var(--wrong-answer-border)'  
-
-  var nodes = document.getElementById("testButtons").getElementsByTagName('*');
-
-  for(var i = 0; i < nodes.length; i++){
-
-      nodes[i].disabled = true;
-  }
-  
-}
-
-
-
-
-
-function updateQuestionBlock() { 
-
-
-
-  let currentQuestionBlock;
-
-  let qQuantity;
+// function showErrors(btnValue){
 
   
+//  // const history = getTestHistory(currentTest.id) 
+
+//   //const mistakes = Object.values(history)[1];   
+
+//   //проверить есть ли ошибки
+
+//   const userAnswer = mistakes[btnValue][1]; 
+
  
 
+//   const questNumber = mistakes[btnValue][0];
 
-  if(state.isMistakes) {
-  
-
-  
-    //alert(state.isMistakes)
-   
-
-    state.wrongAnswers = getTestHistory(currentTest.id).wrongAnswers;
-
-    let qIndex = state.wrongAnswers[state.currentIndex][0];
-
-
-   // alert(qIndex)
-   
-
-    qQuantity = state.wrongAnswers.length;
  
-    
 
-    //currentQuestionBlock = testsList[defaultRank][currentTest.id][0][qIndex];
+//   //updateQuestionBlock(questNumber)
+//   //updateQuestionBlock()
 
-    currentQuestionBlock = testBases[currentTest.id].testBody[state.currentIndex];
+ 
 
-    
+//   const questionBlock = testBases[currentTest.id].testBody[state.currentIndex];   
+
+//   fillQuestionBlock(questionBlock)
+
+ 
+
+//   divTest.style.display = 'block'; 
+
+//   document.getElementById('option0').style.border = 'var(--right-answer-border)';
+
+//   document.getElementById('option' + userAnswer).style.border = 'var(--wrong-answer-border)'  
+
+//   var nodes = document.getElementById("testButtons").getElementsByTagName('*');
+
+//   for(var i = 0; i < nodes.length; i++){
+
+//       nodes[i].disabled = true;
+//   }
+  
+// }
 
 
-  } else {
+function fillQuestionBlock(questionBlock, isShuffle) {  
+  
+  const REQUIRED_OPTIONS = 4;
 
+  // 1. Безопасное получение и копирование массива ответов
+  let answers = Array.isArray(questionBlock?.answers)
+    ? [...questionBlock.answers]
+    : [];
 
-    
+  // 2. Дополнение до требуемого количества вариантов
+  while (answers.length < REQUIRED_OPTIONS) {
+    answers.push('Нет варианта ответа (*)');  }
 
-    // currentQuestionBlock = testsList[defaultRank][currentTest.id][0][state.currentIndex];
-
-    alert(state.currentIndex)
-
-    currentQuestionBlock = testBases[currentTest.id].testBody[state.currentIndex];
-
-    
-   // alert(testBases[currentTest.id].testBody[state.currentIndex].answers.length)
-
-
-    //qQuantity = testsList[defaultRank][currentTest.id][0].length;
-
-    qQuantity = testBases[currentTest.id].testBody[state.currentIndex].answers.length;
+  
+  // 3. Перемешивание массива
+  if(isShuffle) {
+    //const shuffled = shuffleArray(answers);
+    answers = shuffleArray(answers);   
 
   }
 
-   //currentQuestionBlock = testsList[defaultRank][currentTest.id][0][questionIndex];
+  // 4. Заполнение кнопок ответов
+  for (let i = 0; i < REQUIRED_OPTIONS; i++) {
+    const qBtn = document.getElementById(`option${i}`);
 
-  let optionsCount = currentQuestionBlock.answers.length;  
-
-  if(optionsCount < 4) {
-
-    while(optionsCount < 4) {
-
-      currentQuestionBlock.answers.push("Нет варианта ответа (*)");
-
-      optionsCount++;
-
+    if (qBtn) {
+      //qBtn.textContent = shuffled[i];
+      qBtn.textContent = answers[i];
+      qBtn.style.border = 'none';
+      qBtn.disabled = false;
+    } else {
+      console.warn(`Элемент #option${i} не найден в DOM. Проверьте разметку.`);
     }
-
-  }   
-
-
-  //shuffle(currentQuestionBlock.answers);  
-
-
-
-
-  for (var i = 0; i < 4; ++i) {    
-
-    const btnId = `option${i}`;
-
-    document.getElementById(btnId).innerHTML = currentQuestionBlock.answers[i];
-
-    document.getElementById(btnId).style.border = 'none';
-
-    document.getElementById(btnId).disabled = false;
   }
 
-  document.getElementById('question').innerHTML = currentQuestionBlock.question;
-  
-  document.getElementById('counter').innerHTML = `Вопрос: ${state.currentIndex + 1}/${qQuantity}`;
-
-  var ul = document.getElementById('testButtons');
-
-  for (var i = ul.children.length; i >= 0; i--) {
-
-    ul.appendChild(ul.children[Math.random() * i | 0]);
-
+   // 6. Обновление текста вопроса
+  if (questionElement) {
+    questionElement.textContent = questionBlock.question || 'Вопрос не указан';
+  } else {
+    console.error('Элемент questionElement не найден в DOM.');
   }
 
+  // 7. Обновление счётчика вопросов
+  //updateTeststatistics();
+
+  questionCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
+
+  //state.currentIndex++;
+
+}
+
+
+
+
+// function updateTeststatistics() { 
+
+//     questionCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
+
+// }
+
+
+function shuffleArray(array) {
+  const arr = [...array]; // создаём копию, чтобы не мутировать оригинал
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]]; // обмен через деструктуризацию
+  }
+  return arr;
 }
 
 
@@ -273,11 +205,11 @@ function setTrainingMode(optionIndex) {
 
 
 
-function calcRightAnswers(questionsQuantity, errorsQuantity ) { 
+function calcRightAnswers(questionsQuantity, errorsQuantity ) {  
 
-  let rightAnswersQuantity = Math.round(questionsQuantity - errorsQuantity);
+  const rightAnswersQuantity = questionsQuantity - errorsQuantity;
 
-  let percent = Math.round(rightAnswersQuantity * 100 / (questionsQuantity));
+  const percent = Math.round(rightAnswersQuantity * 100 / questionsQuantity); 
 
   return { rightAnswers: rightAnswersQuantity, errorsPercent: percent };
 }
@@ -298,14 +230,18 @@ function getTestHistory(testId) {
 function showTestResult() {  
 
     const history = getTestHistory(currentTest.id);
+
+
     
     if (!history || typeof history !== 'object') {
         console.error("Invalid test history");
         return;
     }
 
-    const questionQuantity = Object.values(history)[0];
-    const mistakes = Object.values(history)[1];
+    // const questionQuantity = Object.values(history)[0];
+    //const mistakes = Object.values(history)[1];
+
+   
 
     
 
@@ -314,9 +250,13 @@ function showTestResult() {
     //     return;
     // }
 
-    const mistakesQuantity = Object.keys(mistakes).length;
+    //const mistakesQuantity = Object.keys(mistakes).length;
 
-    //alert(currentTestLength)
+    const mistakesQuantity = history.wrongAnswers.length;
+
+    const questionQuantity = history.currentIndex + 1;
+
+  
 
     const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
 
@@ -326,7 +266,9 @@ function showTestResult() {
       //тест пройден без ошибок
       if(mistakesQuantity === 0) {
 
-        document.getElementById('result').innerHTML = testSuccess;
+        //document.getElementById('result').innerHTML = testSuccess;
+
+        testResult.textContent = testSuccess;
 
         state.isMistakes = false;
 
@@ -353,56 +295,144 @@ function showTestResult() {
    
 
     const testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
+
     const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
     const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
 
+
+
     const resultHTML = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
 
-    document.getElementById('result').innerHTML = resultHTML;
+    //document.getElementById('result').innerHTML = resultHTML;
 
-    // Clear previous buttons before adding new ones
-    const btnContainer = document.getElementById('errors');
+    testResult.innerHTML = resultHTML;
 
-    btnContainer.innerHTML = ''; 
+   
+    // const quNumber = history.
+
+    createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+
     
-    //let count = 0;
-
-    for(let i = 0; i < mistakes.length; i++) {
-
-      const button = document.createElement('button');
-      button.id = `erBtn${i}`;
-      button.value = i;
-      button.className = 'error_button';
-      const btnNumber = i + 1;
-      button.textContent = btnNumber;
-      btnContainer.appendChild(button);
-
-    }
 
 }
- 
+
+
+
+function createMistakesButtons(mistakesQuantity, mistakes) {    
+  
+  const btnContainer = document.getElementById('errors');  
+  
+  if (!btnContainer) {
+    console.error('Элемент с ID "errors" не найден в DOM');
+    return;
+  }
+
+  btnContainer.replaceChildren();
+   
+  for (let i = 0; i < mistakesQuantity; i++) {    
+
+    const btn = document.createElement('button');
+    btn.id = `erBtn${i}`;
+    btn.value = i;
+    btn.dataset.questionIndex = mistakes[i][0];
+    btn.dataset.userOption = mistakes[i][1];
+    btn.className = 'error_button';   
+    btn.textContent = i + 1;  
+    btnContainer.appendChild(btn);
+
+  }
+}
+
+
+
+function showSelectedMistake(btnId) {    
+
+  const targetBtn = document.getElementById(btnId);
+
+ // const btnValue = targetBtn.value;  
+
+ //const testLength = getCurrentTestLength
+
+  const btns = document.querySelectorAll(".error_button");
+
+  btns.forEach(btn => {
     
-
-function showSelectedMistake(id) {  
-
-  const links = document.querySelectorAll(".error_button");
-
-  const btnValue = document.getElementById(id).value;
-
- 
-
-  showErrors(btnValue);
-
-  links.forEach(link => {
-
-    link.setAttribute("style", "background:`:root { --main-bg-color}`");
+    btn.style.background = "var(--main-bg-color)";
 
   });
 
-  document.getElementById(id).style.background = "var(--error-btn-color)";
+  targetBtn.style.background = "var(--error-btn-color)"; 
+
+  const questionIndex = targetBtn.dataset.questionIndex;   
+
+  const questionBlock = testBases[currentTest.id].testBody[questionIndex];   
+
+  divTest.style.display = BLOCK; 
+
+  fillQuestionBlock(questionBlock, false);  
+
+  highlightOptions(targetBtn);  
+
+  lockOptions(".option_button");
+
+ 
+}
+
+function highlightOptions(targetBtn) {
+
+  const userAnswer = targetBtn.dataset.userOption;
+
+  document.getElementById('option0').style.border = 'var(--right-answer-border)';
+
+  document.getElementById('option' + userAnswer).style.border = 'var(--wrong-answer-border)';
 
 }
+
+
+// function highlightOptions(targetBtn, questionBlock) {
+  
+//     const userAnswer = targetBtn.dataset.userOption;
+//     const correctAnswer = questionBlock.correctAnswer; // Предполагаемое поле
+
+//     // Сброс предыдущих выделений
+//     document.querySelectorAll('.option').forEach(el => {
+//         el.classList.remove('correct', 'wrong');
+//     });
+
+//     // Подсвечиваем правильный ответ
+//     const correctEl = document.getElementById(`option${correctAnswer}`);
+//     if (correctEl) {
+//         correctEl.classList.add('correct');
+//     }
+
+//     // Подсвечиваем выбранный ответ
+//     const userEl = document.getElementById(`option${userAnswer}`);
+//     if (userEl && userAnswer !== correctAnswer) {
+//         userEl.classList.add('wrong');
+//     }
+// }
+
+
+
+
+function lockOptions(selector) {
+
+  document.querySelectorAll(selector).forEach(node => {
+    node.disabled = true;
+  });
+}
+
+
+function getCurrentQustionBlock(questionIndex) {
+  
+  const questionBlock = testBases[currentTest.id].testBody[questionIndex];
+
+  return questionBlock;
+
+}
+
+
 
 
 
@@ -449,22 +479,23 @@ btnHome.addEventListener("click", function(event) {
 
   if (buttonText == "Завершить") {
 
-    //alert(state.currentIndex)
+    
 
     if(state.currentIndex === 1 || !isAnswerDone) {
 
-      //alert(isAnswerDone)
+    
 
       showLevels();    
       return;
     
     } 
 
-    state = {};
+
+    clearTestState();
     
     showResultsPage();
 
-    //alert("Ok")
+    
 
     showTestResult();
 
@@ -494,14 +525,20 @@ btnHome.addEventListener("click", function(event) {
 
   }
 
-  //Object.keys(state).forEach(key => delete state[key]);
+  
   
 
 })
 
 button_next.addEventListener("click", function() {
 
-  updateQuestionBlock();
+ // updateQuestionBlock();
+
+  //const data = testBases[testId].testBody[state.currentIndex];
+
+  const questionBlock = getCurrentQustionBlock(state.currentIndex);
+
+  fillQuestionBlock(questionBlock, true)
 
   document.getElementById('button_next').style.display = "none";
 
@@ -513,28 +550,30 @@ function saveTestHistory() {
 
   localStorage.setItem(currentTest.id, JSON.stringify(state)); 
 
+  //state.currentIndex++;
+
 }
 
+function clearTestState() {
+
+  state.currentIndex = 0;
+  state.wrongAnswers = [];
+  state.isMistakes = false;
+
+};
 
 
-function check(optionIndex) {  
 
+function check(btnId) {  
 
- let el = [state.currentIndex, optionIndex];
-
- 
+   let questionBlock = getCurrentQustionBlock(state.currentIndex);
+  
   //обработка ошибок
-  if(state.isMistakes) {  
-
- 
+  if(state.isMistakes) {   
     
      let qIndex = state.wrongAnswers[state.currentIndex][0];
 
-     el = [qIndex, optionIndex];
-
-    //alert(qIndex)
-
-   
+     el = [qIndex, optionIndex]; 
 
 
     let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);
@@ -544,7 +583,7 @@ function check(optionIndex) {
     //не прав
     if(optionIndex != 0){
 
-      //alert(el)
+      
 
       // if(idx < 0) {
         
@@ -558,38 +597,40 @@ function check(optionIndex) {
 
       //   }
 
-      //alert("w")
+      
       
       state.wrongAnswers.splice(idx, 1, el)
 
-      state.currentIndex++;
+      
+
+      //state.currentIndex++;
 
 
-      //прав
+    //прав
     }else{
 
-        //alert("r")
+       
 
        // state.wrongAnswers.splice(idx, 1);
 
-        state.wrongAnswers.splice(state.currentIndex, 1);
+      state.wrongAnswers.splice(state.currentIndex, 1);
 
-        // if(state.currentIndex > 0) {
+      // if(state.currentIndex > 0) {
 
-        //   state.currentIndex--;
+      //   state.currentIndex--;
 
 
-        // }
-        
-        currentTestLength--;
+      // }
+      
+      currentTestLength--;
 
-        //alert(currentTestLength)
+      
 
-        //return;
+      
 
-        if(state.wrongAnswers.length <= 0) {
+      if(state.wrongAnswers.length <= 0) {
 
-          //alert('Fin')
+          
 
           //state.currentIndex = 0;
 
@@ -616,47 +657,38 @@ function check(optionIndex) {
 
       //state.currentIndex++;
 
-      saveTestHistory();
+    //  saveTestHistory();
 
 
    
-    //основной тест
+  
   } else { 
 
-      if(optionIndex != 0){
+    const correctAnswer = questionBlock.answers[0];
 
-        state.wrongAnswers.push(el); 
-    
-      };
+    const userAnswer = document.getElementById(btnId).textContent;     
 
-      saveTestHistory();
+    if(userAnswer !== correctAnswer){        
 
-      state.currentIndex++;
+      const userAnswerIndex = questionBlock.answers.indexOf(userAnswer);
+
+      const el = [state.currentIndex, userAnswerIndex];
+
+      state.wrongAnswers.push(el); 
+  
+    };
+
+    saveTestHistory();
+
+    state.currentIndex++;
 
   }
 
-
-  
-  // state.currentIndex++;
-  
-
- // saveTestHistory();
-
-
-  if (state.currentIndex === currentTestLength) {   
-    
-    //alert('Fin')
-
-    // state.currentIndex = 0;
-
-    saveTestHistory();    
+  if (state.currentIndex === currentTestLength ) {    
  
     showResultsPage();
 
-    showTestResult();   
-
-    
-    //state.currentIndex = 0;
+    showTestResult();   ;
 
     state.isMistakes = false;
 
@@ -664,44 +696,56 @@ function check(optionIndex) {
 
   } 
 
+
+  // if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
+
+  //   setTrainingMode(optionIndex);
+
+  //   currentIndex++;
+
+  //   return;
+
+  // } 
+
+  questionBlock = getCurrentQustionBlock(state.currentIndex);
+
+  fillQuestionBlock(questionBlock, true);
  
-
-  
-
-  if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
-
-    setTrainingMode(optionIndex);
-
-    currentIndex++;
-
-    return;
-
-  } 
+}
 
 
-  updateQuestionBlock();
+function correctMistakes(){
+
+
 
 
 
 }
-
 
 
 function showMainPage() {
 
-  document.getElementById('main_page').style.display = "block";
-  document.getElementById('results').style.display = "none";
-  divLavels.style.display = "none";
-  document.getElementById('questions_counter').style.display = 'none';
-  divTest.style.display = "none";
-  navBlock.style.display = "none";
-  document.getElementById('result').style.display = "none";
+  const elementsToHide = [
+    divLavels,
+    divTest,
+    navBlock,
+    testResult,
+    resultBlock, 
+    counterBlock,
+    mainPage    
+  ];
+
+  elementsToHide.forEach(element => {
+    element.classList.add('hidden');
+  });
+
+  mainPage.classList.remove('hidden');
+
+ 
 
 }
 
-function showLevels() {
-
-  
+function showLevels() { 
 
   btnHome.style.display = "none";
   navBlock.style.display = "none";
@@ -739,52 +783,26 @@ function showTest() {
 
     const id = event.target.id;
 
-
-     //alert(id)
-
-    
-
     const classNamed = event.target.className;
 
     if(classNamed == "test_button") {   
       
     
-      // if(id == "tempBtn") {
-
-      //   //const tm = new2026
-
-      //   const tm = Object.keys(testBases)
-
-      //  // currentTestLength = tm[0].length;
-
-      //  const d = tm[1]
-
-
-      //   alert(testBases[d][0].question)
-
-
-      // } 
-
       if(id == "tempRemove") {
 
         clearHistory();
 
+      } else {      
 
-      } else {
+        currentTest.id = id;
 
-       // alert(id)
-
-        chooseTest(id, event.target.textContent);
-
-        //chooseTest(id, event.target.textContent);
-
+        chooseTest(id, event.target.textContent);          
+        
       }
 
     } 
 
-    if (classNamed == "error_button") {
-
-      //alert("jjjj")
+    if (classNamed == "error_button") {     
 
       showSelectedMistake(id);
 
@@ -792,10 +810,7 @@ function showTest() {
 
     if (classNamed == "option_button") {
 
-
-      
-
-      check(event.target.value);
+      check(id);
 
       isAnswerDone = true;
 
@@ -805,151 +820,55 @@ function showTest() {
   })
 
 
-
-
-
-function chooseTest(testId, testName) {
-
-  //if(event.target.className !== "test_button") return; 
-
-  //currentTest.id = event.target.id;  
-
- 
-  currentTest.id = testId;
-
-  //alert(testName)
-
- 
+function getNextIndex(history) {
   
+  if (!history) return 0;
 
-  //const testHistory = localStorage.getItem(currentTest.id);
-
-  const history = getTestHistory(testId);
-
+  if (history.isMistakes) {
+    return history.wrongAnswers[0][0];
+  }
   
+  return history.currentIndex;   
+}
 
- // currentTestLength = testsList[defaultRank][testId][0].length;
+function getCurrentTestLength(testId, history){   
 
- // const testLength = testsList[defaultRank][testId][0].length;
-
-  //const mistakes = Object.values(history)[0];  
-
- 
- 
-  
-  // if(testHistory) {   
-  if(history) {
-
-    //const history = JSON.parse(testHistory) ;   
-
-    //mistakes = Object.values(history)[0];   
-    
-    //const mistakes = getMistakes(testHistory);  
-
-    
-
-   
-
-    //const mistakes = Object.values(history)[0]; 
-
-    //const mistakesQuantity = Object.keys(mistakes).length;
-
-   
-
-    // const mistakesQuantity = Object.keys(mistakes).length;
-
-    
-
-    state = history;
-
-    
-
-
-    if(state.isMistakes) {
-     
-
-
-      //alert('ошибки'); 
-
-     // state.wrongAnswers = history.wrongAnswers;
-
-     
-
-    } else {
-
-  
-      //alert('тест '); 
-
-
-    
-
-    }
-
-   // const quNumber = history.currentIndex + 1;
-
-    // currentTestLength = testsList[defaultRank][testId][0].length;
-
-    // if(quNumber === currentTestLength) { 
-
-
-    //   //...................здесь логика проработки допущенных ошибок..........................................................
-
-
-   
-    //   currentTestLength = history.wrongAnswers.length;
-
-    //   state.currentIndex = 0;
-
-    //   saveTestHistory();
-
-
-
-    // } else {
-
-  
-    
-
-
-    //   //state.currentIndex = quNumber;
-
-    // }
-
-    
-
-   
-  } else {   
-
-
-
-   state.currentIndex = 0;   
-
-   //alert(testBases[testId].testBody.length)
-   
-   //currentTestLength = testBases[testId][0].length;
-
-   currentTestLength = testBases[testId].testBody.length;
-
+  if (!history || !history.isMistakes) {
+    return testBases[testId].testBody.length;
   }
 
-   
-  if (tglShuffle.checked) {
+  if (history.isMistakes && history.wrongAnswers) {
+    return history.wrongAnswers.length;
+  }
+}
 
-    shuffle(currentTest.test);
 
-    currentTest.id += '$';
 
-  } else if (tglLearnMode.checked) {
+function chooseTest(testId, testName) {  
 
-    currentTest.id += '*';
-  
-  }  
+  const history = getTestHistory(testId);   
 
-  
+  currentTestLength = getCurrentTestLength(testId, history);
  
-  showChosenTest(testName);  
+  state.currentIndex = getNextIndex(history);
+   
+  // if (tglShuffle.checked) {
 
-  //updateQuestionBlock(state.currentIndex);
-  updateQuestionBlock();
+  //   shuffle(currentTest.test);
+
+  //   currentTest.id += '$';
+
+  // } else if (tglLearnMode.checked) {
+
+  //   currentTest.id += '*';
+  
+  // }    
+ 
+  showChosenTest(testName);   
+
+  const questionBlock = getCurrentQustionBlock(state.currentIndex);
+
+  fillQuestionBlock(questionBlock, true); 
 
 }
 
@@ -961,7 +880,8 @@ function showResultsPage() {
   document.getElementById('button_next').style.display = "none";
   document.getElementById('results').style.display = 'block';
   divTest.style.display = "none";
-  document.getElementById('result').style.display = "block";
+  //document.getElementById('result').style.display = "block";
+  testResult.style.display = "block";
   document.getElementById('counter').style.display = "none"; 
   btnHome.innerText = "На главную";
 
@@ -970,8 +890,12 @@ function showResultsPage() {
 function showChosenTest(testName) {
   
   divTest.style.display = "block";
-  document.getElementById('counter').innerHTML = "Вопрос: 1/" + currentTestLength;
-  document.getElementById('counter').style.display = "block";
+  // document.getElementById('counter').innerHTML = "Вопрос: 1/" + currentTestLength;
+  // document.getElementById('counter').style.display = "block";
+  questionCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
+  questionCounter.style.display = "block";
+
+
   document.getElementById('questions_counter').style.display = 'block';
   divLavels.style.display = "none";
   navBlock.style.display = "block";
