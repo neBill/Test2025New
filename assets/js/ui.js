@@ -25,7 +25,7 @@ let currentTestLength;
 let curQuestionNumber;
 const btnHome = document.getElementById('button_home');
 const navBlock = document.getElementById('nav_block');
-const divLavels = document.getElementById('levels');
+const divLevels = document.getElementById('levels');
 const divTest = document.getElementById('test');
 const btnMenu = document.getElementById('button_menu');
 const headerBlock = document.getElementById('header_block');
@@ -35,6 +35,7 @@ const tglShuffle = document.getElementById('shuffle');
 const questionElement = document.getElementById('question');
 const questionCounter = document.getElementById('counter');
 const testResult = document.getElementById('result');
+const mistakeButtons = document.getElementById('mistakeButtons');  
 
 
  // document.getElementById('results').style.display = NONE;
@@ -49,6 +50,9 @@ const NONE = 'none';
 const mainPage = document.getElementById('main_page');
 const resultBlock = document.getElementById('results');
 const counterBlock = document.getElementById('questions_counter');
+
+
+const testTitle = document.getElementById('test-title');
 
 
 class CurrentTest {
@@ -319,16 +323,15 @@ function showTestResult() {
 
 
 
-function createMistakesButtons(mistakesQuantity, mistakes) {    
+function createMistakesButtons(mistakesQuantity, mistakes) {     
+   
   
-  const btnContainer = document.getElementById('errors');  
-  
-  if (!btnContainer) {
+  if (!mistakeButtons) {
     console.error('Элемент с ID "errors" не найден в DOM');
     return;
   }
 
-  btnContainer.replaceChildren();
+  mistakeButtons.replaceChildren();
    
   for (let i = 0; i < mistakesQuantity; i++) {    
 
@@ -339,7 +342,7 @@ function createMistakesButtons(mistakesQuantity, mistakes) {
     btn.dataset.userOption = mistakes[i][1];
     btn.className = 'error_button';   
     btn.textContent = i + 1;  
-    btnContainer.appendChild(btn);
+    mistakeButtons.appendChild(btn);
 
   }
 }
@@ -726,7 +729,7 @@ function correctMistakes(){
 function showMainPage() {
 
   const elementsToHide = [
-    divLavels,
+    divLevels,
     divTest,
     navBlock,
     testResult,
@@ -747,26 +750,70 @@ function showMainPage() {
 
 function showLevels() { 
 
-  btnHome.style.display = "none";
-  navBlock.style.display = "none";
-  divLavels.style.display = "block";
-  document.getElementById('errors').innerHTML = "";
-  document.getElementById('test-title').innerHTML = "";
-  document.getElementById('results').style.display = "none";
-  divTest.style.display = "none";
-  btnMenu.style.display = "block";
-  headerBlock.style.display = "block";
-  document.getElementById('counter').style.display = "none";
-  //wrongAnswers.errors.length = 0;
+  //alert('show lev')
 
+  const elementsToHide = [
+    
+    btnHome,
+    navBlock,    
+    divTest,
+    resultBlock,
+    questionCounter
+    
+
+  ];
+
+  const elementsToShow = [
+
+    divLevels,
+    btnMenu,
+    headerBlock
+
+  ];
+
+  
+
+   mistakeButtons.textContent = "";
+   testTitle.textContent = "";
+
+  
+
+  elementsToHide.forEach(element => {
+    element.classList.add('hidden');
+  });
+
+  elementsToShow.forEach(element => {
+    element.classList.remove('hidden');
+  });
+
+  
+
+
+
+ // btnHome.style.display = "none";
+ // navBlock.style.display = "none";
+
+
+ //divLevels.style.display = "block";
+  // document.getElementById('mistakeButtons').innerHTML = "";
+  // document.getElementById('test-title').innerHTML = "";
+ // document.getElementById('results').style.display = "none";
+
+  //divTest.style.display = "none";
+ // btnMenu.style.display = "block";
+ // headerBlock.style.display = "block";
+
+  //document.getElementById('counter').style.display = "none";
  
+
+
 
 }
 
 function showTest() {
 
   document.getElementById('questions_counter').style.display = 'block';
-  divLavels.style.display = "none";
+  divLevels.style.display = "none";
   document.getElementById('counter').style.display = "block";
 }
 
@@ -897,7 +944,7 @@ function showChosenTest(testName) {
 
 
   document.getElementById('questions_counter').style.display = 'block';
-  divLavels.style.display = "none";
+  divLevels.style.display = "none";
   navBlock.style.display = "block";
   document.getElementById('button_next').style.display = "none";
 
@@ -914,7 +961,7 @@ function showChosenTest(testName) {
 
 //////////////////////////////////////////////////////////////////////list///////////////////
 
-const testTitle = document.getElementById('test-title');
+//const testTitle = document.getElementById('test-title');
 
 testTitle.addEventListener("click", list)
 
