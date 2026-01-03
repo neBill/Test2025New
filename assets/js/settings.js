@@ -218,6 +218,8 @@ const testsList = {
 
 
 function createTestButtons(){ 
+
+  //alert()
   
   Object.keys(testBases).forEach(key => {
 
@@ -241,6 +243,7 @@ function createTestButtons(){
  
 
   //const tm = Object.keys(testBases)
+  divTest.classList.add('hidden');
 
 
 
@@ -248,7 +251,7 @@ function createTestButtons(){
 
 function removeButtons() {
     
-  divLevelss.innerHTML = '';
+  divLevels.innerHTML = '';
   
 }
 

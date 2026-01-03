@@ -371,7 +371,7 @@ function showSelectedMistake(btnId) {
 
   const questionBlock = testBases[currentTest.id].testBody[questionIndex];   
 
-  divTest.style.display = BLOCK; 
+  divTest.classList.remove('hidden') ;
 
   fillQuestionBlock(questionBlock, false);  
 
@@ -815,7 +815,10 @@ function showLevels() {
 function showTest() {
 
   document.getElementById('questions_counter').style.display = 'block';
-  divLevels.style.display = "none";
+  //divLevels.style.display = "none";
+
+  divLevels.classList.add('hidden');
+
   document.getElementById('counter').style.display = "block";
 }
 
@@ -842,6 +845,8 @@ function showTest() {
         clearHistory();
 
       } else {      
+
+       // alert()
 
         currentTest.id = id;
 
@@ -928,7 +933,10 @@ function showResultsPage() {
   btnHome.style.display = "block";
   document.getElementById('button_next').style.display = "none";
   document.getElementById('results').style.display = 'block';
-  divTest.style.display = "none";
+  //divTest.style.display = "none";
+
+  divTest.classList.add('hidden');
+
   //document.getElementById('result').style.display = "block";
   testResult.style.display = "block";
   document.getElementById('counter').style.display = "none"; 
@@ -938,7 +946,7 @@ function showResultsPage() {
 
 function showChosenTest(testName) {
   
-  divTest.style.display = "block";
+  divTest.classList.remove('hidden');
   // document.getElementById('counter').innerHTML = "Вопрос: 1/" + currentTestLength;
   // document.getElementById('counter').style.display = "block";
   questionCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
@@ -946,8 +954,15 @@ function showChosenTest(testName) {
 
 
   document.getElementById('questions_counter').style.display = 'block';
-  divLevels.style.display = "none";
+
+
+  divLevels.classList.add('hidden');
+
+
   navBlock.style.display = "block";
+
+
+
   document.getElementById('button_next').style.display = "none";
 
   btnHome.innerText = "Завершить";

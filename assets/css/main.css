@@ -242,7 +242,7 @@ p{
 }
 
 /*#answers, #test, #errors_block, .results-block, .levels-block { */
-#answers, #test, #errors_block, .results-block {
+#answers, #errors_block, .results-block {
   display: none; 
 }
 
