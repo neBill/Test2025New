@@ -7,7 +7,7 @@ const shuffleToggle = document.getElementById('shuffle');
 const learnModeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("drop-down-menu");
 const divHelp = document.getElementById("help_block");
-const divTestsButtons = document.getElementById('levels');
+//const divTestsButtons = document.getElementById('levels');
 const btnIncreaseFontSize = document.getElementById('font-increase');
 const btnDecreaseFontSize = document.getElementById('font-decrease');
 const btnDefaultFontSize = document.getElementById('font-default');
@@ -234,7 +234,7 @@ function createTestButtons(){
 
     testButton.textContent = testBases[key].testTitle;
 
-    divTestsButtons.appendChild(testButton);
+    divLevels.appendChild(testButton);
 
   });
 
@@ -248,7 +248,7 @@ function createTestButtons(){
 
 function removeButtons() {
     
-  divTestsButtons.innerHTML = '';
+  divLevelss.innerHTML = '';
   
 }
 

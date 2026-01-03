@@ -486,6 +486,8 @@ btnHome.addEventListener("click", function(event) {
 
     if(state.currentIndex === 1 || !isAnswerDone) {
 
+
+      alert("уровни")
     
 
       showLevels();    
