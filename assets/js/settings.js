@@ -1,17 +1,17 @@
 'use strict';
 
-const lev5Toggle = document.getElementById('lev5');
-const lev6Toggle = document.getElementById('lev6');
-const themeToggle =  document.getElementById('theme'); 
-const shuffleToggle = document.getElementById('shuffle');
-const learnModeToggle = document.getElementById('learn_mode');
-const divDropdownMenu = document.getElementById("drop-down-menu");
-const divHelp = document.getElementById("help_block");
-//const divTestsButtons = document.getElementById('levels');
-const btnIncreaseFontSize = document.getElementById('font-increase');
-const btnDecreaseFontSize = document.getElementById('font-decrease');
-const btnDefaultFontSize = document.getElementById('font-default');
-const fontSizeSample = document.getElementById('fontsizeSample');
+// const lev5Toggle = document.getElementById('lev5');
+// const lev6Toggle = document.getElementById('lev6');
+// const themeToggle =  document.getElementById('theme'); 
+// const shuffleToggle = document.getElementById('shuffle');
+// const learnModeToggle = document.getElementById('learn_mode');
+// const divDropdownMenu = document.getElementById("drop-down-menu");
+// const divHelp = document.getElementById("help_block");
+// //const divTestsButtons = document.getElementById('levels');
+// const btnIncreaseFontSize = document.getElementById('font-increase');
+// const btnDecreaseFontSize = document.getElementById('font-decrease');
+// const btnDefaultFontSize = document.getElementById('font-default');
+// const fontSizeSample = document.getElementById('fontsizeSample');
 
 
 
@@ -93,6 +93,8 @@ function clearHistory() {
 
 window.addEventListener("load", ()=>{  
 
+   showMainPage();
+
   //set saved  settings
   if(localStorage.getItem('settings')) {   
 
@@ -106,7 +108,8 @@ window.addEventListener("load", ()=>{
     
   }    
  
-  createTestButtons();
+   createLevelsButtons();
+  //showMainPage();
   
 });
 
@@ -217,7 +220,7 @@ const testsList = {
 // }
 
 
-function createTestButtons(){ 
+function createLevelsButtons(){ 
 
   //alert()
   
@@ -256,13 +259,13 @@ function removeButtons() {
 }
 
 
-function showHideMenu() {
+function showHideMenu() {  
 
-  const visibility = window.getComputedStyle(divDropdownMenu).display;  
-
-  divDropdownMenu.style.display = visibility === "none" ? 'block' : 'none';
+  // Так как класс есть, он будет убран
+  divDropdownMenu.classList.toggle('hidden')
+  // А при повторном вызове будет снова добавлен
   
-  if(divDropdownMenu.style.display === "none") {   
+   if(divDropdownMenu.classList.contains('hidden')) {  
 
     const currentSettings = {
 
@@ -284,7 +287,7 @@ function showHideMenu() {
 
     removeButtons();
 
-    createTestButtons();
+    createLevelsButtons();
 
   }
 
@@ -300,13 +303,13 @@ function removeSettings() {
 
 function hideHelpPage() {
 
-  divHelp.style.display = "none";  
+  divHelp.classList.add('hidden'); 
 
 }
 
 function showHelpPage() {
 
-  divHelp.style.display = "block"; 
+  divHelp.classList.remove('hidden'); 
 
   showHideMenu();
 

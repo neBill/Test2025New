@@ -28,7 +28,7 @@ const navBlock = document.getElementById('nav_block');
 const divLevels = document.getElementById('levels');
 const divTest = document.getElementById('test');
 const btnMenu = document.getElementById('button_menu');
-const headerBlock = document.getElementById('header_block');
+const headerBlock = document.getElementById('header-block');
 const listBlock = document.getElementById('list-block');
 const tglLearnMode = document.getElementById('learn_mode');
 const tglShuffle = document.getElementById('shuffle'); 
@@ -36,6 +36,26 @@ const questionElement = document.getElementById('question');
 const questionCounter = document.getElementById('counter');
 const testResult = document.getElementById('result');
 const mistakeButtons = document.getElementById('mistakeButtons');  
+const lev5Toggle = document.getElementById('lev5');
+const lev6Toggle = document.getElementById('lev6');
+
+
+const shuffleToggle = document.getElementById('shuffle');
+const learnModeToggle = document.getElementById('learn_mode');
+const divDropdownMenu = document.getElementById("dropdown-menu-block");
+const divMenuButton = document.getElementById("menu-button-block");
+
+
+
+
+
+const divHelp = document.getElementById("help-block");
+const btnIncreaseFontSize = document.getElementById('font-increase');
+const btnDecreaseFontSize = document.getElementById('font-decrease');
+const btnDefaultFontSize = document.getElementById('font-default');
+const fontSizeSample = document.getElementById('fontsizeSample');
+const themeToggle =  document.getElementById('theme'); 
+
 
 
  // document.getElementById('results').style.display = NONE;
@@ -49,7 +69,7 @@ const NONE = 'none';
 
 const mainPage = document.getElementById('main_page');
 const resultBlock = document.getElementById('results');
-const counterBlock = document.getElementById('questions_counter');
+const questionsCounterBlock = document.getElementById('questions-counter');
 
 
 const testTitle = document.getElementById('test-title');
@@ -487,7 +507,7 @@ btnHome.addEventListener("click", function(event) {
     if(state.currentIndex === 1 || !isAnswerDone) {
 
 
-      alert("уровни")
+      //alert("уровни")
     
 
       showLevels();    
@@ -730,22 +750,34 @@ function correctMistakes(){
 
 function showMainPage() {
 
+  //alert()
+
   const elementsToHide = [
-    divLevels,
+    
     divTest,
     navBlock,
     testResult,
     resultBlock, 
-    counterBlock,
-    mainPage    
+    questionsCounterBlock,
+    divHelp,
+    listBlock,
+    divDropdownMenu
+      
   ];
 
   elementsToHide.forEach(element => {
     element.classList.add('hidden');
   });
 
-  mainPage.classList.remove('hidden');
+  // mainPage.classList.remove('hidden');
 
+
+ 
+
+//  divHelp.classList.add('hidden');
+//  listBlock.classList.add('hidden');
+
+  // createLevelsButtons();
  
 
 }
@@ -760,7 +792,7 @@ function showLevels() {
     navBlock,    
     divTest,
     resultBlock,
-    questionCounter
+    questionsCounterBlock
     
 
   ];
@@ -945,6 +977,8 @@ function showResultsPage() {
 }
 
 function showChosenTest(testName) {
+
+
   
   divTest.classList.remove('hidden');
   // document.getElementById('counter').innerHTML = "Вопрос: 1/" + currentTestLength;
@@ -953,13 +987,17 @@ function showChosenTest(testName) {
   questionCounter.style.display = "block";
 
 
-  document.getElementById('questions_counter').style.display = 'block';
+  //document.getElementById('questions_counter').style.display = 'block';
+
+  questionsCounterBlock.classList.remove('hidden');
 
 
   divLevels.classList.add('hidden');
 
 
-  navBlock.style.display = "block";
+  //navBlock.style.display = "block";
+
+  navBlock.classList.remove('hidden');
 
 
 
@@ -984,6 +1022,10 @@ testTitle.addEventListener("click", list)
 
 function list() {
 
+  //alert()
+
+
+
   const parrentBlock = document.getElementById('q-list');
 
   let questions = testsList[defaultRank][currentTest.id][0]
@@ -1003,7 +1045,9 @@ function list() {
   })  
  
 
-  listBlock.style.display = "block";
+  //listBlock.style.display = "block";
+
+  listBlock.classList.remove('hidden');
 
   questions = []
 
@@ -1016,7 +1060,8 @@ btnHideList.addEventListener("click", hideListBlock)
 
 function hideListBlock() {
 
-  listBlock.style.display = "none";
+  //listBlock.style.display = "none";
+  listBlock.classList.add('hidden');
 
 }
 
