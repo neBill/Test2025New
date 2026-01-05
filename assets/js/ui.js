@@ -23,7 +23,7 @@ const testSuccess = "<br>Тест успешно пройден!<br>Резуль
 //let mistakes = {};
 let currentTestLength;
 let curQuestionNumber;
-const btnHome = document.getElementById('button_home');
+
 const navBlock = document.getElementById('nav_block');
 const divLevels = document.getElementById('levels');
 const divTest = document.getElementById('test');
@@ -33,17 +33,21 @@ const listBlock = document.getElementById('list-block');
 const tglLearnMode = document.getElementById('learn_mode');
 const tglShuffle = document.getElementById('shuffle'); 
 const questionElement = document.getElementById('question');
-const questionCounter = document.getElementById('counter');
+const questionsCounter = document.getElementById('questions-counter');
 const testResult = document.getElementById('result');
 const mistakeButtons = document.getElementById('mistakeButtons');  
 const lev5Toggle = document.getElementById('lev5');
 const lev6Toggle = document.getElementById('lev6');
 
 
+
 const shuffleToggle = document.getElementById('shuffle');
 const learnModeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("dropdown-menu-block");
 const divMenuButton = document.getElementById("menu-button-block");
+
+const btnNext = document.getElementById("button-next");
+const btnHome = document.getElementById('button-home');
 
 
 
@@ -63,13 +67,13 @@ const themeToggle =  document.getElementById('theme');
  // document.getElementById('questions_counter').style.display = NONE;
 
 
-const BLOCK = 'block';
-const NONE = 'none';
+// const BLOCK = 'block';
+// const NONE = 'none';
 
 
 const mainPage = document.getElementById('main_page');
 const resultBlock = document.getElementById('results');
-const questionsCounterBlock = document.getElementById('questions-counter');
+const questionsCounterBlock = document.getElementById('questions-counter-block');
 
 
 const testTitle = document.getElementById('test-title');
@@ -174,7 +178,7 @@ function fillQuestionBlock(questionBlock, isShuffle) {
   // 7. Обновление счётчика вопросов
   //updateTeststatistics();
 
-  questionCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
+  questionsCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
 
   //state.currentIndex++;
 
@@ -510,7 +514,11 @@ btnHome.addEventListener("click", function(event) {
       //alert("уровни")
     
 
-      showLevels();    
+      //showLevels();  
+
+      showMainPage();
+      
+      
       return;
     
     } 
@@ -534,7 +542,9 @@ btnHome.addEventListener("click", function(event) {
 
     isAnswerDone = false;
 
-    showLevels();
+    //showLevels();
+
+    showMainPage();
 
   }
 
@@ -555,7 +565,7 @@ btnHome.addEventListener("click", function(event) {
 
 })
 
-button_next.addEventListener("click", function() {
+btnNext.addEventListener("click", function() {
 
  // updateQuestionBlock();
 
@@ -565,7 +575,7 @@ button_next.addEventListener("click", function() {
 
   fillQuestionBlock(questionBlock, true)
 
-  document.getElementById('button_next').style.display = "none";
+  btnNext.classList.add('hidden');
 
 })
 
@@ -765,20 +775,17 @@ function showMainPage() {
       
   ];
 
-  elementsToHide.forEach(element => {
-    element.classList.add('hidden');
-  });
+  hideElements(elementsToHide);
+
+  // elementsToHide.forEach(element => {
+  //   element.classList.add('hidden');
+  // });
 
   // mainPage.classList.remove('hidden');
+  //  divHelp.classList.add('hidden');
+  //  listBlock.classList.add('hidden');
 
-
- 
-
-//  divHelp.classList.add('hidden');
-//  listBlock.classList.add('hidden');
-
-  // createLevelsButtons();
- 
+   createLevelsButtons(); 
 
 }
 
@@ -805,6 +812,10 @@ function showLevels() {
 
   ];
 
+  hideElements(elementsToHide);
+
+  showElements(elementsToShow);
+
   
 
    mistakeButtons.textContent = "";
@@ -812,13 +823,13 @@ function showLevels() {
 
   
 
-  elementsToHide.forEach(element => {
-    element.classList.add('hidden');
-  });
+  // elementsToHide.forEach(element => {
+  //   element.classList.add('hidden');
+  // });
 
-  elementsToShow.forEach(element => {
-    element.classList.remove('hidden');
-  });
+  // elementsToShow.forEach(element => {
+  //   element.classList.remove('hidden');
+  // });
 
   
 
@@ -846,12 +857,16 @@ function showLevels() {
 
 function showTest() {
 
-  document.getElementById('questions_counter').style.display = 'block';
-  //divLevels.style.display = "none";
+  questionsCounterBlock.classList.remove('hidden');
+
+  
 
   divLevels.classList.add('hidden');
 
-  document.getElementById('counter').style.display = "block";
+  //document.getElementById('counter').style.display = "block";
+
+
+
 }
 
 
@@ -962,61 +977,126 @@ function chooseTest(testId, testName) {
 
 function showResultsPage() {
   
-  btnHome.style.display = "block";
-  document.getElementById('button_next').style.display = "none";
-  document.getElementById('results').style.display = 'block';
+  //btnHome.style.display = "block";
+
+  btnHome.classList.remove('hidden');
+
+
+ // document.getElementById('button_next').style.display = "none";
+
+  btnNext.classList.add('hidden');
+
+  testResult.classList.remove('hidden');
+
   //divTest.style.display = "none";
 
   divTest.classList.add('hidden');
 
   //document.getElementById('result').style.display = "block";
-  testResult.style.display = "block";
-  document.getElementById('counter').style.display = "none"; 
-  btnHome.innerText = "На главную";
+ // testResult.style.display = "block";
+
+  testResult.classList.remove('hidden');
+
+
+  // document.getElementById('counter').style.display = "none"; 
+
+  questionsCounter.classList.add('hidden');
+
+
+  btnHome.textContent = "На главную";
 
 }
 
+
+function hideElements(elementsArray){
+
+  elementsArray.forEach(element => {
+      element.classList.add('hidden');
+  });
+
+   
+}
+
+function showElements(elementsArray){  
+
+  elementsArray.forEach(element => {
+    element.classList.remove('hidden');
+  });
+
+}
+
+
+
 function showChosenTest(testName) {
 
+  const elementsToHide = [
+
+    divLevels,
+    btnHome,
+    btnMenu,
+    headerBlock
+
+  ]
+
+  const elementsToShow = [  
+
+    divTest,
+    questionsCounter,
+    questionsCounterBlock,
+    navBlock,
+    btnNext
+
+  ]
+
+  hideElements(elementsToHide);
+
+  showElements(elementsToShow);
 
   
-  divTest.classList.remove('hidden');
+ // divTest.classList.remove('hidden');
   // document.getElementById('counter').innerHTML = "Вопрос: 1/" + currentTestLength;
   // document.getElementById('counter').style.display = "block";
-  questionCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
-  questionCounter.style.display = "block";
+  questionsCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
+
+
+  //questionsCounter.classList.remove('hidden');
 
 
   //document.getElementById('questions_counter').style.display = 'block';
 
-  questionsCounterBlock.classList.remove('hidden');
+ ///questionsCounterBlock.classList.remove('hidden');
 
 
-  divLevels.classList.add('hidden');
+  //divLevels.classList.add('hidden');
 
 
   //navBlock.style.display = "block";
 
-  navBlock.classList.remove('hidden');
+  //navBlock.classList.remove('hidden');
 
 
 
-  document.getElementById('button_next').style.display = "none";
+  //btnNext.classList.remove('hidden');
 
-  btnHome.innerText = "Завершить";
-  btnHome.style.display = "block";
+  // btnHome.textContent = "Завершить";
+
+  // btnHome.classList.add("hidden");
 
 
-  btnMenu.style.display = "none";
-  document.getElementById('test-title').innerHTML = testName;
-  headerBlock.style.display = "none";
+  // btnMenu.classList.add("hidden"); 
+
+  // headerBlock.classList.add("hidden");
+
+  questionsCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
+  testTitle.textContent = testName;
+  btnHome.textContent = "Завершить";
  
 
 }
 
 //////////////////////////////////////////////////////////////////////list///////////////////
 
-//const testTitle = document.getElementById('test-title');
+
 
 testTitle.addEventListener("click", list)
 

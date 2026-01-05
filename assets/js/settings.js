@@ -93,7 +93,7 @@ function clearHistory() {
 
 window.addEventListener("load", ()=>{  
 
-   showMainPage();
+ // showMainPage();
 
   //set saved  settings
   if(localStorage.getItem('settings')) {   
@@ -108,8 +108,8 @@ window.addEventListener("load", ()=>{
     
   }    
  
-   createLevelsButtons();
-  //showMainPage();
+  //createLevelsButtons();
+  showMainPage();
   
 });
 
