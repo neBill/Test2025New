@@ -25,8 +25,8 @@ let currentTestLength;
 let curQuestionNumber;
 
 const navBlock = document.getElementById('nav_block');
-const divLevels = document.getElementById('levels');
-const divTest = document.getElementById('test');
+const divLevels = document.getElementById('levels-buttons-block');
+const divTestButtons = document.getElementById('test-buttons-block');
 const btnMenu = document.getElementById('button-menu');
 const headerBlock = document.getElementById('header-block');
 const listBlock = document.getElementById('list-block');
@@ -34,7 +34,8 @@ const tglLearnMode = document.getElementById('learn_mode');
 const tglShuffle = document.getElementById('shuffle'); 
 const questionElement = document.getElementById('question');
 const questionsCounter = document.getElementById('questions-counter');
-const testResult = document.getElementById('result');
+const pTestResult = document.getElementById('test-result');
+const divTestResult = document.getElementById('test-result-block');
 const mistakeButtons = document.getElementById('mistakeButtons');  
 const lev5Toggle = document.getElementById('lev5');
 const lev6Toggle = document.getElementById('lev6');
@@ -58,7 +59,7 @@ const fontSizeSample = document.getElementById('fontsizeSample');
 const themeToggle =  document.getElementById('theme'); 
 
 const mainPage = document.getElementById('main_page');
-const resultBlock = document.getElementById('results');
+
 const questionsCounterBlock = document.getElementById('questions-counter-block');
 
 const testTitle = document.getElementById('test-title');
@@ -281,7 +282,7 @@ function showTestResult() {
 
         //document.getElementById('result').innerHTML = testSuccess;
 
-        testResult.textContent = testSuccess;
+        pTestResult.textContent = testSuccess;
 
         state.isMistakes = false;
 
@@ -305,21 +306,55 @@ function showTestResult() {
 
     }
 
-   
-
-    const testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
-
     const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+
+
+    const testInfo = [
+      
+      `Тест ${testState}`,
+      `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
+      
+
+    ]
+
+    
+
+    
+
+    
 
     const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
 
 
 
-    const resultHTML = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
+    const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
+    
+
+    for(let i = 0; i < 3; i++){
+
+      const line = document.createElement('p');
+      line.textContent = 
+
+
+    }
+
+   
+
+    // const testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
+
+    
+
+    // const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+
+    // const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
+
+
+
+    // const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
 
     //document.getElementById('result').innerHTML = resultHTML;
 
-    testResult.innerHTML = resultHTML;
+   // pTestResult.textContent = result;
 
    
     // const quNumber = history.
@@ -490,19 +525,11 @@ btnHome.addEventListener("click", function(event) {
   const buttonText = event.target.textContent
 
   if (buttonText == "Завершить") {
-
     
 
     if(state.currentIndex === 1 || !isAnswerDone) {
 
-
-      //alert("уровни")
-    
-
-      //showLevels();  
-
-      showMainPage();
-      
+      showMainPage();      
       
       return;
     
@@ -526,8 +553,6 @@ btnHome.addEventListener("click", function(event) {
   if (buttonText == "На главную") { 
 
     isAnswerDone = false;
-
-    //showLevels();
 
     showMainPage();
 
@@ -749,10 +774,10 @@ function showMainPage() {
 
   const elementsToHide = [
     
-    divTest,
+    divTestButtons,
     navBlock,
-    testResult,
-    resultBlock, 
+    divTestResult,
+    //resultBlock, 
     questionsCounterBlock,
     divHelp,
     listBlock,
@@ -763,7 +788,8 @@ function showMainPage() {
 
   const elementsToShow = [
     
-    divMenuButton
+    divMenuButton,
+    divLevels
     
   ];
 
@@ -771,45 +797,50 @@ function showMainPage() {
 
   showElements(elementsToShow); 
 
+  removeButtons();
+
   createLevelsButtons(); 
 
+  testTitle.textContent = "";
+
 }
 
-function showLevels() { 
+// function showLevels() { 
 
-  //alert('show lev')
+//   //alert('show lev')
 
-  const elementsToHide = [
+//   const elementsToHide = [
     
     
-    navBlock,    
-    divTest,
-    resultBlock,
-    questionsCounterBlock,
+//     navBlock,    
+//     divTest,
+//     resultBlock,
+//     questionsCounterBlock,
     
     
 
-  ];
+//   ];
 
-  const elementsToShow = [
+//   const elementsToShow = [
 
-    divLevels,
-    divMenuButton,
-    headerBlock
+//     divLevels,
+//     divMenuButton,
+//     headerBlock
 
-  ];
+//   ];
 
-  hideElements(elementsToHide);
+//   hideElements(elementsToHide);
 
-  showElements(elementsToShow);
+//   showElements(elementsToShow);
 
   
 
-   mistakeButtons.textContent = "";
-   testTitle.textContent = "";
+//    mistakeButtons.textContent = "";
+//    testTitle.textContent = "";
 
   
-}
+// }
+
 
 function showTest() {
 
@@ -931,34 +962,38 @@ function chooseTest(testId, testName) {
 
 
 
-function showResultsPage() {
+function showResultsPage() {  
+
+  const elementsToHide =[
+
+    divTestButtons,
+    questionsCounter
+
+  ]
+
+  const elementsToShow =[
+
+   
+    divHome,
+    divTestResult
+
+  ]
+
+
+  hideElements(elementsToHide);
+
+  showElements(elementsToShow);
   
 
+  //divHome.classList.remove('hidden');
 
-  //btnHome.classList.remove('hidden');
+  //testResult.classList.remove('hidden');
 
-  divHome.classList.remove('hidden');
+  //divTest.classList.add('hidden'); 
 
- 
+  //testResult.classList.remove('hidden');
 
-  //btnNext.classList.add('hidden');
-
-
-
-  testResult.classList.remove('hidden');
-
-
-
-  divTest.classList.add('hidden');
- 
-
-  testResult.classList.remove('hidden');
-
-
-
-
-  questionsCounter.classList.add('hidden');
-
+ // questionsCounter.classList.add('hidden');
 
   btnHome.textContent = "На главную";
 
@@ -997,7 +1032,7 @@ function showChosenTest(testName) {
 
   const elementsToShow = [  
 
-    divTest,
+    divTestButtons,
     questionsCounter,
     questionsCounterBlock,
     navBlock,

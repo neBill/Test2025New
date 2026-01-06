@@ -246,7 +246,7 @@ function createLevelsButtons(){
  
 
   //const tm = Object.keys(testBases)
-  divTest.classList.add('hidden');
+  divTestButtons.classList.add('hidden');
 
 
 
