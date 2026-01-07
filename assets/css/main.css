@@ -185,7 +185,7 @@ p{
 }
 
 
-.home_block{  
+.home-block{  
   float: left; 
   padding-right: 12px;  
   /*background-color: green;*/
@@ -199,7 +199,7 @@ p{
   
 }
 
-.next_block{   
+.next-block{   
   float: right;
   padding-left: 10px;
   /*background-color: yellow;*/
@@ -429,6 +429,11 @@ svg{
 
 .hidden {
   display: none;
+}
+
+.p-result {
+  text-align: center;
+  line-height: 0.5;
 }
 
 

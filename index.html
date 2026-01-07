@@ -93,7 +93,7 @@
               </div>
               <div class="toggle_btn">
               <label class='Toggle'>
-                <input type='checkbox' name='toggle' id='learn_mode' class="Toggle__input" unchecked />
+                <input type='checkbox' name='toggle' id='learn-mode-toggle' class="Toggle__input" unchecked />
                 <span class="Toggle__display" hidden/>
               </label>
               </div>
@@ -129,7 +129,7 @@
             
             <p><b>Оформление</b></p> 
             <div class="outline">
-              <label id="fontsizeSample">-- Образец шрифта -- </label>
+              <label id="font-size-sample">-- Образец шрифта -- </label>
             </div>
             <!-- <hr class="line"> -->
             <button class="font-size-change" id="font-increase" >Увеличить шрифт</button>              
@@ -195,7 +195,7 @@
       </div>
       
       <div class="counter-block" id="questions-counter-block">        
-        <p id="questions-counter"></p>    
+        <p class="p-result" id="questions-counter"></p>    
       </div>  
 
       
@@ -208,15 +208,16 @@
       
     	<div class="results-block" id="test-result-block">		
     		<!-- <p id="test-result"></p> -->
-    		<p id="wrong_results"></p>
-    		<p id="mistakeButtons"></p>  
+    		<!-- <p id="wrong_results"></p>
+    		<p id="mistakeButtons"></p>   -->
     	</div>     
       
       <div class="test-block" id="test-buttons-block" > 
         <button disabled class="question-button" id="question"></button>
         <hr class="line">
        
-        <div id="testButtons">
+        <div>
+          <!-- <div id="testButtons"> -->
           <button class="option_button" id="option0" value="0"></button>    
           <button class="option_button" id="option1" value="1"></button>    
           <button class="option_button" id="option2" value="2"></button>    
@@ -225,12 +226,12 @@
       </div>        
         
      
-      <div id="nav_block" class="footer" >    
-        <div class="home_block" id="button-home-block">  
+      <div class="footer" id="navigation-block">    
+        <div class="home-block" id="button-home-block">  
           <button class="footer_button" id="button-home" >На главную</button>
         </div>
        
-        <div class="next_block" id="button-next-block">
+        <div class="next-block" id="button-next-block">
           <button class="footer_button" id="button-next" >Следующий</button>
         </div><br><br>
       </div>

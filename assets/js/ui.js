@@ -19,29 +19,29 @@ let state = {
 
 //let isTestFinished = false;
 
-const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
+//const testSuccess = "<br>Тест успешно пройден!<br>Результат - 100%";
 //let mistakes = {};
 let currentTestLength;
-let curQuestionNumber;
+//let curQuestionNumber;
 
-const navBlock = document.getElementById('nav_block');
+const divNavigation = document.getElementById('navigation-block');
 const divLevels = document.getElementById('levels-buttons-block');
 const divTestButtons = document.getElementById('test-buttons-block');
 const btnMenu = document.getElementById('button-menu');
 const headerBlock = document.getElementById('header-block');
 const listBlock = document.getElementById('list-block');
-const tglLearnMode = document.getElementById('learn_mode');
+const tglLearnMode = document.getElementById('learn-mode-toggle');
 const tglShuffle = document.getElementById('shuffle'); 
 const questionElement = document.getElementById('question');
 const questionsCounter = document.getElementById('questions-counter');
 const pTestResult = document.getElementById('test-result');
 const divTestResult = document.getElementById('test-result-block');
-const mistakeButtons = document.getElementById('mistakeButtons');  
+//const mistakeButtons = document.getElementById('mistakeButtons');  
 const lev5Toggle = document.getElementById('lev5');
 const lev6Toggle = document.getElementById('lev6');
 
 const shuffleToggle = document.getElementById('shuffle');
-const learnModeToggle = document.getElementById('learn_mode');
+// const learnModeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("dropdown-menu-block");
 const divMenuButton = document.getElementById("menu-button-block");
 
@@ -55,10 +55,10 @@ const divHelp = document.getElementById("help-block");
 const btnIncreaseFontSize = document.getElementById('font-increase');
 const btnDecreaseFontSize = document.getElementById('font-decrease');
 const btnDefaultFontSize = document.getElementById('font-default');
-const fontSizeSample = document.getElementById('fontsizeSample');
+const fontSizeSample = document.getElementById('font-size-sample');
 const themeToggle =  document.getElementById('theme'); 
 
-const mainPage = document.getElementById('main_page');
+//const mainPage = document.getElementById('main_page');
 
 const questionsCounterBlock = document.getElementById('questions-counter-block');
 
@@ -251,28 +251,16 @@ function showTestResult() {
         console.error("Invalid test history");
         return;
     }
-
-    // const questionQuantity = Object.values(history)[0];
-    //const mistakes = Object.values(history)[1];
-
    
-
-    
-
-    // if (!mistakes || typeof mistakes !== 'object') {
-    //     console.error("Mistakes data is invalid");
-    //     return;
-    // }
-
-    //const mistakesQuantity = Object.keys(mistakes).length;
 
     const mistakesQuantity = history.wrongAnswers.length;
 
     const questionQuantity = history.currentIndex + 1;
-
   
 
     const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
+
+
 
     // if (mistakesQuantity === 0 && testState === 'завершен') {
     if (testState === 'завершен') {
@@ -282,7 +270,7 @@ function showTestResult() {
 
         //document.getElementById('result').innerHTML = testSuccess;
 
-        pTestResult.textContent = testSuccess;
+        pTestResult.textContent = "Тест успешно пройден! Результат - 100%";
 
         state.isMistakes = false;
 
@@ -309,34 +297,44 @@ function showTestResult() {
     const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
 
+    const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
+
+
+
+    //const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
+
+
     const testInfo = [
       
       `Тест ${testState}`,
       `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-      
+      `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
+      `${mistakesHeader}`
 
     ]
 
+    divTestResult.innerHTML = '';
     
-
-    
-
-    
-
-    const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
-
-
-
-    const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
-    
-
-    for(let i = 0; i < 3; i++){
+    testInfo.forEach(text => {
 
       const line = document.createElement('p');
-      line.textContent = 
+      line.textContent = text;
+      line.className = "p-result";     
+      divTestResult.appendChild(line);
+
+    })
+    
+
+    
+
+    // const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
 
 
-    }
+
+    // const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
+    
+
+   
 
    
 
@@ -359,6 +357,8 @@ function showTestResult() {
    
     // const quNumber = history.
 
+    //alert()
+
     createMistakesButtons(mistakesQuantity, history.wrongAnswers);
 
     
@@ -370,12 +370,7 @@ function showTestResult() {
 function createMistakesButtons(mistakesQuantity, mistakes) {     
    
   
-  if (!mistakeButtons) {
-    console.error('Элемент с ID "errors" не найден в DOM');
-    return;
-  }
-
-  mistakeButtons.replaceChildren();
+  const mistakeButtons = document.createElement('p');
    
   for (let i = 0; i < mistakesQuantity; i++) {    
 
@@ -389,6 +384,10 @@ function createMistakesButtons(mistakesQuantity, mistakes) {
     mistakeButtons.appendChild(btn);
 
   }
+
+  divTestResult.appendChild(mistakeButtons);
+
+
 }
 
 
@@ -415,7 +414,11 @@ function showSelectedMistake(btnId) {
 
   const questionBlock = testBases[currentTest.id].testBody[questionIndex];   
 
-  divTest.classList.remove('hidden') ;
+  divTestResult.classList.remove('hidden');
+
+  divTestButtons.classList.remove('hidden');
+
+  //alert(questionBlock)
 
   fillQuestionBlock(questionBlock, false);  
 
@@ -516,7 +519,7 @@ document.addEventListener("click", function(event) {
 });
 
 
-//переход на главную страницу,нажата кнопка На главную или Завершить
+//переход на главную страницу, нажата кнопка На главную или Завершить
 btnHome.addEventListener("click", function(event) {
 
     //showLevels();
@@ -775,7 +778,7 @@ function showMainPage() {
   const elementsToHide = [
     
     divTestButtons,
-    navBlock,
+    divNavigation,
     divTestResult,
     //resultBlock, 
     questionsCounterBlock,
@@ -842,19 +845,19 @@ function showMainPage() {
 // }
 
 
-function showTest() {
+// function showTest() {
 
-  questionsCounterBlock.classList.remove('hidden');
-
-  
-
-  divLevels.classList.add('hidden');
+//   questionsCounterBlock.classList.remove('hidden');
 
   
 
+//   divLevels.classList.add('hidden');
+
+  
 
 
-}
+
+// }
 
 
 
@@ -865,47 +868,49 @@ function showTest() {
   
 
 
-  document.addEventListener("click", function(event) {
+document.addEventListener("click", function(event) {
 
-    const id = event.target.id;
+  const id = event.target.id;
 
-    const classNamed = event.target.className;
+  const classNamed = event.target.className;
 
-    if(classNamed == "test_button") {   
-      
+  if(classNamed == "test_button") {   
     
-      if(id == "tempRemove") {
-
-        clearHistory();
-
-      } else {      
-
-       // alert()
-
-        currentTest.id = id;
-
-        chooseTest(id, event.target.textContent);          
-        
-      }
-
-    } 
-
-    if (classNamed == "error_button") {     
-
-      showSelectedMistake(id);
-
-    }
-
-    if (classNamed == "option_button") {
-
-      check(id);
-
-      isAnswerDone = true;
-
-    }
-
   
-  })
+    if(id == "tempRemove") {
+
+      clearHistory();
+
+    } else {      
+
+      // alert()
+
+      currentTest.id = id;
+
+      chooseTest(id, event.target.textContent);          
+      
+    }
+
+  } 
+
+  if (classNamed == "error_button") {   
+    
+    //alert()
+
+    showSelectedMistake(id);
+
+  }
+
+  if (classNamed == "option_button") {
+
+    check(id);
+
+    isAnswerDone = true;
+
+  }
+
+
+})
 
 
 function getNextIndex(history) {
@@ -983,17 +988,6 @@ function showResultsPage() {
   hideElements(elementsToHide);
 
   showElements(elementsToShow);
-  
-
-  //divHome.classList.remove('hidden');
-
-  //testResult.classList.remove('hidden');
-
-  //divTest.classList.add('hidden'); 
-
-  //testResult.classList.remove('hidden');
-
- // questionsCounter.classList.add('hidden');
 
   btnHome.textContent = "На главную";
 
@@ -1035,7 +1029,7 @@ function showChosenTest(testName) {
     divTestButtons,
     questionsCounter,
     questionsCounterBlock,
-    navBlock,
+    divNavigation,
     divHome
     
 
@@ -1044,38 +1038,6 @@ function showChosenTest(testName) {
   hideElements(elementsToHide);
 
   showElements(elementsToShow);
-
-  
- 
-
-
-  //questionsCounter.classList.remove('hidden');
-
-
-
-
- ///questionsCounterBlock.classList.remove('hidden');
-
-
-  //divLevels.classList.add('hidden');
-
-
-  
-
-  //navBlock.classList.remove('hidden');
-
-
-
-  //btnNext.classList.remove('hidden');
-
- 
-
-  // btnHome.classList.add("hidden");
-
-
-  // btnMenu.classList.add("hidden"); 
-
-  // headerBlock.classList.add("hidden");
 
   questionsCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
   testTitle.textContent = testName;

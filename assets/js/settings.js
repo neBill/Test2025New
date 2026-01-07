@@ -331,7 +331,7 @@ function setSettings(settings) {
   
   shuffleToggle.checked = settings.isShuffle;
 
-  learnModeToggle.checked = settings.isLearnMode;  
+  tglLearnMode.checked = settings.isLearnMode;  
 
   defaultRank = settings.defRank;
 
