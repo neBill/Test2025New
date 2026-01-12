@@ -112,13 +112,13 @@ window.addEventListener('popstate', function() {
 
 
 
-lev5Toggle.addEventListener('change', function() {   
+tglLevel5.addEventListener('change', function() {   
 
   setRankToggles('rank5')
   
 });
 
-lev6Toggle.addEventListener('change', function() {  
+tglLevel6.addEventListener('change', function() {  
 
   setRankToggles('rank6')
   
@@ -323,8 +323,8 @@ function setSettings(settings) {
 
 function setRankToggles(rank){  
 
-  lev6Toggle.checked = rank === 'rank6';
-  lev5Toggle.checked = rank !== 'rank6';
+  tglLevel6.checked = rank === 'rank6';
+  tglLevel5.checked = rank !== 'rank6';
   defaultRank = rank;
 
   // const isRank6 = rank === 'rank6';

@@ -41,14 +41,17 @@ const tglShuffle = document.getElementById('shuffle-toggle');
 const btnQuestion = document.getElementById('question-button');
 
 
-const questionsCounter = document.getElementById('questions-counter');
+const pQuestionsCounter = document.getElementById('questions-counter');
+
+const divQuestionsCounter = document.getElementById('questions-counter-block');
 
 
 const pTestResult = document.getElementById('test-result');
 const divTestResult = document.getElementById('test-result-block');
 //const mistakeButtons = document.getElementById('mistakeButtons');  
-const lev5Toggle = document.getElementById('lev5');
-const lev6Toggle = document.getElementById('lev6');
+const tglLevel5 = document.getElementById('level-5-toggle');
+
+const tglLevel6 = document.getElementById('level-6-toggle');
 
 //const shuffleToggle = document.getElementById('shuffle');
 // const learnModeToggle = document.getElementById('learn_mode');
@@ -68,9 +71,6 @@ const btnDefaultFontSize = document.getElementById('font-default');
 const fontSizeSample = document.getElementById('font-size-sample');
 const themeToggle =  document.getElementById('theme'); 
 
-//const mainPage = document.getElementById('main_page');
-
-const questionsCounterBlock = document.getElementById('questions-counter-block');
 
 const testTitle = document.getElementById('test-title');
 
@@ -174,7 +174,7 @@ function fillQuestionBlock(questionBlock, isShuffle) {
   // 7. Обновление счётчика вопросов
   //updateTeststatistics();
 
-  questionsCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
+  pQuestionsCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
 
   //state.currentIndex++;
 
@@ -791,7 +791,7 @@ function showMainPage() {
     divNavigation,
     divTestResult,
     //resultBlock, 
-    questionsCounterBlock,
+    divQuestionsCounter,
     divHelp,
     divList,
     divDropdownMenu,
@@ -982,7 +982,7 @@ function showResultsPage() {
   const elementsToHide =[
 
     divTestButtons,
-    questionsCounter
+    pQuestionsCounter
 
   ]
 
@@ -1037,8 +1037,8 @@ function showChosenTest(testName) {
   const elementsToShow = [  
 
     divTestButtons,
-    questionsCounter,
-    questionsCounterBlock,
+    pQuestionsCounter,
+    divQuestionsCounter,
     divNavigation,
     divHome
     
@@ -1049,7 +1049,7 @@ function showChosenTest(testName) {
 
   showElements(elementsToShow);
 
-  questionsCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
+  pQuestionsCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
   testTitle.textContent = testName;
   btnHome.textContent = "Завершить";
  
