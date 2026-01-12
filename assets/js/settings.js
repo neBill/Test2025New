@@ -1,23 +1,7 @@
 'use strict';
 
-// const lev5Toggle = document.getElementById('lev5');
-// const lev6Toggle = document.getElementById('lev6');
-// const themeToggle =  document.getElementById('theme'); 
-// const shuffleToggle = document.getElementById('shuffle');
-// const learnModeToggle = document.getElementById('learn_mode');
-// const divDropdownMenu = document.getElementById("drop-down-menu");
-// const divHelp = document.getElementById("help_block");
-// //const divTestsButtons = document.getElementById('levels');
-// const btnIncreaseFontSize = document.getElementById('font-increase');
-// const btnDecreaseFontSize = document.getElementById('font-decrease');
-// const btnDefaultFontSize = document.getElementById('font-default');
-// const fontSizeSample = document.getElementById('fontsizeSample');
 
-
-
-
-let currentFontSize = 20; // default fallback
-
+let currentFontSize = 20; 
 
 function increaseFontSize() {
   
@@ -220,35 +204,23 @@ const testsList = {
 // }
 
 
-function createLevelsButtons(){ 
-
-  //alert()
+function createLevelsButtons(){  
   
   Object.keys(testBases).forEach(key => {
 
-    const testButton = document.createElement('button');
-
-   // alert(testBases[key].testTitle)
+    const testButton = document.createElement('button');   
 
     testButton.id = key;
 
     testButton.className = "test_button";
-
-
-    //alert(testBases[key][0])
 
     testButton.textContent = testBases[key].testTitle;
 
     divLevels.appendChild(testButton);
 
   });
-
  
-
-  //const tm = Object.keys(testBases)
   divTestButtons.classList.add('hidden');
-
-
 
 }
 
@@ -269,8 +241,8 @@ function showHideMenu() {
 
     const currentSettings = {
 
-      isLearnMode : learnModeToggle.checked,
-      isShuffle : shuffleToggle.checked,
+      isLearnMode : tglLearnMode.checked,
+      isShuffle : tglShuffle.checked,
       isDarkTheme : themeToggle.checked,
       defRank : defaultRank,
       fontSize : currentFontSize,
@@ -295,8 +267,7 @@ function showHideMenu() {
 
 function removeSettings() {
   
-  localStorage.removeItem("settings");
-  
+  localStorage.removeItem("settings");  
 
 }
 
@@ -329,7 +300,7 @@ function setSettings(settings) {
 
   themeToggle.checked = settings.isDarkTheme; 
   
-  shuffleToggle.checked = settings.isShuffle;
+  tglShuffle.checked = settings.isShuffle;
 
   tglLearnMode.checked = settings.isLearnMode;  
 

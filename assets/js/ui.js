@@ -28,19 +28,29 @@ const divNavigation = document.getElementById('navigation-block');
 const divLevels = document.getElementById('levels-buttons-block');
 const divTestButtons = document.getElementById('test-buttons-block');
 const btnMenu = document.getElementById('button-menu');
-const headerBlock = document.getElementById('header-block');
-const listBlock = document.getElementById('list-block');
+//const headerBlock = document.getElementById('header-block');
+//const divHeader = document.getElementById('header-block');
+
+const divList = document.getElementById('list-block');
+
+
 const tglLearnMode = document.getElementById('learn-mode-toggle');
-const tglShuffle = document.getElementById('shuffle'); 
-const questionElement = document.getElementById('question');
+const tglShuffle = document.getElementById('shuffle-toggle'); 
+
+
+const btnQuestion = document.getElementById('question-button');
+
+
 const questionsCounter = document.getElementById('questions-counter');
+
+
 const pTestResult = document.getElementById('test-result');
 const divTestResult = document.getElementById('test-result-block');
 //const mistakeButtons = document.getElementById('mistakeButtons');  
 const lev5Toggle = document.getElementById('lev5');
 const lev6Toggle = document.getElementById('lev6');
 
-const shuffleToggle = document.getElementById('shuffle');
+//const shuffleToggle = document.getElementById('shuffle');
 // const learnModeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("dropdown-menu-block");
 const divMenuButton = document.getElementById("menu-button-block");
@@ -155,10 +165,10 @@ function fillQuestionBlock(questionBlock, isShuffle) {
   }
 
    // 6. Обновление текста вопроса
-  if (questionElement) {
-    questionElement.textContent = questionBlock.question || 'Вопрос не указан';
+  if (btnQuestion) {
+    btnQuestion.textContent = questionBlock.question || 'Вопрос не указан';
   } else {
-    console.error('Элемент questionElement не найден в DOM.');
+    console.error('Элемент btnQuestion не найден в DOM.');
   }
 
   // 7. Обновление счётчика вопросов
@@ -783,7 +793,7 @@ function showMainPage() {
     //resultBlock, 
     questionsCounterBlock,
     divHelp,
-    listBlock,
+    divList,
     divDropdownMenu,
     
       
@@ -1079,7 +1089,7 @@ function list() {
 
 
 
-  listBlock.classList.remove('hidden');
+  divList.classList.remove('hidden');
 
   questions = []
 
@@ -1093,7 +1103,7 @@ btnHideList.addEventListener("click", hideListBlock)
 function hideListBlock() {
 
   
-  listBlock.classList.add('hidden');
+  divList.classList.add('hidden');
 
 }
 
