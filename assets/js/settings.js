@@ -35,9 +35,9 @@ function setFontSize(fontSize) {
 
   // if(fontSize > 23 || fontSize < 17) return;  
 
-  document.body.style.setProperty("--btn-font-size", `${fontSize}px`);
+  docBody.style.setProperty("--btn-font-size", `${fontSize}px`);
  
-  fontSizeSample.style.fontSize = `${fontSize}px`;
+  lbFontSizeSample.style.fontSize = `${fontSize}px`;
 
   currentFontSize = fontSize;
 }
@@ -242,8 +242,8 @@ function showHideMenu() {
     const currentSettings = {
 
       isLearnMode : tglLearnMode.checked,
-      isShuffle : tglShuffle.checked,
-      isDarkTheme : themeToggle.checked,
+      // isShuffle : tglShuffle.checked,
+      isDarkTheme : tglTheme.checked,
       defRank : defaultRank,
       fontSize : currentFontSize,
       
@@ -298,9 +298,9 @@ function saveData(key, valueObject ){
 
 function setSettings(settings) {
 
-  themeToggle.checked = settings.isDarkTheme; 
+  tglTheme.checked = settings.isDarkTheme; 
   
-  tglShuffle.checked = settings.isShuffle;
+  //tglShuffle.checked = settings.isShuffle;
 
   tglLearnMode.checked = settings.isLearnMode;  
 
@@ -308,15 +308,17 @@ function setSettings(settings) {
 
   currentFontSize = settings.fontSize;
 
-  document.body.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
+  //document.body.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
+
+  docBody.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
 
   let theme;
 
-  themeToggle.checked == true  ? theme = 'dark-theme' : theme = 'light-theme';  
+  tglTheme.checked == true  ? theme = 'dark-theme' : theme = 'light-theme';  
 
   //const theme = settings.isDarkTheme ? 'dark-theme' : 'light-theme';
 
-  document.body.className = theme;
+  docBody.className = theme;
 
 }
 
@@ -337,7 +339,7 @@ function setRankToggles(rank){
 const defaultSettings = {
 
   isLearnMode : false,
-  isShuffle : false,
+  // isShuffle : false,
   isDarkTheme : false,
   defRank : 'rank6', 
   fontSize : 20,

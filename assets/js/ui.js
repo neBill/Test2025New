@@ -28,18 +28,13 @@ const divNavigation = document.getElementById('navigation-block');
 const divLevels = document.getElementById('levels-buttons-block');
 const divTestButtons = document.getElementById('test-buttons-block');
 const btnMenu = document.getElementById('button-menu');
-//const headerBlock = document.getElementById('header-block');
+
 //const divHeader = document.getElementById('header-block');
 
 const divList = document.getElementById('list-block');
-
-
 const tglLearnMode = document.getElementById('learn-mode-toggle');
-const tglShuffle = document.getElementById('shuffle-toggle'); 
-
 
 const btnQuestion = document.getElementById('question-button');
-
 
 const pQuestionsCounter = document.getElementById('questions-counter');
 
@@ -48,13 +43,13 @@ const divQuestionsCounter = document.getElementById('questions-counter-block');
 
 const pTestResult = document.getElementById('test-result');
 const divTestResult = document.getElementById('test-result-block');
+
 //const mistakeButtons = document.getElementById('mistakeButtons');  
+
 const tglLevel5 = document.getElementById('level-5-toggle');
 
 const tglLevel6 = document.getElementById('level-6-toggle');
 
-//const shuffleToggle = document.getElementById('shuffle');
-// const learnModeToggle = document.getElementById('learn_mode');
 const divDropdownMenu = document.getElementById("dropdown-menu-block");
 const divMenuButton = document.getElementById("menu-button-block");
 
@@ -68,11 +63,13 @@ const divHelp = document.getElementById("help-block");
 const btnIncreaseFontSize = document.getElementById('font-increase');
 const btnDecreaseFontSize = document.getElementById('font-decrease');
 const btnDefaultFontSize = document.getElementById('font-default');
-const fontSizeSample = document.getElementById('font-size-sample');
-const themeToggle =  document.getElementById('theme'); 
+const lbFontSizeSample = document.getElementById('font-size-sample');
+const tglTheme =  document.getElementById('theme-toggle'); 
 
 
-const testTitle = document.getElementById('test-title');
+const pTestTitle = document.getElementById('test-title');
+
+const docBody = document.body;
 
 
 class CurrentTest {
@@ -252,6 +249,8 @@ function getTestHistory(testId) {
 
 
 function showTestResult() {  
+
+  alert("ошибки")
 
     const history = getTestHistory(currentTest.id);
 
@@ -535,58 +534,89 @@ btnHome.addEventListener("click", function(event) {
     //showLevels();
 
 
-  const buttonText = event.target.textContent
+   //const buttonText = event.target.textContent
 
-  if (buttonText == "Завершить") {
+  // if (buttonText === "Завершить") {
     
 
-    if(state.currentIndex === 1 || !isAnswerDone) {
+  //   if(state.currentIndex === 1 || !isAnswerDone) {
 
-      showMainPage();      
+  //     showMainPage();      
       
-      return;
+  //     return;
     
-    } 
+  //   } 
 
 
-    clearTestState();
+  //   clearTestState();
     
-    showResultsPage();
-
-    
-
-    showTestResult();
-
-
+  //   showResultsPage();
 
     
 
-  }
+  //   showTestResult();
 
-  if (buttonText == "На главную") { 
 
-    isAnswerDone = false;
 
-    showMainPage();
+    
 
+  // }
+
+  // if (buttonText === "На главную") { 
+
+  //   isAnswerDone = false;
+
+  //   showMainPage();
+
+  // }
+  const btnValue = event.target.value;
+
+  switch (btnValue) {
+
+    case "complite":
+
+      if(state.currentIndex === 1 || !isAnswerDone) {
+
+        showMainPage();      
+        
+        return;
+    
+      } 
+
+      clearTestState();
+    
+      showResultsPage();    
+
+      showTestResult();
+
+      break;
+
+    case "mainpage":
+
+      isAnswerDone = false;
+
+      showMainPage();  
+
+      break;
   }
 
    
-
-
-
-  if(tglShuffle.checked) {
-
-    localStorage.removeItem(currentTest.id);
-
-    currentTest.id = '';
-
-  }
-
-  
-  
-
 })
+
+
+// function compliteTest(){
+
+
+
+// }
+
+// function compliteTest(){
+
+
+
+// }
+
+
 
 btnNext.addEventListener("click", function() {
 
@@ -606,9 +636,7 @@ btnNext.addEventListener("click", function() {
 
 function saveTestHistory() {     
 
-  localStorage.setItem(currentTest.id, JSON.stringify(state)); 
-
-  //state.currentIndex++;
+  localStorage.setItem(currentTest.id, JSON.stringify(state));   
 
 }
 
@@ -624,24 +652,67 @@ function clearTestState() {
 
 function check(btnId) {  
 
-   let questionBlock = getCurrentQustionBlock(state.currentIndex);
+  let questionBlock = getCurrentQustionBlock(state.currentIndex);
+
+
+  if (state.currentIndex === currentTestLength ) {    
+
+    finishTest();
+
+    return;
+
+  } 
+
+ 
   
   //обработка ошибок
   if(state.isMistakes) {   
-    
-     let qIndex = state.wrongAnswers[state.currentIndex][0];
 
+    correctMistakes();
+
+  } else { 
+
+    goTest(questionBlock);
+  }
+
+  // if (state.currentIndex === currentTestLength ) {    
+
+    
+
+  //   finishTest();
+
+  //   return;
+
+  // } 
+
+
+  // if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
+
+  //   runLernMode();
+
+  // } 
+
+
+
+  questionBlock = getCurrentQustionBlock(state.currentIndex);
+
+  fillQuestionBlock(questionBlock, true);
+ 
+}
+
+
+function correctMistakes(){
+
+
+  
+
+  let qIndex = state.wrongAnswers[state.currentIndex][0];
      el = [qIndex, optionIndex]; 
 
-
-    let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);
-
-    
+    let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);    
 
     //не прав
-    if(optionIndex != 0){
-
-      
+    if(optionIndex != 0){      
 
       // if(idx < 0) {
         
@@ -665,9 +736,7 @@ function check(btnId) {
 
 
     //прав
-    }else{
-
-       
+    }else{       
 
        // state.wrongAnswers.splice(idx, 1);
 
@@ -718,16 +787,17 @@ function check(btnId) {
     //  saveTestHistory();
 
 
-   
-  
-  } else { 
+}
 
-    const correctAnswer = questionBlock.answers[0];
+function goTest(questionBlock){
+
+
+const correctAnswer = questionBlock.answers[0];
 
     const userAnswer = document.getElementById(btnId).textContent;     
 
-    if(userAnswer !== correctAnswer){        
-
+    if(userAnswer !== correctAnswer){  
+      
       const userAnswerIndex = questionBlock.answers.indexOf(userAnswer);
 
       const el = [state.currentIndex, userAnswerIndex];
@@ -736,13 +806,32 @@ function check(btnId) {
   
     };
 
-    saveTestHistory();
+    //saveTestHistory();
 
     state.currentIndex++;
 
-  }
+    saveTestHistory();
 
-  if (state.currentIndex === currentTestLength ) {    
+    //alert(state.currentIndex)
+
+}
+
+function runLernMode(){
+
+
+     setTrainingMode(optionIndex);
+
+     currentIndex++;
+
+     return;
+
+
+}
+
+function finishTest(){
+
+
+  // alert(`${state.currentIndex} - ${currentTestLength}`)
  
     showResultsPage();
 
@@ -750,40 +839,11 @@ function check(btnId) {
 
     state.isMistakes = false;
 
-    return;
-
-  } 
-
-
-  // if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
-
-  //   setTrainingMode(optionIndex);
-
-  //   currentIndex++;
-
-  //   return;
-
-  // } 
-
-  questionBlock = getCurrentQustionBlock(state.currentIndex);
-
-  fillQuestionBlock(questionBlock, true);
- 
-}
-
-
-function correctMistakes(){
-
-
-
-
-
 }
 
 
 function showMainPage() {
 
-  //alert()
 
   const elementsToHide = [
     
@@ -814,68 +874,10 @@ function showMainPage() {
 
   createLevelsButtons(); 
 
-  testTitle.textContent = "";
+  pTestTitle.textContent = "";
 
 }
 
-// function showLevels() { 
-
-//   //alert('show lev')
-
-//   const elementsToHide = [
-    
-    
-//     navBlock,    
-//     divTest,
-//     resultBlock,
-//     questionsCounterBlock,
-    
-    
-
-//   ];
-
-//   const elementsToShow = [
-
-//     divLevels,
-//     divMenuButton,
-//     headerBlock
-
-//   ];
-
-//   hideElements(elementsToHide);
-
-//   showElements(elementsToShow);
-
-  
-
-//    mistakeButtons.textContent = "";
-//    testTitle.textContent = "";
-
-  
-// }
-
-
-// function showTest() {
-
-//   questionsCounterBlock.classList.remove('hidden');
-
-  
-
-//   divLevels.classList.add('hidden');
-
-  
-
-
-
-// }
-
-
-
-
-  //if(event.target.className !== "test_button") return; 
-
-  //currentTest.id = event.target.id;  
-  
 
 
 document.addEventListener("click", function(event) {
@@ -953,19 +955,7 @@ function chooseTest(testId, testName) {
 
   currentTestLength = getCurrentTestLength(testId, history);
  
-  state.currentIndex = getNextIndex(history);
-   
-  // if (tglShuffle.checked) {
-
-  //   shuffle(currentTest.test);
-
-  //   currentTest.id += '$';
-
-  // } else if (tglLearnMode.checked) {
-
-  //   currentTest.id += '*';
-  
-  // }    
+  state.currentIndex = getNextIndex(history); 
  
   showChosenTest(testName);   
 
@@ -1000,6 +990,7 @@ function showResultsPage() {
   showElements(elementsToShow);
 
   btnHome.textContent = "На главную";
+  btnHome.value = "mainpage";
 
 }
 
@@ -1050,8 +1041,9 @@ function showChosenTest(testName) {
   showElements(elementsToShow);
 
   pQuestionsCounter.textContent = `Вопрос: 1/"${currentTestLength}`;
-  testTitle.textContent = testName;
+  pTestTitle.textContent = testName;
   btnHome.textContent = "Завершить";
+  btnHome.value = "complite";
  
 
 }
@@ -1060,7 +1052,7 @@ function showChosenTest(testName) {
 
 
 
-testTitle.addEventListener("click", list)
+pTestTitle.addEventListener("click", list)
 
 function list() {
 
