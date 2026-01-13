@@ -251,6 +251,8 @@ function getTestHistory(testId) {
 function showTestResult() {  
 
   alert("ошибки")
+  alert(state.currentIndex)
+
 
     const history = getTestHistory(currentTest.id);
 
@@ -575,7 +577,9 @@ btnHome.addEventListener("click", function(event) {
 
     case "complite":
 
-      if(state.currentIndex === 1 || !isAnswerDone) {
+
+
+      if(state.wrongAnswers.length < 1 || !isAnswerDone) {
 
         showMainPage();      
         
@@ -586,6 +590,8 @@ btnHome.addEventListener("click", function(event) {
       clearTestState();
     
       showResultsPage();    
+
+      //alert(state.currentIndex)
 
       showTestResult();
 
@@ -650,48 +656,24 @@ function clearTestState() {
 
 
 
-function check(btnId) {  
+function check(btnId) {    
 
-  let questionBlock = getCurrentQustionBlock(state.currentIndex);
+  if (state.currentIndex === currentTestLength - 1) finishTest();  
 
-
-  if (state.currentIndex === currentTestLength ) {    
-
-    finishTest();
-
-    return;
-
-  } 
-
- 
+  let questionBlock = getCurrentQustionBlock(state.currentIndex);    
   
-  //обработка ошибок
-  if(state.isMistakes) {   
+  if(state.isMistakes) correctMistakes();   
 
-    correctMistakes();
+  if(!state.isMistakes) goThroughTest(questionBlock, btnId);
+  
 
-  } else { 
-
-    goTest(questionBlock);
-  }
-
-  // if (state.currentIndex === currentTestLength ) {    
-
-    
-
-  //   finishTest();
-
-  //   return;
-
-  // } 
-
-
-  // if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
+  
+  //if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
+  // if (tglLearnMode.checked === true) { 
 
   //   runLernMode();
 
   // } 
-
 
 
   questionBlock = getCurrentQustionBlock(state.currentIndex);
@@ -701,86 +683,43 @@ function check(btnId) {
 }
 
 
-function correctMistakes(){
-
-
-  
+function correctMistakes(){  
 
   let qIndex = state.wrongAnswers[state.currentIndex][0];
-     el = [qIndex, optionIndex]; 
 
-    let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);    
+  el = [qIndex, optionIndex]; 
+
+  let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);    
 
     //не прав
-    if(optionIndex != 0){      
-
-      // if(idx < 0) {
-        
-      //   if(optionIndex != 0){
-
-      //     state.wrongAnswers.push(el)
-
-      //   } else {
-
-      //     state.wrongAnswers.splice(idx, 1, el)
-
-      //   }
-
+  if(optionIndex != 0){    
       
-      
-      state.wrongAnswers.splice(idx, 1, el)
-
-      
-
-      //state.currentIndex++;
-
-
+    state.wrongAnswers.splice(idx, 1, el);   
+    //state.currentIndex++;
     //прав
-    }else{       
+  }else{             
 
-       // state.wrongAnswers.splice(idx, 1);
+    state.wrongAnswers.splice(state.currentIndex, 1);     
+    
+    currentTestLength--;
 
-      state.wrongAnswers.splice(state.currentIndex, 1);
+    if(state.wrongAnswers.length <= 0) {  
 
-      // if(state.currentIndex > 0) {
+      saveTestHistory();    
+  
+      showResultsPage();
 
-      //   state.currentIndex--;
-
-
-      // }
+      showTestResult();   
       
-      currentTestLength--;
+      return;
 
-      
-
-      
-
-      if(state.wrongAnswers.length <= 0) {
-
-          
-
-          //state.currentIndex = 0;
-
-          saveTestHistory();    
-      
-          showResultsPage();
-
-          showTestResult();   
-
-         // saveTestHistory();
-         
-
-         
-
-          return;
-
-        }
+    }
 
 
        // state.currentIndex = 0;
 
 
-    }
+  }
 
       //state.currentIndex++;
 
@@ -789,22 +728,22 @@ function correctMistakes(){
 
 }
 
-function goTest(questionBlock){
+function goThroughTest(questionBlock, btnId){
 
 
-const correctAnswer = questionBlock.answers[0];
+  const correctAnswer = questionBlock.answers[0];
 
-    const userAnswer = document.getElementById(btnId).textContent;     
+  const userAnswer = document.getElementById(btnId).textContent;     
 
-    if(userAnswer !== correctAnswer){  
+  if(userAnswer !== correctAnswer){  
       
-      const userAnswerIndex = questionBlock.answers.indexOf(userAnswer);
+    const userAnswerIndex = questionBlock.answers.indexOf(userAnswer);
 
-      const el = [state.currentIndex, userAnswerIndex];
+    const el = [state.currentIndex, userAnswerIndex];
 
-      state.wrongAnswers.push(el); 
+    state.wrongAnswers.push(el); 
   
-    };
+  };
 
     //saveTestHistory();
 
@@ -812,12 +751,13 @@ const correctAnswer = questionBlock.answers[0];
 
     saveTestHistory();
 
-    //alert(state.currentIndex)
+    alert(state.currentIndex)
 
 }
 
 function runLernMode(){
 
+  if(optionIndex != rightOptionIndex){
 
      setTrainingMode(optionIndex);
 
@@ -825,19 +765,23 @@ function runLernMode(){
 
      return;
 
+  }
+
 
 }
 
 function finishTest(){
 
 
-  // alert(`${state.currentIndex} - ${currentTestLength}`)
+   alert(`${state.currentIndex} - ${currentTestLength}`)
  
     showResultsPage();
 
-    showTestResult();   ;
+   // showTestResult();   
 
     state.isMistakes = false;
+
+    return;
 
 }
 
