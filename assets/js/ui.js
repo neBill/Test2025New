@@ -41,7 +41,7 @@ const pQuestionsCounter = document.getElementById('questions-counter');
 const divQuestionsCounter = document.getElementById('questions-counter-block');
 
 
-const pTestResult = document.getElementById('test-result');
+//const pTestResult = document.getElementById('test-result');
 const divTestResult = document.getElementById('test-result-block');
 
 //const mistakeButtons = document.getElementById('mistakeButtons');  
@@ -248,15 +248,12 @@ function getTestHistory(testId) {
 }
 
 
-function showTestResult() {  
+function showTestResult(testState) {  
+  
 
-  alert("ошибки")
-  alert(state.currentIndex)
-
+  //alert(state.currentIndex)
 
     const history = getTestHistory(currentTest.id);
-
-
     
     if (!history || typeof history !== 'object') {
         console.error("Invalid test history");
@@ -269,25 +266,39 @@ function showTestResult() {
     const questionQuantity = history.currentIndex + 1;
   
 
-    const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
-
+    //const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
 
 
     // if (mistakesQuantity === 0 && testState === 'завершен') {
-    if (testState === 'завершен') {
+
+    if (testState === 'complite') {
 
       //тест пройден без ошибок
       if(mistakesQuantity === 0) {
 
-        //document.getElementById('result').innerHTML = testSuccess;
+        //const pTestResult = document.createElement("p");
 
-        pTestResult.textContent = "Тест успешно пройден! Результат - 100%";
 
-        state.isMistakes = false;
+
+        //pTestResult.textContent = "Тест успешно пройден! Результат - 100%"; 
+
+        //divTestResult.appendChild(pTestResult);
+
+        const textArray = [
+
+          "Тест успешно пройден!",
+          "Результат - 100%"
+
+        ]
+
+       // state.isMistakes = false;
+
+       printTestResult(textArray);
 
 
         localStorage.removeItem(currentTest.id);
-        return;
+
+       // return;
 
       } else {//есть ошибки
 
@@ -299,41 +310,59 @@ function showTestResult() {
 
         saveTestHistory();
 
+        const textArray = [
+          
+          `Тест ${testState}`,
+          `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
+          `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
+          `${mistakesHeader}`
 
+        ]
+
+         const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+
+
+        const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
+
+        createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+
+        printTestResult(textArray);
       }
 
 
     }
 
-    const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+    //const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
 
-    const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
+    //const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
 
 
 
     //const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
 
 
-    const testInfo = [
+    // const testInfo = [
       
-      `Тест ${testState}`,
-      `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-      `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
-      `${mistakesHeader}`
+    //   `Тест ${testState}`,
+    //   `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
+    //   `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
+    //   `${mistakesHeader}`
 
-    ]
+    // ]
 
-    divTestResult.innerHTML = '';
+
+
+    // divTestResult.innerHTML = '';
     
-    testInfo.forEach(text => {
+    // testInfo.forEach(text => {
 
-      const line = document.createElement('p');
-      line.textContent = text;
-      line.className = "p-result";     
-      divTestResult.appendChild(line);
+    //   const line = document.createElement('p');
+    //   line.textContent = text;
+    //   line.className = "p-result";     
+    //   divTestResult.appendChild(line);
 
-    })
+    // })
     
 
     
@@ -370,12 +399,28 @@ function showTestResult() {
 
     //alert()
 
-    createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+    // createMistakesButtons(mistakesQuantity, history.wrongAnswers);
 
     
 
 }
 
+
+function printTestResult(arrayText){
+
+   divTestResult.innerHTML = '';
+    
+    arrayText.forEach(text => {
+
+      const line = document.createElement('p');
+      line.textContent = text;
+      line.className = "p-result";     
+      divTestResult.appendChild(line);
+
+    })
+    
+
+}
 
 
 function createMistakesButtons(mistakesQuantity, mistakes) {     
@@ -751,7 +796,7 @@ function goThroughTest(questionBlock, btnId){
 
     saveTestHistory();
 
-    alert(state.currentIndex)
+   // alert(state.currentIndex)
 
 }
 
@@ -773,11 +818,15 @@ function runLernMode(){
 function finishTest(){
 
 
-   alert(`${state.currentIndex} - ${currentTestLength}`)
+  // alert(`${state.currentIndex} - ${currentTestLength}`)
+
+  // const history = getTestHistory(testId);
+
+  
  
     showResultsPage();
 
-   // showTestResult();   
+    showTestResult("complite");   
 
     state.isMistakes = false;
 
