@@ -245,187 +245,245 @@ function getTestHistory(testId) {
 
   return JSON.parse(testHistory);
 
+
 }
 
+//////////////////////////////////
 
-function showTestResult(testState) {  
-  
+function showSuccessefulResult(){
 
-  //alert(state.currentIndex)
 
-    const history = getTestHistory(currentTest.id);
+  const textArray = [
+
+    "Тест успешно пройден!",
+    "Результат - 100%"
+
+  ]
+
+  state.isMistakes = false;
     
-    if (!history || typeof history !== 'object') {
-        console.error("Invalid test history");
-        return;
-    }
-   
+  printTestResult(textArray);
 
-    const mistakesQuantity = history.wrongAnswers.length;
-
-    const questionQuantity = history.currentIndex + 1;
-  
-
-    //const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
+  localStorage.removeItem(currentTest.id); 
 
 
-    // if (mistakesQuantity === 0 && testState === 'завершен') {
+}
 
-    if (testState === 'complite') {
+function showUnSuccessefulResult(){
 
-      //тест пройден без ошибок
-      if(mistakesQuantity === 0) {
+  const history = getTestHistory(currentTest.id);
 
-        //const pTestResult = document.createElement("p");
+  const mistakesQuantity = history.wrongAnswers.length;
 
+  const questionQuantity = history.currentIndex + 1;
 
-
-        //pTestResult.textContent = "Тест успешно пройден! Результат - 100%"; 
-
-        //divTestResult.appendChild(pTestResult);
-
-        const textArray = [
-
-          "Тест успешно пройден!",
-          "Результат - 100%"
-
-        ]
-
-       // state.isMistakes = false;
-
-       printTestResult(textArray);
+  const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
 
-        localStorage.removeItem(currentTest.id);
+    const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
 
-       // return;
-
-      } else {//есть ошибки
-
+    const textArray = [
       
+      `Тест завершен`,
+      `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
+      `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
+      `${mistakesHeader}`
 
-        state.isMistakes = true;
+    ]
 
-        state.currentIndex = 0;
+    
+  printTestResult(textArray);
 
-        saveTestHistory();
+  createMistakesButtons(mistakesQuantity, history.wrongAnswers);
 
-        const textArray = [
-          
-          `Тест ${testState}`,
-          `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-          `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
-          `${mistakesHeader}`
+}
 
-        ]
+////////////////////////////////////////////////////////
 
-         const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+function showTestResult() {
 
+  const history = getTestHistory(currentTest.id);
 
-        const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
+  // Проверяем наличие истории
+  if (!history) {
+    console.error('История теста не найдена');
+    return;
+  }
 
-        createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+  const textArray = [];
 
-        printTestResult(textArray);
-      }
+  const questionQuantity = history.currentIndex + 1;
 
+  if(history.wrongAnswers.length > 0){      
 
-    }
+    //const mistakesQuantity = history.wrongAnswers.length;    
 
     //const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
-
     //const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
 
-
-
-    //const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
-
-
-    // const testInfo = [
+    // textArray = [
       
-    //   `Тест ${testState}`,
+    //   `Тест завершен`,
     //   `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
     //   `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
     //   `${mistakesHeader}`
 
-    // ]
-
-
-
-    // divTestResult.innerHTML = '';
+    // ]   
     
-    // testInfo.forEach(text => {
-
-    //   const line = document.createElement('p');
-    //   line.textContent = text;
-    //   line.className = "p-result";     
-    //   divTestResult.appendChild(line);
-
-    // })
     
+    const mistakesQuantity = history.wrongAnswers.length;
 
-    
+    const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
-    // const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
+    textArray.push(
+
+      'Тест завершен',
+      `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
+      `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
+      'Ваши ошибки:'
+    );
+
+    //alert(history.wrongAnswers.length)
+    createMistakesButtons(mistakesQuantity, history.wrongAnswers);
 
 
-
-    // const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
     
 
+  }else{
+
+    textArray = [
+
+    "Тест успешно пройден!",
+    "Результат - 100%"
+
+    ]
+
+    state.isMistakes = false;
+    
+  
+
+    localStorage.removeItem(currentTest.id); 
+
+
+  }
+
+  printTestResult(textArray);
+
+}
+
+
+
+
+
+function _showTestResult() {  
+  
+
+  const history = getTestHistory(currentTest.id);
+  
+  // if (!history || typeof history !== 'object') {
+  //     console.error("Invalid test history");
+  //     return;
+  // }
    
-
+  let textArray = [];
    
+  //const mistakesQuantity = history.wrongAnswers.length;
 
-    // const testInfo = `<br>Тест ${testState}<br>Пройдено вопросов: ${questionQuantity} из ${currentTestLength}<br>`;
+  //const questionQuantity = history.currentIndex + 1;
+  
 
+   // const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
+
+
+    // if (mistakesQuantity === 0 && testState === 'завершен') {
+
+   //if (testState === 'завершен') {
+  if (isTestCompleted(state.currentIndex + 1)) {
+
+    const mistakesQuantity = history.wrongAnswers.length;
+
+    const questionQuantity = history.currentIndex + 1;
+
+      //тест пройден без ошибок
+    if(mistakesQuantity === 0) {
+        
+      textArray = [
+
+        "Тест успешно пройден!",
+        "Результат - 100%"
+
+      ]
     
+      //printTestResult(textArray);
 
-    // const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+      localStorage.removeItem(currentTest.id);       
 
-    // const mistakesHeader = mistakesQuantity > 0 ? '<br>Ваши ошибки:<br>' : '';
+    } else {
+
+      //alert("ошибки")
+
+      //state.isMistakes = true;
+
+      //state.currentIndex = 0;
+
+      saveTestHistory();
+
+      const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
 
 
+      const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
 
-    // const result = `${testInfo}Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)${mistakesHeader}`;
+      textArray = [
+        
+        `Тест завершен`,
+        `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
+        `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
+        `${mistakesHeader}`
 
-    //document.getElementById('result').innerHTML = resultHTML;
+      ]
 
-   // pTestResult.textContent = result;
+      //printTestResult(textArray);        
 
-   
-    // const quNumber = history.
+      //createMistakesButtons(mistakesQuantity, history.wrongAnswers);        
+    }
 
-    //alert()
+    printTestResult(textArray);
 
-    // createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+    createMistakesButtons(mistakesQuantity, history.wrongAnswers);
 
-    
+
+  } else {
+
+    alert("stop")
+
+  }
+
+
 
 }
 
 
 function printTestResult(arrayText){
 
-   divTestResult.innerHTML = '';
-    
-    arrayText.forEach(text => {
+  divTestResult.innerHTML = '';
+  
+  arrayText.forEach(text => {
 
-      const line = document.createElement('p');
-      line.textContent = text;
-      line.className = "p-result";     
-      divTestResult.appendChild(line);
+    const line = document.createElement('p');
+    line.textContent = text;
+    line.className = "p-result";     
+    divTestResult.appendChild(line);
 
-    })
-    
+  })    
 
 }
 
 
 function createMistakesButtons(mistakesQuantity, mistakes) {     
    
-  
+  //alert(mistakesQuantity + " -- " + mistakes);
+
   const mistakeButtons = document.createElement('p');
    
   for (let i = 0; i < mistakesQuantity; i++) {    
@@ -441,6 +499,8 @@ function createMistakesButtons(mistakesQuantity, mistakes) {
 
   }
 
+  //alert(mistakeButtons.innerHTML);
+
   divTestResult.appendChild(mistakeButtons);
 
 
@@ -451,10 +511,6 @@ function createMistakesButtons(mistakesQuantity, mistakes) {
 function showSelectedMistake(btnId) {    
 
   const targetBtn = document.getElementById(btnId);
-
- // const btnValue = targetBtn.value;  
-
- //const testLength = getCurrentTestLength
 
   const btns = document.querySelectorAll(".error_button");
 
@@ -474,14 +530,11 @@ function showSelectedMistake(btnId) {
 
   divTestButtons.classList.remove('hidden');
 
-  //alert(questionBlock)
-
   fillQuestionBlock(questionBlock, false);  
 
   highlightOptions(targetBtn);  
 
   lockOptions(".option_button");
-
  
 }
 
@@ -575,97 +628,52 @@ document.addEventListener("click", function(event) {
 });
 
 
-//переход на главную страницу, нажата кнопка На главную или Завершить
-btnHome.addEventListener("click", function(event) {
 
-    //showLevels();
+btnHome.addEventListener("click", function(event) {    
+  const btnText = event.target.textContent;
+  
+  if (btnText === "Завершить") {
+    handleFinishButtonClick();
+  } else if (btnText === "На главную") {
+    handleMainPageButtonClick();
+  }
+});
 
+function handleFinishButtonClick() {
 
-   //const buttonText = event.target.textContent
+  const history = getTestHistory(currentTest.id);
 
-  // if (buttonText === "Завершить") {
-    
-
-  //   if(state.currentIndex === 1 || !isAnswerDone) {
-
-  //     showMainPage();      
-      
-  //     return;
-    
-  //   } 
-
-
-  //   clearTestState();
-    
-  //   showResultsPage();
-
-    
-
-  //   showTestResult();
-
-
-
-    
-
-  // }
-
-  // if (buttonText === "На главную") { 
-
-  //   isAnswerDone = false;
-
-  //   showMainPage();
-
-  // }
-  const btnValue = event.target.value;
-
-  switch (btnValue) {
-
-    case "complite":
-
-
-
-      if(state.wrongAnswers.length < 1 || !isAnswerDone) {
-
-        showMainPage();      
-        
-        return;
-    
-      } 
-
-      clearTestState();
-    
-      showResultsPage();    
-
-      //alert(state.currentIndex)
-
-      showTestResult();
-
-      break;
-
-    case "mainpage":
-
-      isAnswerDone = false;
-
-      showMainPage();  
-
-      break;
+  if (!history || history.wrongAnswers.length < 1 || !isAnswerDone) {
+    showMainPage();
+    return;
   }
 
-   
-})
+  clearTestState();
+  showResultsPage();
+  //showTestResult();
+
+  showUnSuccessefulResult();
 
 
-// function compliteTest(){
+}
+
+function handleMainPageButtonClick() {
+
+  isAnswerDone = false;
+  showMainPage();
 
 
-
-// }
-
-// function compliteTest(){
+  //finishTest();
 
 
+}
 
-// }
+
+function isTestCompleted(currentIndex){  
+  
+  return currentIndex === currentTestLength;
+
+}
 
 
 
@@ -703,13 +711,46 @@ function clearTestState() {
 
 function check(btnId) {    
 
-  if (state.currentIndex === currentTestLength - 1) finishTest();  
+  //const history = getTestHistory();
+
+  if (isTestCompleted(state.currentIndex + 1)) {    
+    
+    //finishTest();  
+
+    //const history = getTestHistory(currentTest.id);  
+
+    showResultsPage();     
+    
+    showTestResult();
+
+    // if(history.wrongAnswers.length > 0){
+
+    //   showUnSuccessefulResult();
+
+    // }else{
+
+    //   showSuccessefulResult();        
+
+    // }
+
+    // //showSuccessefulResult()
+
+    state.isMistakes = false;
+
+    // isAnswerDone = false;
+    // showMainPage();
+
+    return;
+
+  }
 
   let questionBlock = getCurrentQustionBlock(state.currentIndex);    
+
+
   
   if(state.isMistakes) correctMistakes();   
 
-  if(!state.isMistakes) goThroughTest(questionBlock, btnId);
+  if(!state.isMistakes) doTest(questionBlock, btnId);
   
 
   
@@ -773,7 +814,7 @@ function correctMistakes(){
 
 }
 
-function goThroughTest(questionBlock, btnId){
+function doTest(questionBlock, btnId){
 
 
   const correctAnswer = questionBlock.answers[0];
@@ -815,40 +856,51 @@ function runLernMode(){
 
 }
 
-function finishTest(){
+////////////////////////////////remove///////////////////////
 
+// function finishTest(){
 
-  // alert(`${state.currentIndex} - ${currentTestLength}`)
+//   const history = getTestHistory(currentTest.id);
 
-  // const history = getTestHistory(testId);
+//   //alert(history);
 
-  
- 
-    showResultsPage();
+//     showResultsPage();
 
-    showTestResult("complite");   
+//     //showTestResult();   
 
-    state.isMistakes = false;
+//     if(history.wrongAnswers.length > 0){
 
-    return;
+//       showUnSuccessefulResult();
 
-}
+//     }else{
 
+//       showSuccessefulResult(); 
+//       //state.isMistakes = false; 
+
+//     }
+
+//     //showSuccessefulResult()
+
+//     state.isMistakes = false;
+
+//     // isAnswerDone = false;
+//   // showMainPage();
+
+// }
+
+///////////////////////////////////////////
 
 function showMainPage() {
-
 
   const elementsToHide = [
     
     divTestButtons,
     divNavigation,
     divTestResult,
-    //resultBlock, 
     divQuestionsCounter,
     divHelp,
     divList,
-    divDropdownMenu,
-    
+    divDropdownMenu    
       
   ];
 
