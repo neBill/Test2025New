@@ -15,6 +15,12 @@ let state = {
   isMistakes: false
 };
 
+// // Константы для статусов теста
+// const TEST_STATUS = {
+//   COMPLETED: 'завершен',
+//   PAUSED: 'остановлен'
+// };
+
 
 
 //let isTestFinished = false;
@@ -82,49 +88,6 @@ class CurrentTest {
 const currentTest = new CurrentTest();
 
 
-// function showErrors(btnValue){
-
-  
-//  // const history = getTestHistory(currentTest.id) 
-
-//   //const mistakes = Object.values(history)[1];   
-
-//   //проверить есть ли ошибки
-
-//   const userAnswer = mistakes[btnValue][1]; 
-
- 
-
-//   const questNumber = mistakes[btnValue][0];
-
- 
-
-//   //updateQuestionBlock(questNumber)
-//   //updateQuestionBlock()
-
- 
-
-//   const questionBlock = testBases[currentTest.id].testBody[state.currentIndex];   
-
-//   fillQuestionBlock(questionBlock)
-
- 
-
-
-
-//   document.getElementById('option0').style.border = 'var(--right-answer-border)';
-
-//   document.getElementById('option' + userAnswer).style.border = 'var(--wrong-answer-border)'  
-
-//   var nodes = document.getElementById("testButtons").getElementsByTagName('*');
-
-//   for(var i = 0; i < nodes.length; i++){
-
-//       nodes[i].disabled = true;
-//   }
-  
-// }
-
 
 function fillQuestionBlock(questionBlock, isShuffle) {  
   
@@ -179,14 +142,6 @@ function fillQuestionBlock(questionBlock, isShuffle) {
 
 
 
-
-// function updateTeststatistics() { 
-
-//     questionCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${currentTestLength}`; 
-
-// }
-
-
 function shuffleArray(array) {
   const arr = [...array]; // создаём копию, чтобы не мутировать оригинал
   for (let i = arr.length - 1; i > 0; i--) {
@@ -227,288 +182,117 @@ function setTrainingMode(optionIndex) {
 
 
 function calcRightAnswers(questionsQuantity, errorsQuantity ) {  
-
   const rightAnswersQuantity = questionsQuantity - errorsQuantity;
-
   const percent = Math.round(rightAnswersQuantity * 100 / questionsQuantity); 
-
   return { rightAnswers: rightAnswersQuantity, errorsPercent: percent };
 }
 
-
-
 function getTestHistory(testId) {
-
   const testHistory = localStorage.getItem(testId);
-
   if(!testHistory) return;
-
   return JSON.parse(testHistory);
-
-
 }
 
-//////////////////////////////////
 
-function showSuccessefulResult(){
+function createTestReport(isMistakes, isComplite, statistic){
 
-
-  const textArray = [
-
-    "Тест успешно пройден!",
-    "Результат - 100%"
-
-  ]
-
-  state.isMistakes = false;
+  let textArray = [];
+  let testState = isComplite ? "завершен" : "остановлен";
+  if(isMistakes){
+    textArray.push(
+      `Тест ${testState}`,
+      `Пройдено вопросов: ${statistic.questionQuantity} из ${currentTestLength}`,
+      `Правильных ответов: ${statistic.rightAnswers} из ${statistic.questionQuantity} (${statistic.errorsPercent}%)`,
+      'Ваши ошибки:'
+    );
     
-  printTestResult(textArray);
-
-  localStorage.removeItem(currentTest.id); 
-
-
-}
-
-function showUnSuccessefulResult(){
-
-  const history = getTestHistory(currentTest.id);
-
-  const mistakesQuantity = history.wrongAnswers.length;
-
-  const questionQuantity = history.currentIndex + 1;
-
-  const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
-
-
-    const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
-
-    const textArray = [
-      
-      `Тест завершен`,
-      `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-      `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
-      `${mistakesHeader}`
-
-    ]
-
-    
-  printTestResult(textArray);
-
-  createMistakesButtons(mistakesQuantity, history.wrongAnswers);
-
+  }else{
+    textArray.push(
+      'Тест успешно пройден!',
+      'Результат — 100%'
+    );     
+  }
+  return textArray;
 }
 
 ////////////////////////////////////////////////////////
 
-function showTestResult() {
+function showTestResult(isTestCompleted) {
 
-  const history = getTestHistory(currentTest.id);
-
-  // Проверяем наличие истории
+  const history = getTestHistory(currentTest.id);  
   if (!history) {
     console.error('История теста не найдена');
     return;
-  }
-
-  const textArray = [];
+  } 
 
   const questionQuantity = history.currentIndex + 1;
+  let textArray = [];
+
+  let buttons;
 
   if(history.wrongAnswers.length > 0){      
-
-    //const mistakesQuantity = history.wrongAnswers.length;    
-
-    //const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
-
-    //const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
-
-    // textArray = [
-      
-    //   `Тест завершен`,
-    //   `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-    //   `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
-    //   `${mistakesHeader}`
-
-    // ]   
-    
-    
     const mistakesQuantity = history.wrongAnswers.length;
+    const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);   
 
-    const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
+    textArray = createTestReport(true, isTestCompleted, {      
+      questionQuantity : questionQuantity,
+      rightAnswers : rightAnswers,
+      errorsPercent : errorsPercent,
+    });   
 
-    textArray.push(
-
-      'Тест завершен',
-      `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-      `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
-      'Ваши ошибки:'
-    );
-
-    //alert(history.wrongAnswers.length)
-    createMistakesButtons(mistakesQuantity, history.wrongAnswers);
-
-
-    
+    buttons = createMistakesButtons(mistakesQuantity, history.wrongAnswers);
 
   }else{
-
-    textArray = [
-
-    "Тест успешно пройден!",
-    "Результат - 100%"
-
-    ]
-
-    state.isMistakes = false;
-    
-  
-
+   
+    state.isMistakes = false;  
+    textArray = createTestReport(false, isTestCompleted, {});     
     localStorage.removeItem(currentTest.id); 
-
-
-  }
-
-  printTestResult(textArray);
-
+  } 
+  renderResult(textArray);  
+  divTestResult.appendChild(buttons);
 }
 
 
-
-
-
-function _showTestResult() {  
-  
-
-  const history = getTestHistory(currentTest.id);
-  
-  // if (!history || typeof history !== 'object') {
-  //     console.error("Invalid test history");
-  //     return;
-  // }
-   
-  let textArray = [];
-   
-  //const mistakesQuantity = history.wrongAnswers.length;
-
-  //const questionQuantity = history.currentIndex + 1;
-  
-
-   // const testState = questionQuantity === currentTestLength ? 'завершен' : 'остановлен';
-
-
-    // if (mistakesQuantity === 0 && testState === 'завершен') {
-
-   //if (testState === 'завершен') {
-  if (isTestCompleted(state.currentIndex + 1)) {
-
-    const mistakesQuantity = history.wrongAnswers.length;
-
-    const questionQuantity = history.currentIndex + 1;
-
-      //тест пройден без ошибок
-    if(mistakesQuantity === 0) {
-        
-      textArray = [
-
-        "Тест успешно пройден!",
-        "Результат - 100%"
-
-      ]
-    
-      //printTestResult(textArray);
-
-      localStorage.removeItem(currentTest.id);       
-
-    } else {
-
-      //alert("ошибки")
-
-      //state.isMistakes = true;
-
-      //state.currentIndex = 0;
-
-      saveTestHistory();
-
-      const { rightAnswers, errorsPercent } = calcRightAnswers(questionQuantity, mistakesQuantity);
-
-
-      const mistakesHeader = mistakesQuantity > 0 ? 'Ваши ошибки:' : '';
-
-      textArray = [
-        
-        `Тест завершен`,
-        `Пройдено вопросов: ${questionQuantity} из ${currentTestLength}`,
-        `Правильных ответов: ${rightAnswers} из ${questionQuantity} (${errorsPercent}%)`,
-        `${mistakesHeader}`
-
-      ]
-
-      //printTestResult(textArray);        
-
-      //createMistakesButtons(mistakesQuantity, history.wrongAnswers);        
-    }
-
-    printTestResult(textArray);
-
-    createMistakesButtons(mistakesQuantity, history.wrongAnswers);
-
-
-  } else {
-
-    alert("stop")
-
-  }
-
-
-
-}
-
-
-function printTestResult(arrayText){
-
+function renderResult(textArray) {
   divTestResult.innerHTML = '';
-  
-  arrayText.forEach(text => {
+  printTestResult(textArray);
+}
 
+
+function printTestResult(arrayText){    
+  arrayText.forEach(text => {
     const line = document.createElement('p');
     line.textContent = text;
     line.className = "p-result";     
     divTestResult.appendChild(line);
-
   })    
-
 }
 
 
-function createMistakesButtons(mistakesQuantity, mistakes) {     
-   
-  //alert(mistakesQuantity + " -- " + mistakes);
-
-  const mistakeButtons = document.createElement('p');
-   
+function createMistakesButtons(mistakesQuantity, mistakes) {    
+  
+  const mistakeButtons = document.createElement('p');   
   for (let i = 0; i < mistakesQuantity; i++) {    
-
     const btn = document.createElement('button');
     btn.id = `erBtn${i}`;
     btn.value = i;
     btn.dataset.questionIndex = mistakes[i][0];
     btn.dataset.userOption = mistakes[i][1];
     btn.className = 'error_button';   
-    btn.textContent = i + 1;  
+    btn.textContent = i + 1;      
+
+    btn.addEventListener('click', function() {      
+      showSelectedMistake(this.id);
+    });
+
     mistakeButtons.appendChild(btn);
-
-  }
-
-  //alert(mistakeButtons.innerHTML);
-
-  divTestResult.appendChild(mistakeButtons);
-
-
+  }  
+ return mistakeButtons;
 }
 
 
 
-function showSelectedMistake(btnId) {    
+function showSelectedMistake(btnId) {   
 
   const targetBtn = document.getElementById(btnId);
 
@@ -534,7 +318,7 @@ function showSelectedMistake(btnId) {
 
   highlightOptions(targetBtn);  
 
-  lockOptions(".option_button");
+  lockOptionButtons(".option_button");
  
 }
 
@@ -575,7 +359,7 @@ function highlightOptions(targetBtn) {
 
 
 
-function lockOptions(selector) {
+function lockOptionButtons(selector) {
 
   document.querySelectorAll(selector).forEach(node => {
     node.disabled = true;
@@ -583,51 +367,10 @@ function lockOptions(selector) {
 }
 
 
-function getCurrentQustionBlock(questionIndex) {
-  
+function getCurrentQuestionBlock(questionIndex) {  
   const questionBlock = testBases[currentTest.id].testBody[questionIndex];
-
   return questionBlock;
-
 }
-
-
-
-
-
-document.addEventListener("click", function(event) {
-
-  // const buttonClass = event.target.className;
-
-  // const buttonId = event.target.id;
-
-  // if (buttonClass == "error_button") {
-
-  //   const links = document.querySelectorAll(".error_button");
-
-  //   showErrors(buttonId);
-
-  //   links.forEach(link => {
-
-  //     link.setAttribute("style", "background:`:root { --main-bg-color}`");
-
-  //   });
-
-  //   document.getElementById(buttonId).style.background = "var(--error-btn-color)";
-
-  // }
-
-
-
-  // if (buttonClass == "font-size-change") {
-
-  //    chageFontSize(buttonId);
-  // }
-
-
-});
-
-
 
 btnHome.addEventListener("click", function(event) {    
   const btnText = event.target.textContent;
@@ -643,6 +386,8 @@ function handleFinishButtonClick() {
 
   const history = getTestHistory(currentTest.id);
 
+  
+
   if (!history || history.wrongAnswers.length < 1 || !isAnswerDone) {
     showMainPage();
     return;
@@ -650,28 +395,13 @@ function handleFinishButtonClick() {
 
   clearTestState();
   showResultsPage();
-  //showTestResult();
 
-  showUnSuccessefulResult();
-
-
+  showTestResult(isTestCompleted());
 }
 
 function handleMainPageButtonClick() {
-
   isAnswerDone = false;
   showMainPage();
-
-
-  //finishTest();
-
-
-}
-
-
-function isTestCompleted(currentIndex){  
-  
-  return currentIndex === currentTestLength;
 
 }
 
@@ -683,7 +413,7 @@ btnNext.addEventListener("click", function() {
 
   //const data = testBases[testId].testBody[state.currentIndex];
 
-  const questionBlock = getCurrentQustionBlock(state.currentIndex);
+  const questionBlock = getCurrentQuestionBlock(state.currentIndex);
 
   fillQuestionBlock(questionBlock, true)
 
@@ -707,46 +437,26 @@ function clearTestState() {
 
 };
 
+function isTestCompleted() {
+  return currentTestLength === state.currentIndex + 1;
+}
 
 
-function check(btnId) {    
 
-  //const history = getTestHistory();
-
-  if (isTestCompleted(state.currentIndex + 1)) {    
+function check(btnId) {     
     
-    //finishTest();  
-
-    //const history = getTestHistory(currentTest.id);  
-
+  if (isTestCompleted()) { 
+    
     showResultsPage();     
     
-    showTestResult();
+    showTestResult(true);    
 
-    // if(history.wrongAnswers.length > 0){
-
-    //   showUnSuccessefulResult();
-
-    // }else{
-
-    //   showSuccessefulResult();        
-
-    // }
-
-    // //showSuccessefulResult()
-
-    state.isMistakes = false;
-
-    // isAnswerDone = false;
-    // showMainPage();
-
+    state.isMistakes = false;   
     return;
 
   }
 
-  let questionBlock = getCurrentQustionBlock(state.currentIndex);    
-
-
+  let questionBlock = getCurrentQuestionBlock(state.currentIndex);    
   
   if(state.isMistakes) correctMistakes();   
 
@@ -762,7 +472,7 @@ function check(btnId) {
   // } 
 
 
-  questionBlock = getCurrentQustionBlock(state.currentIndex);
+  questionBlock = getCurrentQuestionBlock(state.currentIndex);
 
   fillQuestionBlock(questionBlock, true);
  
@@ -795,7 +505,7 @@ function correctMistakes(){
   
       showResultsPage();
 
-      showTestResult();   
+      showTestResult(isTestCompleted());   
       
       return;
 
@@ -856,39 +566,6 @@ function runLernMode(){
 
 }
 
-////////////////////////////////remove///////////////////////
-
-// function finishTest(){
-
-//   const history = getTestHistory(currentTest.id);
-
-//   //alert(history);
-
-//     showResultsPage();
-
-//     //showTestResult();   
-
-//     if(history.wrongAnswers.length > 0){
-
-//       showUnSuccessefulResult();
-
-//     }else{
-
-//       showSuccessefulResult(); 
-//       //state.isMistakes = false; 
-
-//     }
-
-//     //showSuccessefulResult()
-
-//     state.isMistakes = false;
-
-//     // isAnswerDone = false;
-//   // showMainPage();
-
-// }
-
-///////////////////////////////////////////
 
 function showMainPage() {
 
@@ -950,13 +627,13 @@ document.addEventListener("click", function(event) {
 
   } 
 
-  if (classNamed == "error_button") {   
+  // if (classNamed == "error_button") {   
     
-    //alert()
+  //   //alert()
 
-    showSelectedMistake(id);
+  //  // showSelectedMistake(id);
 
-  }
+  // }
 
   if (classNamed == "option_button") {
 
@@ -968,6 +645,13 @@ document.addEventListener("click", function(event) {
 
 
 })
+
+
+// function handleMistakeClick (id) {
+
+//   showSelectedMistake(id);
+
+// }
 
 
 function getNextIndex(history) {
@@ -1004,7 +688,7 @@ function chooseTest(testId, testName) {
  
   showChosenTest(testName);   
 
-  const questionBlock = getCurrentQustionBlock(state.currentIndex);
+  const questionBlock = getCurrentQuestionBlock(state.currentIndex);
 
   fillQuestionBlock(questionBlock, true); 
 
