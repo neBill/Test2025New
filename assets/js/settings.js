@@ -209,13 +209,10 @@ function createLevelsButtons(){
   Object.keys(testBases).forEach(key => {
 
     const testButton = document.createElement('button');   
-
     testButton.id = key;
-
-    testButton.className = "test_button";
-
+    testButton.className = "test_button";   
     testButton.textContent = testBases[key].testTitle;
-
+    testButton.addEventListener('click', testButtonClick);  
     divLevels.appendChild(testButton);
 
   });
