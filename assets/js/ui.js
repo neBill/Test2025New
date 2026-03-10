@@ -3,35 +3,38 @@
 let rightOptionIndex;
 //let isLearnMode;
 let isHistorySave = true;
-let isAnswerDone = false;
 let defaultRank;
 
 let state = {
   currentIndex: 0,
-  currentTestLength : 0,
-  wrongAnswers: [],
-  isMistakes: false,  
+  currentTestLength : 0,  
+  isMistakes: false,
+  rightAnswersCount : 0,
+  wrongAnswers: []
 };
 
-const divNavigation = document.getElementById('navigation-block');
+
+
+const answerButtons = document.querySelectorAll('.option-button');
+const navigationContainer = document.getElementById('navigation-block');
 const divLevels = document.getElementById('levels-buttons-block');
-const divTestButtons = document.getElementById('test-buttons-block');
+const testButtonsContainer = document.getElementById('test-buttons-block');
 const btnMenu = document.getElementById('button-menu');
-const divList = document.getElementById('list-block');
+const listPageContainer = document.getElementById('questions-list-page');
 const tglLearnMode = document.getElementById('learn-mode-toggle');
 const btnQuestion = document.getElementById('question-button');
 const pQuestionsCounter = document.getElementById('questions-counter');
-const divQuestionsCounter = document.getElementById('questions-counter-block');
-const divTestResult = document.getElementById('test-result-block');
+const questionsCounter = document.getElementById('questions-counter-block');
+const testResultsContainer = document.getElementById('test-result-block');
 const tglLevel5 = document.getElementById('level-5-toggle');
 const tglLevel6 = document.getElementById('level-6-toggle');
-const divDropdownMenu = document.getElementById("dropdown-menu-block");
-const divMenuButton = document.getElementById("menu-button-block");
-const divNext = document.getElementById("button-next-block");
+const divDropdownMenu = document.getElementById('dropdown-menu-block');
+const divMenuButton = document.getElementById('menu-button-block');
+const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
-const btnNext = document.getElementById("button-next");
+const btnNext = document.getElementById('button-next');
 const btnHome = document.getElementById('button-home');
-const divHelp = document.getElementById("help-block");
+const helpSection = document.getElementById('help-block');
 const btnIncreaseFontSize = document.getElementById('font-increase');
 const btnDecreaseFontSize = document.getElementById('font-decrease');
 const btnDefaultFontSize = document.getElementById('font-default');
@@ -40,8 +43,16 @@ const tglTheme =  document.getElementById('theme-toggle');
 const pTestTitle = document.getElementById('test-title');
 const docBody = document.body;
 
+const modalListContainer = document.getElementById('mod-content');
+const col1 = document.getElementById('col1');
+const col2 = document.getElementById('col2');
+const answerListContainer = document.getElementById('answer-list-block');
+
+const divListBlock = document.getElementById('questions-list-block');////
+
 const btnHideList = document.getElementById('btn-hide-list');
-btnHideList.addEventListener("click", hideListBlock);
+
+btnHideList.addEventListener('click', hideListBlock);
 
 class CurrentTest {
    constructor(test, id) {
@@ -53,215 +64,202 @@ class CurrentTest {
 const currentTest = new CurrentTest();
 
 
-
 //навешиваем на кнопки вариантов событие клик
-document.querySelectorAll('.option_button').forEach(button => {
+document.querySelectorAll('.option-button').forEach(button => {
     button.addEventListener('click', handleClick);
 });
 
 
-let newFailedQuestions = []
+let questionQuantity; 
+let questionNumber = 1;
+
 
 //клик по кнопке варианта ответа
 function handleClick(event) { 
-
-  const id = event.target.id;   
-
-  const element = document.getElementById(id); 
-
-  const userAnswerStatus = element.dataset.status;  
-
-  const userAnswerIndex = parseInt(element.dataset.answerId);  
-
-  const isFailedQuestions = state.isMistakes;
-
-  let nextQuestionIndex;
-
-
-  if(isFailedQuestions) {   
-
-    correctFailedQuestion(userAnswerStatus, userAnswerIndex);
-
-    if (state.wrongAnswers.length <= 0) {    
-      
-      if(newFailedQuestions.length > 0) {
-
-        state.wrongAnswers = newFailedQuestions;
-
-        newFailedQuestions = [];
-
-        saveTestHistory(state);
-
-        return;
-      }
-
-      handleTestCompletion(true);
-
-      return;
-      
-    } 
-   
-
-    nextQuestionIndex = state.wrongAnswers[state.currentIndex][0];
-
-
-  } else {
-
-    answerQuestion(userAnswerStatus, userAnswerIndex);    
-
-    nextQuestionIndex = ++state.currentIndex;    
-
-    if (state.currentTestLength === state.currentIndex) {      
-
-      handleTestCompletion(true);      
-
-      return;
-      
-    } 
-
-  }  
-
   
-  navigateToNextQuestion(nextQuestionIndex);  
+  const button = event.target; 
+  const isMistakeMode = state.isMistakes;    
+  const isAnswerCorrect = button.dataset.success;  
+  const userAnswerId = Number(button.dataset.answerId);  
 
-  isAnswerDone = true;
+  if(isMistakeMode) {  
+
+    state.rightAnswersCount++;
+
+    handleMistakeMode(isAnswerCorrect, userAnswerId);
+
+    if (state.wrongAnswers.length === 0) {
+      
+      return handleTestCompletion();
+
+    }   
+
+    if (state.currentIndex === state.wrongAnswers.length) {
+     //alert('по новой')
+      state.currentIndex = 0;
+      state.rightAnswersCount = 0;
+      state.currentTestLength = state.wrongAnswers.length;
+      saveTestHistory(state);
+
+    }   
+
+    return navigateToNextQuestion(state.wrongAnswers[state.currentIndex][0]);
+  }
+
+  handleNormalMode(isAnswerCorrect, userAnswerId);
+
+  state.currentIndex++;
+
+  renderQuestionCounter(`Вопрос: ${state.currentIndex + 1}/${questionQuantity}`);
+  
+  if (state.currentIndex === state.currentTestLength) {
+    
+    return handleTestCompletion(); 
+  } 
+  navigateToNextQuestion(state.currentIndex);
 }
 
 
-function answerQuestion(userAnswerStatus, selectedAnswerIndex){
+function handleNormalMode(isCorrect, answerId){  
 
-  if(userAnswerStatus === "false"){       
-    
-    state.wrongAnswers.push([state.currentIndex, selectedAnswerIndex]);   
-      
-  } 
+  if(isCorrect === 'false') { 
+
+    state.wrongAnswers.push([state.currentIndex, answerId]);   
+
+  }  
 
   saveTestHistory(state);  
 
 }
 
-function correctFailedQuestion(userAnswerStatus, selectedAnswerIndex){  
-     
-  
-    //не прав
-  if(userAnswerStatus === "false"){     
-      
-    const questionIndex = state.wrongAnswers[0][0];
+function handleMistakeMode(isCorrect, answerId){    
 
-    newFailedQuestions.push([questionIndex, selectedAnswerIndex]);    
+  const questionIndex = state.wrongAnswers[state.currentIndex][0];
 
-    state.wrongAnswers.splice(0, 1);  
-
-    saveTestHistory(state);
+  if (isCorrect === 'false') {
    
-   
-  }else{//прав  
+    state.wrongAnswers.splice(state.currentIndex, 1, [questionIndex, answerId]);
 
-    state.wrongAnswers.splice(0, 1);  
-    
-    state.currentTestLength = state.wrongAnswers.length;    
+    state.currentIndex++;
 
-    saveTestHistory(state);          
+  } else {
+
+    state.wrongAnswers.splice(state.currentIndex, 1);       
 
   }
+  
+  if(questionNumber === questionQuantity){
+
+    questionNumber = 1;
+
+    questionQuantity = state.wrongAnswers.length;
+
+  }else{
+
+    questionNumber++;
+  }
+  
+  renderQuestionCounter(`Работа над ошибками\n\nВопрос: ${questionNumber}/${questionQuantity}`);
+
+  saveTestHistory(state);
 
 }
 
 
-function navigateToNextQuestion(nextQuestionIndex) {  
 
-  let questionBlock = getCurrentQuestionBlock(nextQuestionIndex);
+function renderQuestionCounter(text){  
 
-  fillQuestionBlock(questionBlock, true);
+  pQuestionsCounter.textContent  =  text;
+
+}
+
+
+ function handleTestCompletion() {
+  
+  showResultsPage();
+
+  const isTestCompleted = true;
+
+  showTestResult(isTestCompleted);
+
+  if (state.wrongAnswers.length === 0) {
+    clearTestState();
+    return;
+  }
+
+  state.isMistakes = true;
+  state.currentIndex = 0;
+  state.currentTestLength = state.wrongAnswers.length;
+   
+  questionNumber = 1;
+
+  saveTestHistory(state);
+}
+
+function navigateToNextQuestion(index) {  
+  const block = getCurrentQuestionBlock(index);
+  fillQuestionBlock(block, !state.isMistakes); 
   
 }
-
-function handleTestCompletion(isCompleted) {
-
-    showResultsPage();
-    showTestResult(isCompleted);
-
-    const failedQuestionCount = state.wrongAnswers.length;    
-    
-    if (failedQuestionCount <= 0) {
-      clearTestState();
-    } else {
-        state.isMistakes = true;        
-        state.currentIndex = 0;
-        state.currentTestLength = failedQuestionCount;
-        saveTestHistory(state);
-    }
-}
-
-
-
 
 
 function fillQuestionBlock(questionBlock, isShuffle) {   
   
   const REQUIRED_OPTIONS = 4;
 
-  // 1. Безопасное получение и копирование массива ответов
-  let answers = Array.isArray(questionBlock?.answers)
-    ? [...questionBlock.answers]
+  let answers = Array.isArray(questionBlock.answers)
+    ? questionBlock.answers.map(a => ({ ...a }))
     : [];
 
-  // 2. Дополнение до требуемого количества вариантов
-  while (answers.length < REQUIRED_OPTIONS) {
-    answers.push('Нет варианта ответа (*)');  }
-
+    
+  for (let i = REQUIRED_OPTIONS - 1; i >= answers.length; i--) {
+    answers.push({
+      text: 'Нет варианта ответа (*)',
+      correct: false,
+      id: i
+    });
+  }
   
-  // 3. Перемешивание массива при прохождении теста ( при показе ошибок должен быть "false")
-  if(isShuffle) {
-    //const shuffled = shuffleArray(answers);
+  if(isShuffle) {    
     answers = shuffleArray(answers);   
-
   }
 
-  //alert(answers[0].text)
+  clearOptionsHighlight(answerButtons);  
 
-  //4. Заполнение кнопок ответов
-  for (let i = 0; i < REQUIRED_OPTIONS; i++) {
-    const qBtn = document.getElementById(`option${i}`);
-
-    if (qBtn) {
-      //qBtn.textContent = shuffled[i];
-      qBtn.textContent = answers[i].text; 
-      qBtn.dataset.status = answers[i].correct;
-      qBtn.dataset.answerId = answers[i].id;
-      qBtn.style.border = 'none';
-      qBtn.disabled = false;
-    } else {
-      console.warn(`Элемент #option${i} не найден в DOM. Проверьте разметку.`);
-    }
-  }
-
+  answerButtons.forEach((button, index) => {        
+    const a = answers[index];     
+    button.textContent = a.text; 
+    button.dataset.success = a.success;
+    button.dataset.answerId = a.id;
+    button.disabled = false;     
+  }); 
+   
+  btnQuestion.textContent = questionBlock.question;
+ 
   
-
-   // 6. Обновление текста вопроса
-  if (btnQuestion) {
-    btnQuestion.textContent = questionBlock.question || 'Вопрос не указан';
-  } else {
-    console.error('Элемент btnQuestion не найден в DOM.');
-  }
-
-  // 7. Обновление счётчика вопросов
-  //updateTeststatistics(); 
-
- // alert(state.currentTestLength)
-
-  pQuestionsCounter.textContent = `Вопрос: ${state.currentIndex + 1}/${state.currentTestLength}`;  
-
 }
 
 
 
+
+
+// function shuffleArray(array) {
+//   const arr = [...array]; // создаём копию, чтобы не мутировать оригинал
+//   for (let i = arr.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [arr[i], arr[j]] = [arr[j], arr[i]]; // обмен через деструктуризацию
+//   }
+//   return arr;
+// }
+
 function shuffleArray(array) {
-  const arr = [...array]; // создаём копию, чтобы не мутировать оригинал
+  const arr = array.map(item => ({ ...item }));
+
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]]; // обмен через деструктуризацию
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
+
   return arr;
 }
 
@@ -295,9 +293,9 @@ function setTrainingMode(optionIndex) {
 
 
 
-function calcRightAnswers(questionsQuantity, errorsQuantity ) {  
-  const rightAnswersQuantity = questionsQuantity - errorsQuantity;
-  const percent = Math.round(rightAnswersQuantity * 100 / questionsQuantity); 
+function calcRightAnswers(completedQuestions, mistakesQuantity ) {  
+  const rightAnswersQuantity = completedQuestions - mistakesQuantity;
+  const percent = Math.round(rightAnswersQuantity * 100 / completedQuestions); 
   return { rightAnswers: rightAnswersQuantity, errorsPercent: percent };
 }
 
@@ -308,10 +306,10 @@ function getTestHistory(testId) {
 }
 
 
-function createTestReport(isMistakes, isComplite, statistic){
+function createTestReport(isMistakes, isTestCompleted, statistic){
 
   let textArray = [];
-  let testState = isComplite ? "завершен" : "остановлен";
+  let testState = isTestCompleted ? "завершен" : "остановлен";
 
   if(isMistakes){
     textArray.push(
@@ -334,29 +332,53 @@ function createTestReport(isMistakes, isComplite, statistic){
 
 function showTestResult(isTestCompleted) {
 
+
   const history = getTestHistory(currentTest.id); 
 
-  if (!history) {
-    console.error('История теста не найдена');
-    return;
-  } 
+  // if (!history) {    
+  //   console.error('История теста не найдена');
+  //   return;
+  // } 
 
-  
+  let completedQuestions = state.currentIndex;
 
-
-
-  const completedQuestions = state.currentIndex;
+  if(state.isMistakes)
+  {
+    completedQuestions = state.rightAnswersCount;
+    
+  }
 
 
   let textArray = [];
 
-  let buttons = [];
+  let buttons = [];  
 
-  //alert(state.currentIndex)
+  if(history.wrongAnswers.length > 0){   
 
-  if(history.wrongAnswers.length > 0){      
-    const mistakesQuantity = history.wrongAnswers.length;
+    
+    
+    
+    let mistakesQuantity = history.wrongAnswers.length;
+
+    //alert(completedQuestions + " --- " + mistakesQuantity)
+
+
+    if(state.isMistakes) {
+
+      ///let rightAnswersCount = state.currentTestLength - state.wrongAnswers.length;
+     // alert(state.rightAnswersCount + " --- " + mistakesQuantity)
+
+      mistakesQuantity = state.rightAnswersCount - (state.currentTestLength - state.wrongAnswers.length);
+
+      //mistakesQuantity = state.currentIndex;
+      
+    }
+
+   // alert(completedQuestions + " --- " + mistakesQuantity)
+
     const { rightAnswers, errorsPercent } = calcRightAnswers(completedQuestions, mistakesQuantity);   
+
+   // alert(rightAnswers + " --- " + errorsPercent)
 
     textArray = createTestReport(true, isTestCompleted, {      
       completedQuestions : completedQuestions,
@@ -364,27 +386,28 @@ function showTestResult(isTestCompleted) {
       errorsPercent : errorsPercent,      
     });   
 
-    buttons = createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+    // buttons = createMistakesButtons(mistakesQuantity, history.wrongAnswers);
+
+    buttons = createMistakesButtons(history.wrongAnswers);
 
   }else{
    
-    //state.isMistakes = false;  
-   
-
     clearTestState();
     textArray = createTestReport(false, isTestCompleted, {});     
     localStorage.removeItem(currentTest.id); 
   } 
+
+  //alert(textArray)
 
   renderResult(textArray, buttons);   
 }
 
 
 function renderResult(textArray, buttons) {
-  divTestResult.innerHTML = '';
+  testResultsContainer.innerHTML = '';
   printTestResult(textArray);  
   if(buttons.length <= 0) return;
-  divTestResult.appendChild(buttons);  
+  testResultsContainer.appendChild(buttons);  
 }
 
 
@@ -392,22 +415,23 @@ function printTestResult(arrayText){
   arrayText.forEach(text => {
     const line = document.createElement('p');
     line.textContent = text;
-    line.className = "p-result";     
-    divTestResult.appendChild(line);
+    line.className = 'p-result';     
+    testResultsContainer.appendChild(line);
   })    
 }
 
 
-function createMistakesButtons(mistakesQuantity, mistakes) {    
-  
+function createMistakesButtons(mistakesArray) {  
+  // function createMistakesButtons(mistakesQuantity, mistakes) {     
+  const mistakes = mistakesArray.length;
   const mistakeButtons = document.createElement('p');   
-  for (let i = 0; i < mistakesQuantity; i++) {    
+  for (let i = 0; i < mistakes; i++) {    
     const btn = document.createElement('button');
     btn.id = `erBtn${i}`;
     btn.value = i;
-    btn.dataset.questionIndex = mistakes[i][0];
-    btn.dataset.userOption = mistakes[i][1];
-    btn.className = 'error_button';   
+    btn.dataset.questionIndex = mistakesArray[i][0];
+    btn.dataset.userOption = mistakesArray[i][1];
+    btn.className = 'error-button';   
     btn.textContent = i + 1;      
 
     btn.addEventListener('click', function() {      
@@ -424,48 +448,46 @@ function createMistakesButtons(mistakesQuantity, mistakes) {
 function showSelectedMistake(btnId) {   
 
   const targetBtn = document.getElementById(btnId);
-
-  const btns = document.querySelectorAll(".error_button");
-
-  btns.forEach(btn => {
+  const btns = document.querySelectorAll('.error-button');
+  
+  btns.forEach(btn => btn.classList.toggle('active-button', btn === targetBtn));
     
-    btn.style.background = "var(--main-bg-color)";
-
-  });
-
-  targetBtn.style.background = "var(--error-btn-color)"; 
-
   const questionIndex = targetBtn.dataset.questionIndex;   
-
-  const questionBlock = testBases[currentTest.id].testBody[questionIndex];   
-
-  divTestResult.classList.remove('hidden');
-
-  divTestButtons.classList.remove('hidden');
-
+  const questionBlock = testBases[currentTest.id].testBody[questionIndex];    
+  
+  [testResultsContainer, testButtonsContainer].forEach(container => 
+    container.classList.remove('hidden')
+  );
+  
   fillQuestionBlock(questionBlock, false);  
-
-  highlightOptions(targetBtn);  
-
-  lockOptionButtons(".option_button");
- 
+  highlightOptions(targetBtn); 
+  lockOptionButtons('.option-button'); 
 }
 
 function highlightOptions(targetBtn) {
+  const selectedAnswer = targetBtn.dataset.userOption;  
+  // const answerButtons = document.querySelectorAll('.option-button');
+  const correctAnswerId = 'option0';
+  clearOptionsHighlight(answerButtons)
+  answerButtons.forEach(button => {
+    // button.classList.remove('correct', 'incorrect');    
+    if (button.id === correctAnswerId) {    
+      button.classList.add('correct');      
+    }    
+    if (button.id === `option${selectedAnswer}`) {
+      button.classList.add('incorrect');
+    }
+  }); 
+}
 
-  const userAnswer = targetBtn.dataset.userOption;
-
-  document.getElementById('option0').style.border = 'var(--right-answer-border)';
-
-  document.getElementById('option' + userAnswer).style.border = 'var(--wrong-answer-border)';
-
+function clearOptionsHighlight(buttons){
+  buttons.forEach(button => {
+    button.classList.remove('correct', 'incorrect'); 
+  })
 }
 
 
-
-
 function lockOptionButtons(selector) {
-
   document.querySelectorAll(selector).forEach(node => {
     node.disabled = true;
   });
@@ -478,45 +500,47 @@ function getCurrentQuestionBlock(questionIndex) {
 }
 
 btnHome.addEventListener("click", function(event) {    
-  const btnText = event.target.textContent;
-  
+  const btnText = event.target.textContent;  
   if (btnText === "Завершить") {
+   
     handleFinishButtonClick();
+
   } else if (btnText === "На главную") {
-    handleMainPageButtonClick();
+    //handleMainPageButtonClick();
+    showMainPage();
   }
 });
 
-function handleFinishButtonClick() {
+function handleFinishButtonClick() {  
+ 
+  questionNumber = 1;
+
+  if (!state.wrongAnswers.length || state.rightAnswersCount === 0) {         
+    showMainPage();     
+    return;
+  }   
+ 
+  showResultsPage();
+
+  const isTestCompleted = false;
+  
+  showTestResult(isTestCompleted);
+
+   if(state.isMistakes){
+
+    state.currentIndex = 0;
+    state.rightAnswersCount = 0;
+
+  }
 
   saveTestHistory(state);
-
-  const history = getTestHistory(currentTest.id);
-  if (!history || history.wrongAnswers.length < 1 || !isAnswerDone) {
-    showMainPage();
-    return;
-  }    
-
- // clearTestState();
-
-  showResultsPage();
-  const isCompleted = isTestCompleted();
-  showTestResult(isCompleted);
 }
-
-function handleMainPageButtonClick() {
-  isAnswerDone = false;
-  showMainPage();
-}
-
 
 
 btnNext.addEventListener("click", function() {
 
   const questionBlock = getCurrentQuestionBlock(state.currentIndex);
-
-  fillQuestionBlock(questionBlock, true)
-
+  fillQuestionBlock(questionBlock, true);
   btnNext.classList.add('hidden');
 
 })
@@ -534,243 +558,16 @@ function clearTestState() {
   state.currentIndex = 0;
   state.wrongAnswers = [];
   state.isMistakes = false;
+  state.currentTestLength = 0;
 
 };
 
-function isTestCompleted() {
+// function isTestCompleted() {
 
-  return state.currentTestLength === state.currentIndex;
-}
-
-// function isIncorrectAnswers(){
-
-//   return state.wrongAnswers.length > 0 ? true : false;
-
+//   return state.currentTestLength === state.currentIndex;
 // }
 
 
-
-// function checkAnswer(btnId) {   
-  
-//   // const isCompleted = isTestCompleted();  
-
-//   //alert(state.currentIndex)
-//   //alert(isCompleted)
-
-//   // if (isCompleted) {
-
-//     // alert('DONE')
-//   //   handleTestCompletion(isCompleted);
-
-//   //   return;
-//   // }   
-  
-//   const userAnswerIndex = document.getElementById(btnId).value;
-
-  
-//   let questionBlock = getCurrentQuestionBlock(state.currentIndex);  
-  
-//   //alert(state.isMistakes)
-  
-//   if(state.isMistakes){
-//      correctMistakes(userAnswerIndex);  
-//      return; 
-//   }
-//   //if(!state.isMistakes) doTest(questionBlock, btnId);
-
-//   //alert("state")
-
-//   if(!state.isMistakes) doTest(userAnswerIndex);
-  
-
-  
-//   //if (tglLearnMode.checked === true && optionIndex != rightOptionIndex) { 
-//   // if (tglLearnMode.checked === true) { 
-
-//   //   runLernMode();
-
-//   // } 
-
-  
-//   const isCompleted = isTestCompleted();  
-  
-
-//   // if (isCompleted) {
-
-//   //   alert('DONE')
-//   //   handleTestCompletion(isCompleted);
-
-//   //   return;
-//   // } 
-
-//   //alert(state.currentIndex)
-
-//   questionBlock = getCurrentQuestionBlock(state.currentIndex);
-
-//   fillQuestionBlock(questionBlock, true,);
- 
-// }
-
-// function handleTestCompletion(isCompleted) {
-
-//     showResultsPage();
-//     showTestResult(isCompleted);
-
-//     const failedQuestionCount = state.wrongAnswers.length;    
-    
-//     if (failedQuestionCount <= 0) {
-//       clearTestState();
-//     } else {
-//         state.isMistakes = true;        
-//         state.currentIndex = 0;
-//         state.currentTestLength = failedQuestionCount;
-//         saveTestHistory(state);
-//     }
-// }
-
-
-// function correctMistakes(userAnswerIndex){  
-
-//   alert(userAnswerIndex);
-
-//   const questionIndex = state.wrongAnswers[state.currentIndex][0];
-
-//   //const userAnswerIndex = document.getElementById(btnId).value; 
-
-//   while(state.wrongAnswers.length > 0){
-
-//     let questionBlock = getCurrentQuestionBlock(state.currentIndex);
-
-//     fillQuestionBlock(questionBlock, true,);
-
-//   }
-  
-
-  
-
-//  // let el = [questionIndex, userAnswerIndex]; 
-
-//   // alert('correct')
-
-//  // let idx = state.wrongAnswers.findIndex(item => item[0] == state.currentIndex);    
-
-//     //не прав
-//   if(userAnswerIndex !== "0"){    
-      
-
-//    //alert('WR')
-    
-//    // state.wrongAnswers.splice(idx, 1, el);   
-
-//     let el = [questionIndex, userAnswerIndex]; 
-
-//    // alert(state.currentIndex)
-
-//    // alert(state.wrongAnswers[state.currentIndex])
-
-//     state.wrongAnswers.splice(state.currentIndex, 1, el);
-
-//     saveTestHistory(state);
-
-//     //alert(state.wrongAnswers.length);  
-
-
-//     state.currentIndex++;
-   
-//   }else{//прав  
-    
-//     alert('ri')
-
-//     //alert()
-
-//     state.wrongAnswers.splice(0, 1);  
-    
-//    //saveTestHistory(state);
-
-    
-
-
-//     state.currentIndex = state.wrongAnswers[0][0];
-
-//     saveTestHistory(state);
-    
-//     //state.currentTestLength--;
-
-//     if(state.wrongAnswers.length <= 0) {  
-
-//       saveTestHistory(state);    
-  
-//       showResultsPage();
-
-//       const isCompleted = isTestCompleted();
-
-//       showTestResult(isCompleted);   
-      
-//       return;
-
-//     }
-
-
-//        // state.currentIndex = 0;
-
-
-//   }
-
-//       //state.currentIndex++;
-
-   
-
-
-// }
-
-
-// function doTest(userAnswerIndex){  
-
-//   alert('test');
-//   //const userAnswerIndex = document.getElementById(btnId).value;  
-
-//   //alert(userAnswerIndex);
-
-//   if(userAnswerIndex !== "0"){     
-//     const el = [state.currentIndex, userAnswerIndex];
-
-
-//     state.wrongAnswers.push(el);   
-//   };    
-
-//   state.currentIndex++;
-//   saveTestHistory(state);  
-// }
-
-// function doTest(btnId){
-
-//   //const correctAnswer = questionBlock.answers[0];
-
-//   const userAnswerIndex = document.getElementById(btnId).value; 
-
-//   //const userAnswer = document.getElementById(btnId).textContent; 
-  
-//   alert(userAnswerIndex)
-
-//   // if(userAnswer !== correctAnswer){  
-
-//   if(userAnswerIndex !== 0){
-      
-//    // const userAnswerIndex = questionBlock.answers.indexOf(userAnswer);
-
-//     //const el = [state.currentIndex, userAnswerIndex];
-
-//     const el = [state.currentIndex, userAnswerIndex];
-
-//     state.wrongAnswers.push(el); 
-  
-//   };    
-
-//   state.currentIndex++;
-
-//   saveTestHistory(state);  
-
-// }
 
 function runLernMode(){
 
@@ -786,12 +583,12 @@ function showMainPage() {
 
   const elementsToHide = [
     
-    divTestButtons,
-    divNavigation,
-    divTestResult,
-    divQuestionsCounter,
-    divHelp,
-    divList,
+    testButtonsContainer,
+    navigationContainer,
+    testResultsContainer,
+    questionsCounter,
+    helpSection,
+    listPageContainer,
     divDropdownMenu    
       
   ];
@@ -823,66 +620,7 @@ function testButtonClick(event) {
  
 }
 
-// document.addEventListener("click", function(event) {
 
-//   const id = event.target.id;
-
-//   const classNamed = event.target.className;
-
-//   if(classNamed == "test_button") {   
-    
-  
-//     if(id == "tempRemove") {
-
-//       clearHistory();
-
-//     } else {      
-
-//       // alert()
-
-//      // currentTest.id = id;
-
-//      // chooseTest(id, event.target.textContent);          
-      
-//     }
-
-//   } 
-
-  // if (classNamed == "error_button") {   
-    
-  //   //alert()
-
-  //  // showSelectedMistake(id);
-
-  // }
-
-  // if (classNamed == "option_button") {
-
-
-
-  //   check(id);
-
-  //   isAnswerDone = true;
-
-  // }
-
-
-//})
-
-
-
-
-
-// function getNextIndex(history) {
-  
-//   if (!history) return 0;
-
-//   // if (history.isMistakes) {
-//   //   return history.wrongAnswers[0][0];
-//   // }
-  
-//   return history.currentIndex;   
-// }
 
 function getCurrentTestLength(testId, history){   
 
@@ -899,60 +637,60 @@ function getCurrentTestLength(testId, history){
 
 function chooseTest(testId, testName) {  
   
-  const history = getTestHistory(testId);
+  const history = getTestHistory(testId);  
 
-  clearTestState();
+  questionNumber = 1;
 
   state.currentTestLength = getCurrentTestLength(testId, history);
 
-  //alert(state.currentTestLength)
+  questionQuantity = state.currentTestLength;
 
-  let currentIndex = 0;
-  let questionIndex = 0;
-  
-  if (history) {
+  //let counterText = `Вопрос: 1/${state.currentTestLength}`;
 
-    state = history;    
+  let counterText;
 
-    if (history.isMistakes) {
-      //currentIndex = 0;     
+  // Инициализируем индексы с учетом истории
+  let { currentIndex = 0, questionIndex = 0 } = history || {};   
 
-      questionIndex = history.wrongAnswers[0][0];
-    } else {
-      currentIndex = history.currentIndex;
-      questionIndex = currentIndex;
-    }
+   // Определяем индекс вопроса на основе ошибок
+  if (history?.isMistakes) {
+    questionIndex = history.wrongAnswers?.[0]?.[0] || 0;
+
+   // alert(questionNumber)
+
+    counterText = `Работа над ошибками\n\nВопрос: ${questionNumber}/${questionQuantity}`;
+
+
+  } else {
+    currentIndex = history?.currentIndex || 0;
+    questionIndex = currentIndex;
+
+    counterText = `Вопрос: ${currentIndex + 1}/${state.currentTestLength}`;
+
   }
-
-
 
   state.currentIndex = currentIndex;
 
-  //alert(state.currentTestLength)
+  //alert(state.currentIndex)
 
-
-  showChosenTest(testName);  
+  showChosenTest(testName, counterText);  
 
   const questionBlock = getCurrentQuestionBlock(questionIndex);
   fillQuestionBlock(questionBlock, true);
-
-  //alert(state.currentTestLength)
-
-
+ 
 }
-
 
 
 function showResultsPage() {  
 
   const elementsToHide =[
-    divTestButtons,
+    testButtonsContainer,
     pQuestionsCounter
   ]
 
   const elementsToShow =[   
     divHome,
-    divTestResult
+    testResultsContainer
   ]
 
 
@@ -982,7 +720,7 @@ function showElements(elementsArray){
 
 
 
-function showChosenTest(testName) {
+function showChosenTest(testName, counterText) {
   const elementsToHide = [
     divLevels,
     divMenuButton,    
@@ -990,16 +728,20 @@ function showChosenTest(testName) {
   ]
 
   const elementsToShow = [ 
-    divTestButtons,
+    testButtonsContainer,
     pQuestionsCounter,
-    divQuestionsCounter,
-    divNavigation,
+    questionsCounter,
+    navigationContainer,
     divHome   
   ]
 
   hideElements(elementsToHide);
-  showElements(elementsToShow);
-  pQuestionsCounter.textContent = `Вопрос: 1/"${state.currentTestLength}`;
+  showElements(elementsToShow);  
+
+ 
+
+  renderQuestionCounter(counterText);
+
   pTestTitle.textContent = testName;
   btnHome.textContent = "Завершить";
   btnHome.value = "complite";
@@ -1007,121 +749,102 @@ function showChosenTest(testName) {
 
 //////////////////////////////////////////////////////////////////////list///////////////////
 
-pTestTitle.addEventListener("click", list)
+pTestTitle.addEventListener("click", showQuestionsList)
 
-function list() {
+function showQuestionsList() {
 
-  const parrentBlock = document.getElementById('q-list');
+  const questions = testBases[currentTest.id].testBody;    
+  
+  questions.forEach((question, index) => {
+    const p = document.createElement('p');
+    p.id = index;
+    p.className = 'question-in-list';
+    p.textContent = `${index + 1}) ${question.question}`;
+    divListBlock.appendChild(p);
+    
+  });
 
-  let questions = testsList[defaultRank][currentTest.id][0]
-
-  let i = 0;
-
-  questions.forEach((question) => {
-   
-    const line = document.createElement('p');
-    line.textContent = `${i + 1}) ${question[0]}`;
-    line.id = i.toString();
-    line.className = "q-line"
-    parrentBlock.appendChild(line);
-    i++;
-
-
-  })  
+   listPageContainer.classList.remove('hidden');
  
-  divList.classList.remove('hidden');
-
-  questions = []
 
 }  
   
-function hideListBlock() {  
-  divList.classList.add('hidden');
+function hideListBlock() {    
+  divListBlock.innerHTML = ""; 
+  listPageContainer.classList.add('hidden'); 
 }
 
 
-document.addEventListener("click", function (event) { 
+// Функция для очистки DOM-элемента
+const clearNode = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild);
+    }
+};
 
-  if(event.target.className !== 'q-line') return;
+// Функция для создания параграфа с ответом
+const createAnswerParagraph = (answer) => {
+    const p = document.createElement('p');
+    p.id = answer.id;
+    p.innerHTML = `${answer.id + 1}) ${answer.text}`;
+    return p;
+};
 
- // let questions = testsList[defaultRank][currentTest.id][0]  
+// Функция для создания параграфа с меткой
+const createLabelParagraph = (answer) => {
+    const p = document.createElement('p');
+    if (answer.success) {
+        p.innerHTML = '&#10004;';
+    }
+    return p;
+};
 
-  const parrentBlock = document.getElementById('mod-content'); 
-
-  const question = document.createElement('p');
-
-  const line = document.createElement('hr');
-
-  line.className = 'line'
-
-  let questions = testsList[defaultRank][currentTest.id][0]
-
-  question.textContent = questions[event.target.id][0];  
-
-  let text = questions[event.target.id][1];   
-  
-  while (parrentBlock.hasChildNodes()) {
-
-    parrentBlock.removeChild(parrentBlock.firstChild);
-
-  }
-
-  parrentBlock.appendChild(question);
-
-  parrentBlock.appendChild(line);
-
-    let i = 0;
-  
-    text.forEach((answer) => {
+// Основная функция обработки клика
+const handleQuestionsListClick = (event) => {
+  const target = event.target;  
+  if (!target.classList.contains('question-in-list')) return;  
+  // Получаем данные
+  const answers = testBases[currentTest.id].testBody[target.id].answers;  
+  // Очищаем блоки
+  clearNode(col1);
+  clearNode(col2);
+  // Заполняем ответы
+  answers.forEach((answer) => {
+      col1.appendChild(createLabelParagraph(answer));
+      col2.appendChild(createAnswerParagraph(answer));
+  });    
     
-      
-      const paragraph = document.createElement('p');
-      
-      paragraph .id = i.toString();
-      
-
-      paragraph .innerHTML = '   ' + `${i + 1}) ${answer[0]}`;
-      
-      if(answer[1].toString() === "1")
-      {        
-        
-
-        paragraph .className = 'right-option';
-
-        
-      }
-
-      parrentBlock.appendChild(paragraph );
-
-      i++;
+  modalListContainer.appendChild(answerListContainer);
+  modal.style.display = 'block';      
   
-  
-    })
-    
-    modal.style.display = "block";
+};
 
-
-});
-
-
+// Добавляем обработчик
+document.addEventListener('click', handleQuestionsListClick);
 
 // Get the modal
-var modal = document.getElementById("myModal");
+const modal = document.getElementById("myModal");
 
 // Get the <span> element that closes the modal
- var span = document.getElementsByClassName("close")[0];
+const span = document.querySelector(".close-modal");
 
+// Добавляем обработчики событий
+span.addEventListener('click', closeModal);
 
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+// Функция для открытия модального окна
+function openModal() {
+  modal.style.display = 'block';
 }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+// Функция для закрытия модального окна
+function closeModal() {
+  modal.style.display = 'none';
+}
+
+// Закрываем модальное окно при клике вне его
+window.addEventListener('click', (event) => {
+  if (event.target === modal) {
+      closeModal();
   }
-}
+});
   

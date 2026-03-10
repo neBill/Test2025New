@@ -3,10 +3,13 @@ body.light-theme {
   --main-bg-color: #007373;
   --main-fg-color: #FFF;
   /* --right-answer-border: 2px solid #05fa3a; */
-  --right-answer-border: 2.5px solid #04FB39;
- 
+  --right-answer-border: 2.5px solid #04FB39; 
   --wrong-answer-border: 2px solid red;
-  --error-btn-color:  red;
+  /* --error-btn-color:  red; */
+
+  --error-btn-normal-color: #007373;
+  --error-btn-active-color: red;
+
   --main-border: 0px;
   --body-fon: #ADD8E6;
   --text-color: #007373;
@@ -27,7 +30,10 @@ body.dark-theme {
   --main-fg-color: #E9E8EB;     
   --right-answer-border: 2px solid #0079f2;
   --wrong-answer-border: 2px solid #F76365;
-  --error-btn-color: #F76365;
+
+  --error-btn-normal-color: #3e4657;
+  --error-btn-active-color: #F76365;
+  
   --toogle-on-color: #0079f2;
   --body-fon: #202430;
   --text-color: #7d8fb3;
@@ -39,7 +45,7 @@ body.dark-theme {
   --font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.button, .test_button, .count_button, .option_button, .question-button {
+.button, .test_button, .count_button, .option-button, .question-button {
   width: 100%; 
   text-align: center;    
   font-size: var(--btn-font-size);
@@ -61,7 +67,7 @@ body.dark-theme {
  
 }   
 
-.option_button{
+.option-button{
 
   text-align: left;  
   padding: 13px;
@@ -93,7 +99,7 @@ body.dark-theme {
   margin-top: 0px;
 }
 
-.error_button {
+.error-button {
   width: 32px;
   height: 32px;
   background-color: var(--main-bg-color);
@@ -107,9 +113,6 @@ body.dark-theme {
   padding:  2% 25% 5% 25%;
     
 }
-
-
-
 
 .test-block{  
   padding: 0%  1%  2% 1%;  
@@ -422,6 +425,40 @@ svg{
   text-align: center;
   line-height: 0.5;
 }
+
+#answer-list-block {
+width: 100%;
+/* overflow: hidden; */
+display: flex; 
+
+}
+
+
+#col1, #col2 {   
+  float: left;
+  padding: 6px;
+}
+
+#col1 {
+  width: 6%;
+}
+
+.active-button {
+  background: var(--error-btn-active-color);
+}
+
+.correct{
+ border : var(--right-answer-border);
+}
+
+.incorrect{
+  border : var(--wrong-answer-border);
+}
+
+#questions-counter {
+  white-space: pre-wrap; /* или pre-line */
+}
+
 
 
 

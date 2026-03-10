@@ -3,26 +3,20 @@
 
 let currentFontSize = 20; 
 
-function increaseFontSize() {
-  
+function increaseFontSize() {  
   const newFontSize = currentFontSize + 1; 
-
   setFontSize(newFontSize);
 
 }
 
 function decreaseFontSize() { 
-
   const newFontSize = currentFontSize - 1;
-
   setFontSize(newFontSize);
 
 }
 
 function defaultFontSize() {  
-
   setFontSize(20)
-
 }
 
 
@@ -99,29 +93,22 @@ window.addEventListener("load", ()=>{
 
 //лечение выхода из приложения при нажании кнопки назад в андроид
 window.addEventListener('load', function() {
-
     window.history.pushState({}, '')
 });
   
-window.addEventListener('popstate', function() {
-   
-    btnHome.click();
-    
+window.addEventListener('popstate', function() {   
+    btnHome.click();    
     window.history.pushState({}, '')
 });
 
 
 
 tglLevel5.addEventListener('change', function() {   
-
-  setRankToggles('rank5')
-  
+  setRankToggles('rank5')  
 });
 
 tglLevel6.addEventListener('change', function() {  
-
-  setRankToggles('rank6')
-  
+  setRankToggles('rank6')  
 });
 
 
@@ -151,93 +138,33 @@ const testsList = {
 }
 
 
-// function createTestButtons(){ 
-  
-//   Object.keys(testsList[defaultRank]).forEach(key => {
-
-//     const testButton = document.createElement('button');
-
-//     testButton.id = key;
-
-//     testButton.className = "test_button";
-
-//     testButton.textContent = testsList[defaultRank][key][1]
-
-//     divTestsButtons.appendChild(testButton);
-
-//   });
-
-//   ///////////////////////
-//   //divTestsButtons.appendChild(testButton);
-
-//   const testButton = document.createElement('button');
-
-//   testButton.id = "tempRemove";
-
-//   testButton.className = "test_button";
-
-//   testButton.textContent = "DelHistory";
-
-//   // testButton.onclick = clearHistory();
-
-//   divTestsButtons.appendChild(testButton);
-
-
-//   /////////////////////////////////
-
-//   const tempButton = document.createElement('button');
-
-//   tempButton.id = "tempBtn";
-
-//   tempButton.className = "test_button";
-
-//   tempButton.textContent = "New";
-
-//   // testButton.onclick = clearHistory();
-
-//   divTestsButtons.appendChild(tempButton);
-
-//   //const tm = Object.keys(testBases)
-
-
-
-// }
 
 
 function createLevelsButtons(){  
   
   Object.keys(testBases).forEach(key => {
-
     const testButton = document.createElement('button');   
     testButton.id = key;
     testButton.className = "test_button";   
     testButton.textContent = testBases[key].testTitle;
     testButton.addEventListener('click', testButtonClick);  
     divLevels.appendChild(testButton);
-
   });
  
-  divTestButtons.classList.add('hidden');
-
+  testButtonsContainer.classList.add('hidden');
 }
 
-function removeButtons() {
-    
-  divLevels.innerHTML = '';
-  
+function removeButtons() {    
+  divLevels.innerHTML = '';  
 }
 
 
 function showHideMenu() {  
-
   // Так как класс есть, он будет убран
   divDropdownMenu.classList.toggle('hidden')
-  // А при повторном вызове будет снова добавлен
-  
+  // А при повторном вызове будет снова добавлен  
    if(divDropdownMenu.classList.contains('hidden')) {  
-
     const currentSettings = {
-
       isLearnMode : tglLearnMode.checked,
       // isShuffle : tglShuffle.checked,
       isDarkTheme : tglTheme.checked,
@@ -247,74 +174,51 @@ function showHideMenu() {
     }
 
     const isSettings = localStorage.getItem("settings");
-
-    const settings = isSettings ? currentSettings : defaultSettings
-
-    setSettings(settings)
-
-    saveData('settings', settings);    
-
+    const settings = isSettings ? currentSettings : defaultSettings;
+    setSettings(settings);
+    saveData('settings', settings);   
     removeButtons();
-
     createLevelsButtons();
-
   }
 
 }
 
-function removeSettings() {
-  
+function removeSettings() {  
   localStorage.removeItem("settings");  
-
 }
 
 
 function hideHelpPage() {
-
-  divHelp.classList.add('hidden'); 
-
+  helpSection.classList.add('hidden'); 
 }
 
 function showHelpPage() {
-
-  divHelp.classList.remove('hidden'); 
-
+  helpSection.classList.remove('hidden'); 
   showHideMenu();
-
 }
 
 
 
 
 function saveData(key, valueObject ){   
-
   localStorage.setItem(key, JSON.stringify(valueObject));
-
 }
 
 
 function setSettings(settings) {
-
   tglTheme.checked = settings.isDarkTheme; 
   
   //tglShuffle.checked = settings.isShuffle;
 
   tglLearnMode.checked = settings.isLearnMode;  
-
   defaultRank = settings.defRank;
-
   currentFontSize = settings.fontSize;
-
   //document.body.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
 
   docBody.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
-
   let theme;
-
   tglTheme.checked == true  ? theme = 'dark-theme' : theme = 'light-theme';  
-
   //const theme = settings.isDarkTheme ? 'dark-theme' : 'light-theme';
-
   docBody.className = theme;
 
 }
@@ -334,12 +238,10 @@ function setRankToggles(rank){
 }
 
 const defaultSettings = {
-
   isLearnMode : false,
   // isShuffle : false,
   isDarkTheme : false,
   defRank : 'rank6', 
-  fontSize : 20,
-  
+  fontSize : 20,  
 }
 
