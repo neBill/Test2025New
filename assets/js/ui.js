@@ -95,7 +95,7 @@ function handleClick(event) {
     }   
 
     if (state.currentIndex === state.wrongAnswers.length) {
-     //alert('по новой')
+     
       state.currentIndex = 0;
       state.rightAnswersCount = 0;
       state.currentTestLength = state.wrongAnswers.length;
@@ -559,6 +559,7 @@ function clearTestState() {
   state.wrongAnswers = [];
   state.isMistakes = false;
   state.currentTestLength = 0;
+  state.rightAnswersCount = 0;
 
 };
 
