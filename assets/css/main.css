@@ -459,7 +459,15 @@ display: flex;
   white-space: pre-wrap; /* или pre-line */
 }
 
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
 
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
 
 
 
