@@ -155,12 +155,28 @@ function handleTestCompletion() {
 
     //state.isTestCompleted = true;
 
+    
+
+    showResultsPage(); 
+
+    showTestResult(state);
+
+    state.currentIndex = 0;
+
     saveTestHistory(state);
 
 
   }else{
 
     //state.isMistakes = false; 
+    showResultsPage(); 
+
+    //showTestResult(state);
+    const testReport = createSuccessReport(state)
+
+    printTestResult(testReport, buttons); 
+
+    clearTestState();  
 
 
     localStorage.removeItem(currentTest.id);
@@ -169,9 +185,9 @@ function handleTestCompletion() {
 
   //saveTestHistory(state);
   
-  showResultsPage(); 
+  // showResultsPage(); 
 
-  showTestResult(state);
+  // showTestResult(state);
 
   // state.currentIndex = 0;
 
@@ -344,13 +360,13 @@ function showTestResult(testParams){
 
      
       
-      testReport = createSuccessReport(testParams)
+      // testReport = createSuccessReport(testParams)
 
       
-      // localStorage.removeItem(currentTest.id);
+      // // localStorage.removeItem(currentTest.id);
       
 
-      clearTestState();  
+      // clearTestState();  
 
     }else{
 
@@ -665,7 +681,9 @@ function chooseTest(testId, testTitle) {
 
     state.currentTestLength = state.retryQuestions.length;
 
-    //state.currentIndex = 0;
+    // state.currentIndex = 0;
+
+    // saveTestHistory(state);
 
     questionIndex = state.retryQuestions[state.currentIndex][0];   
 
