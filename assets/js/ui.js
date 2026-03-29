@@ -10,6 +10,7 @@ let state = {
   currentTestLength : 0,  
   isMistakes: false,
   isTestCompleted : false,
+  isShuffle: true,
   wrongAnswers: [],
   retryQuestions : []
 };
@@ -43,16 +44,12 @@ const lbFontSizeSample = document.getElementById('font-size-sample');
 const tglTheme =  document.getElementById('theme-toggle'); 
 const pTestTitle = document.getElementById('test-title');
 const docBody = document.body;
-
 const modalListContainer = document.getElementById('mod-content');
 const col1 = document.getElementById('col1');
 const col2 = document.getElementById('col2');
 const answerListContainer = document.getElementById('answer-list-block');
-
-const divListBlock = document.getElementById('questions-list-block');////
-
+const divListBlock = document.getElementById('questions-list-block');
 const btnHideList = document.getElementById('btn-hide-list');
-
 btnHideList.addEventListener('click', hideListBlock);
 
 class CurrentTest {
@@ -64,7 +61,6 @@ class CurrentTest {
 
 const currentTest = new CurrentTest();
 
-
 //навешиваем на кнопки вариантов событие клик
 document.querySelectorAll('.option-button').forEach(button => {
     button.addEventListener('click', handleClick);
@@ -75,8 +71,9 @@ document.querySelectorAll('.option-button').forEach(button => {
 function handleClick(event) { 
   
   const button = event.target; 
-  //const isMistakeMode = state.isMistakes;        
+          
   const userAnswerId = Number(button.dataset.answerId);  
+
   let isAnswerCorrect = false;
 
   if(userAnswerId === 0){
@@ -85,11 +82,7 @@ function handleClick(event) {
 
   } 
 
-  state.isMistakes ? runMistakeMod(isAnswerCorrect, userAnswerId) : runNormalMod(isAnswerCorrect, userAnswerId);
-  
-}
 
-function runNormalMod(isAnswerCorrect, userAnswerId){
 
   if(!isAnswerCorrect) {     
 
@@ -99,7 +92,24 @@ function runNormalMod(isAnswerCorrect, userAnswerId){
 
   state.currentIndex++;
 
-  saveTestHistory(state);  
+  saveTestHistory(state);    
+
+
+  state.isMistakes ? runMistakeMod(isAnswerCorrect, userAnswerId) : runNormalMod(isAnswerCorrect, userAnswerId);
+  
+}
+
+function runNormalMod(isAnswerCorrect, userAnswerId){
+
+  // if(!isAnswerCorrect) {     
+
+  //   state.wrongAnswers.push([state.currentIndex, userAnswerId]);   
+
+  // }   
+
+  // state.currentIndex++;
+
+  // saveTestHistory(state);  
 
   renderQuestionCounter(`Вопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);
   
@@ -113,18 +123,17 @@ function runNormalMod(isAnswerCorrect, userAnswerId){
 }
 
 
-
 function runMistakeMod(isAnswerCorrect, userAnswerId){ 
 
-  if(!isAnswerCorrect) { 
+  // if(!isAnswerCorrect) { 
 
-   state.wrongAnswers.push([state.currentIndex, userAnswerId]);   
+  //  state.wrongAnswers.push([state.currentIndex, userAnswerId]);   
 
-  } 
+  // } 
   
-  state.currentIndex++;
+  // state.currentIndex++;
 
-  saveTestHistory(state);  
+  // saveTestHistory(state);  
 
   renderQuestionCounter(`Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);    
 
@@ -141,25 +150,19 @@ function runMistakeMod(isAnswerCorrect, userAnswerId){
 
 function handleTestCompletion() {  
 
-  state.isTestCompleted = true;
+   state.isTestCompleted = true;
 
   if(state.wrongAnswers.length > 0){
 
     state.isMistakes = true;      
 
-    state.retryQuestions = JSON.parse(JSON.stringify(state.wrongAnswers));
-
-    state.wrongAnswers.length = 0;   
-    
-    //state.currentIndex = 0;
-
-    //state.isTestCompleted = true;
-
-    
-
     showResultsPage(); 
 
-    showTestResult(state);
+    showTestResult(state);   
+
+    state.retryQuestions = JSON.parse(JSON.stringify(state.wrongAnswers));
+
+    state.wrongAnswers.length = 0;  
 
     state.currentIndex = 0;
 
@@ -167,37 +170,19 @@ function handleTestCompletion() {
 
 
   }else{
+    
+    showResultsPage();     
 
-    //state.isMistakes = false; 
-    showResultsPage(); 
-
-    //showTestResult(state);
-    const testReport = createSuccessReport(state)
-
-    printTestResult(testReport, buttons); 
+    printTestResult(createSuccessReport()); 
 
     clearTestState();  
-
 
     localStorage.removeItem(currentTest.id);
 
   }
 
-  //saveTestHistory(state);
-  
-  // showResultsPage(); 
-
-  // showTestResult(state);
-
-  // state.currentIndex = 0;
-
-  //  saveTestHistory(state);
-
-  //localStorage.removeItem(currentTest.id);
-  
+   
 }
-
-
 
 
 function navigateToNextQuestion(index) {  
@@ -207,8 +192,6 @@ function navigateToNextQuestion(index) {
 }
 
 
-
-
 function renderQuestionCounter(text){  
 
   pQuestionsCounter.textContent  =  text;
@@ -216,7 +199,7 @@ function renderQuestionCounter(text){
 }
 
 
-// function fillQuestionBlock(questionBlock, isShuffle) {   
+   
 function fillQuestionBlock(questionBlock) {  
   
   const REQUIRED_OPTIONS = 4;
@@ -234,9 +217,9 @@ function fillQuestionBlock(questionBlock) {
     });
   }
   
-  // if(isShuffle) {    
+   if(state.isShuffle) {    
     answers = shuffleArray(answers);   
-  // }
+   }
 
   clearOptionsHighlight(answerButtons);  
 
@@ -252,8 +235,6 @@ function fillQuestionBlock(questionBlock) {
  
   
 }
-
-
 
 
 function shuffleArray(array) {
@@ -296,23 +277,8 @@ function setTrainingMode(optionIndex) {
 }
 
 
-function calcRightAnswers(testParams) {  
-  
-  let totalQ = 1;
-  let incorrectQ = 0;
-
-  if(testParams.isTestCompleted){
-
-    totalQ = testParams.currentTestLength; 
-    incorrectQ = testParams.retryQuestions.length;
-
-  }else{
-
-    totalQ = testParams.currentIndex; 
-    incorrectQ = testParams.wrongAnswers.length;
-
-  }
-  
+function calcRightAnswers(totalQ, incorrectQ) {    
+    
   const correctAnswers = totalQ - incorrectQ;  
   const percent = Math.round(correctAnswers * 100 / totalQ); 
   return { correctAnswers: correctAnswers, errorsPercent: percent };
@@ -320,20 +286,28 @@ function calcRightAnswers(testParams) {
 }
 
 
-const createSuccessReport = (testParams) => [
+// const createSuccessReport = (testParams) => [
+const createSuccessReport = () => [
   'Тест успешно пройден!',
-  `Пройдено вопросов: ${testParams.currentIndex} из ${testParams.currentTestLength}`,
+ // `Пройдено вопросов: ${testParams.currentIndex} из ${testParams.currentTestLength}`,
   'Результат — 100%'
 ];
 
-const createUnSuccessReport = (testState, testParams) => {
+const createUnSuccessReport = (testParams) => {
 
-  const { correctAnswers, errorsPercent } = calcRightAnswers(testParams);
+
+  const totalQ = testParams.currentIndex;
+
+  const incorrectQ = testParams.wrongAnswers.length;
+
+  const { correctAnswers, errorsPercent } = calcRightAnswers(totalQ, incorrectQ);
+
+  
   
   const array = [
-    `Тест ${testState}`,
-    `Пройдено вопросов: ${testParams.currentIndex} из ${testParams.currentTestLength}`,
-    `Правильных ответов: ${correctAnswers} из ${testParams.currentIndex} (${errorsPercent}%)`,
+    `Тест ${testParams.isTestCompleted ? "завершен" : "остановлен"}`,
+    `Пройдено вопросов: ${totalQ} из ${testParams.currentTestLength}`,
+    `Правильных ответов: ${correctAnswers} из ${totalQ} (${errorsPercent}%)`,
     'Ваши ошибки:'
   ]
   return array
@@ -345,97 +319,30 @@ const createUnSuccessReport = (testState, testParams) => {
 
 function showTestResult(testParams){  
 
+  state.isShuffle = false;
+
   let testReport;
-  let buttons = []; 
 
-  let testState = testParams.isTestCompleted ? "завершен" : "остановлен";
+  let buttons = [];  
 
-  if(testParams.isTestCompleted){   
+  buttons = createMistakesButtons(testParams.wrongAnswers); 
 
-    //alert(state.isMistakes)
-  
-    if(!state.isMistakes){   
+  testReport = createUnSuccessReport(testParams);    
 
-      
+  testResultsContainer.innerHTML = '';
 
-     
-      
-      // testReport = createSuccessReport(testParams)
+  printTestResult(testReport);
 
-      
-      // // localStorage.removeItem(currentTest.id);
-      
-
-      // clearTestState();  
-
-    }else{
-
-      
-
-      testReport = createUnSuccessReport(testState, testParams);
-
-      buttons = createMistakesButtons(testParams.retryQuestions);
-
-
-    }
-    
-  
-
-  }else{
-
-   
-    
-    if(testParams.wrongAnswers.length > 0){
-
-    
-
-      testReport = createUnSuccessReport(testState, testParams);
-
-      buttons = createMistakesButtons(testParams.wrongAnswers);
-
-      //testResultsContainer.appendChild(buttons);  
-
-
-
-    } else{
-
-      //isMistakes = false;
-    }
-
-
-  }
-
- 
-  //renderResult(testReport, buttons);
-
-  printTestResult(testReport, buttons); 
+  testResultsContainer.appendChild(buttons);  
 
 }
 
 
 
-
-
-
-
-// function renderResult(testReport, buttons) {
-
-//   //testResultsContainer.innerHTML = '';
-
-  
-//   //printTestResult(testReport);    
-
-//   //if(!state.isMistakes) return;
-
-//   // const buttons = createMistakesButtons(state.retryQuestions);
-
-//    //testResultsContainer.appendChild(buttons);  
-// }
-
-function printTestResult(arrayText, buttons){      
+ 
+function printTestResult(arrayText){       
 
   testResultsContainer.innerHTML = '';
-
   arrayText.forEach(text => {
     const line = document.createElement('p');
     line.textContent = text;
@@ -443,9 +350,7 @@ function printTestResult(arrayText, buttons){
     testResultsContainer.appendChild(line);
   })     
 
-  if(buttons.length === 0) return;
-
-  testResultsContainer.appendChild(buttons);
+ 
 }
 
 
@@ -494,11 +399,11 @@ function showSelectedMistake(btnId) {
 
 function highlightOptions(targetBtn) {
   const selectedAnswer = targetBtn.dataset.userOption;  
-  // const answerButtons = document.querySelectorAll('.option-button');
+  
   const correctAnswerId = 'option0';
   clearOptionsHighlight(answerButtons)
   answerButtons.forEach(button => {
-    // button.classList.remove('correct', 'incorrect');    
+      
     if (button.id === correctAnswerId) {    
       button.classList.add('correct');      
     }    
@@ -546,10 +451,10 @@ function handleStopTest() {
     return;
   }else{
 
-    //state.currentIndex = 0;
+    
   }
    
-  state.isTestCompleted = false;
+  
   
   showResultsPage();
 
@@ -640,18 +545,6 @@ function clearTestState() {
 };
 
 
-// function getCurrentTestLength(testId, history){   
-
-//   // if (!history || !history.isMistakes) {
-//   //   return testBases[testId].testBody.length;
-//   // }
-
-//   // if (history.isMistakes && history.wrongAnswers) {
-//   //   return history.wrongAnswers.length;
-//   // }
-
-
-// }
 
 function getTestState(testId) {
   if(localStorage.getItem(testId)) {
@@ -670,7 +563,13 @@ function chooseTest(testId, testTitle) {
   let questionCounterText;
   let questionIndex;
 
+  state.isTestCompleted = false;  
+
+  state.isShuffle = true;
+
   state = getTestState(testId);  
+
+  state.isTestCompleted = false;
 
   if(state.currentTestLength === 0)
   {
@@ -680,18 +579,15 @@ function chooseTest(testId, testTitle) {
   if(state.isMistakes){
 
     state.currentTestLength = state.retryQuestions.length;
-
-    // state.currentIndex = 0;
-
-    // saveTestHistory(state);
-
+    
     questionIndex = state.retryQuestions[state.currentIndex][0];   
 
-    questionCounterText = `Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`;
+    questionCounterText = `Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`;    
 
   }else{
 
     questionCounterText = `Вопрос: ${state.currentIndex + 1}/${state.currentTestLength}`;
+
     questionIndex = state.currentIndex;
 
   }
@@ -700,8 +596,7 @@ function chooseTest(testId, testTitle) {
 
   const questionBlock = getCurrentQuestionBlock(questionIndex);
 
-
-  fillQuestionBlock(questionBlock);
+  fillQuestionBlock(questionBlock); 
  
 }
 
