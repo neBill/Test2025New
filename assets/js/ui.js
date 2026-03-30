@@ -1,9 +1,9 @@
 'use strict';
 
-let rightOptionIndex;
-//let isLearnMode;
-let isHistorySave = true;
-let defaultRank;
+ let rightOptionIndex;
+ //let isLearnMode;
+ let isHistorySave = true;
+ let defaultRank;
 
 let state = {
   currentIndex: 0,
@@ -50,6 +50,8 @@ const col2 = document.getElementById('col2');
 const answerListContainer = document.getElementById('answer-list-block');
 const divListBlock = document.getElementById('questions-list-block');
 const btnHideList = document.getElementById('btn-hide-list');
+
+
 btnHideList.addEventListener('click', hideListBlock);
 
 class CurrentTest {
@@ -70,46 +72,25 @@ document.querySelectorAll('.option-button').forEach(button => {
 //клик по кнопке варианта ответа
 function handleClick(event) { 
   
-  const button = event.target; 
-          
+  const button = event.target;           
   const userAnswerId = Number(button.dataset.answerId);  
-
   let isAnswerCorrect = false;
-
   if(userAnswerId === 0){
-
     isAnswerCorrect = true; 
-
   } 
 
-
-
   if(!isAnswerCorrect) {     
-
-    state.wrongAnswers.push([state.currentIndex, userAnswerId]);   
-
+    // state.wrongAnswers.push([state.currentIndex, userAnswerId]);
+    state.wrongAnswers.push({qId : state.currentIndex, aId : userAnswerId});  
+    
   }   
 
   state.currentIndex++;
-
   saveTestHistory(state);    
-
-
-  state.isMistakes ? runMistakeMod(isAnswerCorrect, userAnswerId) : runNormalMod(isAnswerCorrect, userAnswerId);
-  
+  state.isMistakes ? runMistakeMod() : runNormalMod();  
 }
 
-function runNormalMod(isAnswerCorrect, userAnswerId){
-
-  // if(!isAnswerCorrect) {     
-
-  //   state.wrongAnswers.push([state.currentIndex, userAnswerId]);   
-
-  // }   
-
-  // state.currentIndex++;
-
-  // saveTestHistory(state);  
+function runNormalMod(){  
 
   renderQuestionCounter(`Вопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);
   
@@ -122,18 +103,7 @@ function runNormalMod(isAnswerCorrect, userAnswerId){
 
 }
 
-
-function runMistakeMod(isAnswerCorrect, userAnswerId){ 
-
-  // if(!isAnswerCorrect) { 
-
-  //  state.wrongAnswers.push([state.currentIndex, userAnswerId]);   
-
-  // } 
-  
-  // state.currentIndex++;
-
-  // saveTestHistory(state);  
+function runMistakeMod(){  
 
   renderQuestionCounter(`Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);    
 
@@ -143,7 +113,9 @@ function runMistakeMod(isAnswerCorrect, userAnswerId){
 
   }     
 
-  return navigateToNextQuestion(state.retryQuestions[state.currentIndex][0]);
+ 
+
+   return navigateToNextQuestion(state.retryQuestions[state.currentIndex].qId);
 
 }
 
@@ -203,6 +175,9 @@ function renderQuestionCounter(text){
 function fillQuestionBlock(questionBlock) {  
   
   const REQUIRED_OPTIONS = 4;
+
+  //console.log('questionBlock', questionBlock);
+
 
   let answers = Array.isArray(questionBlock.answers)
     ? questionBlock.answers.map(a => ({ ...a }))
@@ -362,8 +337,8 @@ function createMistakesButtons(mistakesArray) {
     const btn = document.createElement('button');
     btn.id = `erBtn${i}`;
     btn.value = i;
-    btn.dataset.questionIndex = mistakesArray[i][0];
-    btn.dataset.userOption = mistakesArray[i][1];
+    btn.dataset.questionIndex = mistakesArray[i].qId;
+    btn.dataset.userOption = mistakesArray[i].aId;
     btn.className = 'error-button';   
     btn.textContent = i + 1;      
 
@@ -386,7 +361,11 @@ function showSelectedMistake(btnId) {
   btns.forEach(btn => btn.classList.toggle('active-button', btn === targetBtn));
     
   const questionIndex = targetBtn.dataset.questionIndex;   
-  const questionBlock = testBases[currentTest.id].testBody[questionIndex];    
+
+
+  const questionBlock = testBases[currentTest.id].testBody[questionIndex];  
+  
+  
   
   [testResultsContainer, testButtonsContainer].forEach(container => 
     container.classList.remove('hidden')
@@ -396,6 +375,8 @@ function showSelectedMistake(btnId) {
   highlightOptions(targetBtn); 
   lockOptionButtons('.option-button'); 
 }
+
+
 
 function highlightOptions(targetBtn) {
   const selectedAnswer = targetBtn.dataset.userOption;  
@@ -580,7 +561,9 @@ function chooseTest(testId, testTitle) {
 
     state.currentTestLength = state.retryQuestions.length;
     
-    questionIndex = state.retryQuestions[state.currentIndex][0];   
+    // questionIndex = state.retryQuestions[state.currentIndex][0];   
+
+    questionIndex = state.retryQuestions[state.currentIndex].qId; 
 
     questionCounterText = `Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`;    
 
