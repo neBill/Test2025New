@@ -43,9 +43,20 @@ btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
+btnMenu.addEventListener("click", showHideMenu);
+
+btnRemoveHistory.addEventListener("click",  clearHistory);
+
+btnRemoveCache.addEventListener("click",  clearCache);
+
+btnDefaultSettings.addEventListener("click",  removeSettings);
+
+btnShowHelp.addEventListener("click",  showHelpPage);
+
+btnGoBack.addEventListener("click",  showHideProfilePage);
 
 
-function clearCaches(){   
+function clearCache(){   
 
   caches.open('offline-cache-v1').then(cache => {
     cache.keys().then(keys => {
@@ -103,44 +114,58 @@ window.addEventListener('popstate', function() {
 
 
 
-tglLevel5.addEventListener('change', function() {   
-  setRankToggles('rank5')  
-});
+// tglLevel5.addEventListener('change', function() {   
+//   setRankToggles('rank5')  
+// });
 
-tglLevel6.addEventListener('change', function() {  
-  setRankToggles('rank6')  
-});
+// tglLevel6.addEventListener('change', function() {  
+//   setRankToggles('rank6')  
+// });
 
 
-const testsList = {
+// const testsList = {
    
-  rank5 : { 
-    st5_1 : [test_5s_block_1, "5p Стандарт 1"],
-    st5_2 : [test_5s_block_2, "5p Стандарт 2"],
-    ex5 : [test_5ex, "5р эксперт"],
-    ot_1 : [test_ot_block_1, "Охрана труда 1"],
-    ot_2 : [test_ot_block_2, "Охрана труда 2"],
-    ot5_2025 : [test_otrp, "ОT 2025"],
-  },    
+//   rank5 : { 
+//     st5_1 : [test_5s_block_1, "5p Стандарт 1"],
+//     st5_2 : [test_5s_block_2, "5p Стандарт 2"],
+//     ex5 : [test_5ex, "5р эксперт"],
+//     ot_1 : [test_ot_block_1, "Охрана труда 1"],
+//     ot_2 : [test_ot_block_2, "Охрана труда 2"],
+//     ot5_2025 : [test_otrp, "ОT 2025"],
+//   },    
     
-  rank6 : {      
-    st6_1 : [test_6s_block_1, "6p Стандарт 1"],
-    st6_2 : [test_6s_block_2, "6p Стандарт 2"],
-    st6_3 : [test_6s_block_3, "6p Стандарт 3"],
-    st6_4 : [test_6s_block_4, "6p Стандарт 4"],
-    ex6 : [test_6e_block_1, "6р Эксперт"],
-    ot_1 : [test_ot_block_1, "Охрана труда 1"],
-    ot_2 : [test_ot_block_2, "Охрана труда 2"],
-    ot6_2025 : [test_otrp, "ОT 2025"],
-    tmp : [temp, "TEMP"],  
-  },
+//   rank6 : {      
+//     st6_1 : [test_6s_block_1, "6p Стандарт 1"],
+//     st6_2 : [test_6s_block_2, "6p Стандарт 2"],
+//     st6_3 : [test_6s_block_3, "6p Стандарт 3"],
+//     st6_4 : [test_6s_block_4, "6p Стандарт 4"],
+//     ex6 : [test_6e_block_1, "6р Эксперт"],
+//     ot_1 : [test_ot_block_1, "Охрана труда 1"],
+//     ot_2 : [test_ot_block_2, "Охрана труда 2"],
+//     ot6_2025 : [test_otrp, "ОT 2025"],
+//     tmp : [temp, "TEMP"],  
+//   },
 
-}
+// }
 
 
 
 
 function createLevelsButtons(){  
+
+
+  // let testsList = [];
+
+
+
+  //  Object.keys(testBases).forEach(key => {
+
+  //   testsList.push(testBases[key].testTitle)
+   
+  // });
+
+  //alert(testsList)
+
   
   Object.keys(testBases).forEach(key => {
     const testButton = document.createElement('button');   
@@ -148,22 +173,111 @@ function createLevelsButtons(){
     testButton.className = "test_button";   
     testButton.textContent = testBases[key].testTitle;
     testButton.addEventListener('click', testButtonClick);  
-    divLevels.appendChild(testButton);
+    divTestsSelector.appendChild(testButton);
   });
  
-  testButtonsContainer.classList.add('hidden');
+   testButtonsContainer.classList.add('hidden');
 }
+
+
+btnShowProfilePage.addEventListener('click', showHideProfilePage)   
+
+
+function showHideProfilePage() {
+
+  // let display = divProfilePage.style.display; 
+
+  divProfilePage.classList.toggle('hidden', false);
+
+   const elementsToHide = [
+    divMainSettings,
+    // divMenuButton,    
+    btnMenu
+  ]
+
+  const elementsToShow = [ 
+   // testButtonsContainer,
+   // pQuestionsCounter,
+    //questionsCounter,
+   // navigationContainer,
+    //divHome   
+  ]
+  
+ // if(display === "block") {   
+
+  //  divProfilePage.style.display = "none"; 
+   // mainMenu.style.display = "block";
+   // header.style.display = "flex";
+
+    // const divisions = document.getElementsByName('div');  
+    // const levels = document.getElementsByName('lev'); 
+    // let division;
+    // let level;
+
+    // for(var i = 0; i < divisions.length; i++){
+    //   if(divisions[i].checked){
+    //       division = divisions[i].id;
+    //       break;
+    //   }        
+    // }
+
+    // for(var i = 0; i < levels.length; i++){
+    //   if(levels[i].checked){
+    //       level = levels[i].id;
+    //       break;
+    //   }        
+    // }
+
+    
+
+ // } else {   
+
+  //  divProfilePage.style.display = "block";
+
+    //hideElements(elementsToHide);
+    //hideBlocks();
+
+    
+    //profileTitle
+ // }
+
+
+  // const elementsToHide = [
+  //   divLevels,
+  //   divMenuButton,    
+  //   divNext
+  // ]
+
+  // const elementsToShow = [ 
+  //   testButtonsContainer,
+  //   pQuestionsCounter,
+  //   questionsCounter,
+  //   navigationContainer,
+  //   divHome   
+  // ]
+
+  hideElements(elementsToHide);
+  showElements(elementsToShow); 
+
+}
+
+
+
 
 function removeButtons() {    
-  divLevels.innerHTML = '';  
+  divTestsSelector.innerHTML = '';  
 }
 
+// btnMenu.addEventListener("click", showHideMenu);
 
 function showHideMenu() {  
   // Так как класс есть, он будет убран
-  divDropdownMenu.classList.toggle('hidden')
-  // А при повторном вызове будет снова добавлен  
-   if(divDropdownMenu.classList.contains('hidden')) {  
+   // А при повторном вызове будет снова добавлен  
+  divMainSettings.classList.toggle('hidden')
+  divTestsSelector.classList.toggle('hidden')
+
+
+   if(divMainSettings.classList.contains('hidden')) {  
     const currentSettings = {
       isLearnMode : tglLearnMode.checked,
       // isShuffle : tglShuffle.checked,

@@ -19,19 +19,19 @@ let state = {
 
 const answerButtons = document.querySelectorAll('.option-button');
 const navigationContainer = document.getElementById('navigation-block');
-const divLevels = document.getElementById('levels-buttons-block');
+const divTestsSelector = document.getElementById('test-selector');
 const testButtonsContainer = document.getElementById('test-buttons-block');
-const btnMenu = document.getElementById('button-menu');
+const btnMenu = document.getElementById('settings-page-button');
 const listPageContainer = document.getElementById('questions-list-page');
 const tglLearnMode = document.getElementById('learn-mode-toggle');
 const btnQuestion = document.getElementById('question-button');
 const pQuestionsCounter = document.getElementById('questions-counter');
 const questionsCounter = document.getElementById('questions-counter-block');
 const testResultsContainer = document.getElementById('test-result-block');
-const tglLevel5 = document.getElementById('level-5-toggle');
-const tglLevel6 = document.getElementById('level-6-toggle');
-const divDropdownMenu = document.getElementById('dropdown-menu-block');
-const divMenuButton = document.getElementById('menu-button-block');
+// const tglLevel5 = document.getElementById('level-5-toggle');
+// const tglLevel6 = document.getElementById('level-6-toggle');
+const divMainSettings = document.getElementById('main-settings');
+const btnGoBack = document.getElementById('go-back');
 const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
 const btnNext = document.getElementById('button-next');
@@ -50,6 +50,18 @@ const col2 = document.getElementById('col2');
 const answerListContainer = document.getElementById('answer-list-block');
 const divListBlock = document.getElementById('questions-list-block');
 const btnHideList = document.getElementById('btn-hide-list');
+const btnShowProfilePage = document.getElementById('profile-page-button');
+const divProfilePage = document.getElementById('test-profile');
+const btnRemoveHistory = document.getElementById('history-remover');
+const btnDefaultSettings = document.getElementById('default-settings');
+const btnRemoveCache = document.getElementById('cache-remover');
+const btnShowHelp = document.getElementById('show-help');
+
+
+
+
+
+const CORRECT_ANSWER_ID = 0;
 
 
 btnHideList.addEventListener('click', hideListBlock);
@@ -74,53 +86,122 @@ function handleClick(event) {
   
   const button = event.target;           
   const userAnswerId = Number(button.dataset.answerId);  
-  let isAnswerCorrect = false;
-  if(userAnswerId === 0){
-    isAnswerCorrect = true; 
-  } 
 
-  if(!isAnswerCorrect) {     
+
+  updateTestState(state, userAnswerId);
+  navigateToNext(state);
+
+  //let isAnswerCorrect = false;
+
+  // if(userAnswerId === CORRECT_ANSWER_ID){
+  //   isAnswerCorrect = true; 
+  // } 
+
+
+  //const isAnswerCorrect = (answerId) => answerId === CORRECT_ANSWER_ID;
+
+
+  //if(!isAnswerCorrect()) {     
     // state.wrongAnswers.push([state.currentIndex, userAnswerId]);
-    state.wrongAnswers.push({qId : state.currentIndex, aId : userAnswerId});  
+  //  state.wrongAnswers.push({qId : state.currentIndex, aId : userAnswerId});  
     
-  }   
+ // }   
 
-  state.currentIndex++;
-  saveTestHistory(state);    
-  state.isMistakes ? runMistakeMod() : runNormalMod();  
+ // state.currentIndex++;
+  //saveTestHistory(state);    
+
+  // Обновление состояния с явным разделением операций
+  // const updateTestState = (state, userAnswerId) => {
+  // if (!isAnswerCorrect(userAnswerId)) {
+  //   state.wrongAnswers.push({
+  //     qId: state.currentIndex,
+  //     aId: userAnswerId
+  //   });
+  // }
+
+  // state.currentIndex++;
+  // saveTestHistory(state);
+    //};
+
+
+
+
+
+  //state.isMistakes ? runMistakeMod() : runNormalMod();  
 }
 
-function runNormalMod(){  
 
-  renderQuestionCounter(`Вопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);
+const isAnswerCorrect = (answerId) => answerId === CORRECT_ANSWER_ID;
+
+// Обновление состояния с явным разделением операций
+const updateTestState = (state, userAnswerId) => {
+if (!isAnswerCorrect(userAnswerId)) {
+  state.wrongAnswers.push({
+    qId: state.currentIndex,
+    aId: userAnswerId
+  });
+}
+
+state.currentIndex++;
+saveTestHistory(state);
+};
+
+// Унифицированная навигация
+const navigateToNext = (state) => {
+  const { currentIndex, currentTestLength, retryQuestions, isMistakes } = state;
+
+  // Определяем лимит в зависимости от режима
+  const maxIndex = isMistakes ? retryQuestions.length : currentTestLength;
+
+  if (currentIndex >= maxIndex) {
+    return handleTestCompletion(state);
+  }
+
+  // Получаем ID вопроса для навигации
+  const nextQuestionId = isMistakes
+    ? retryQuestions[currentIndex].qId
+    : currentIndex;
+
+  navigateToNextQuestion(nextQuestionId);
+
+  // Обновляем счётчик с учётом режима
+  const modeLabel = isMistakes ? 'Работа над ошибками' : 'Вопрос';
+  renderQuestionCounter(`${modeLabel}: ${currentIndex + 1}/${maxIndex}`);
+};
+
+
+// function runNormalMod(){  
+
+//   renderQuestionCounter(`Вопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);
   
-  if (state.currentIndex === state.currentTestLength) {
+//   if (state.currentIndex === state.currentTestLength) {
     
-    return handleTestCompletion(); 
-  } 
+//     return handleTestCompletion(); 
+//   } 
 
-  navigateToNextQuestion(state.currentIndex);
+//   navigateToNextQuestion(state.currentIndex);
 
-}
+// }
 
-function runMistakeMod(){  
+// function runMistakeMod(){  
 
-  renderQuestionCounter(`Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);    
+//   renderQuestionCounter(`Работа над ошибками\n\nВопрос: ${state.currentIndex + 1}/${state.currentTestLength}`);    
 
-  if (state.currentIndex === state.retryQuestions.length) {   
+//   if (state.currentIndex === state.retryQuestions.length) {   
     
-    return handleTestCompletion();
+//     return handleTestCompletion();
 
-  }     
+//   }     
 
  
 
-   return navigateToNextQuestion(state.retryQuestions[state.currentIndex].qId);
+//    return navigateToNextQuestion(state.retryQuestions[state.currentIndex].qId);
 
-}
+// }
 
 
-function handleTestCompletion() {  
+// function handleTestCompletion() {  
+const handleTestCompletion = (state) => {
 
    state.isTestCompleted = true;
 
@@ -155,6 +236,29 @@ function handleTestCompletion() {
 
    
 }
+
+// // Обработка завершения теста
+// const handleTestCompletion = (state) => {
+//   state.isTestCompleted = true;
+
+//   if (state.wrongAnswers.length > 0) {
+//     // Режим работы над ошибками
+//     state.isMistakes = true;
+//     state.retryQuestions = [...state.wrongAnswers]; // Быстрый shallow-клон
+//     state.wrongAnswers = [];
+//     state.currentIndex = 0;
+
+//     showResultsPage();
+//     showTestResult(state);
+//     saveTestHistory(state);
+//   } else {
+//     // Успешное завершение
+//     showResultsPage();
+//     printTestResult(createSuccessReport());
+//     clearTestState();
+//     localStorage.removeItem(currentTest.id);
+//   }
+// };
 
 
 function navigateToNextQuestion(index) {  
@@ -483,14 +587,15 @@ function showMainPage() {
     questionsCounter,
     helpSection,
     listPageContainer,
-    divDropdownMenu    
+    divMainSettings   
       
   ];
 
   const elementsToShow = [
     
-    divMenuButton,
-    divLevels
+    // divMenuButton,
+    divTestsSelector,
+    btnMenu
     
   ];
 
@@ -498,11 +603,13 @@ function showMainPage() {
 
   showElements(elementsToShow); 
 
-  removeButtons();
+  removeButtons();  
 
   createLevelsButtons(); 
 
   pTestTitle.textContent = "";
+
+  //alert('(')
 
 }
 
@@ -625,9 +732,10 @@ function showElements(elementsArray){
 
 function showChosenTest(testName, counterText) {
   const elementsToHide = [
-    divLevels,
-    divMenuButton,    
-    divNext
+    divTestsSelector,
+    // divMenuButton,    
+    divNext,
+    btnMenu
   ]
 
   const elementsToShow = [ 
@@ -649,6 +757,8 @@ function showChosenTest(testName, counterText) {
   btnHome.textContent = "Завершить";
   btnHome.value = "complite";
 }
+
+// btnMenu.addEventListener("click", showHideMenu)
 
 //////////////////////////////////////////////////////////////////////list///////////////////
 

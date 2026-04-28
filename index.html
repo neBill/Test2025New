@@ -15,162 +15,160 @@
   </head>
   
   <body>
-  	<div class="body-cotent">
+    <!-----------Главный блок-------------------------------->
+  	<div>
 
-      <div class="header" id="header-block">
-
-        
-        
-        <div class="dropdown-block"> 
-          <div id="menu-button-block">
-            <button onclick="showHideMenu()" class="dropbtn" id="button-menu">            
+      <!-----------Меню блок-------------------------------->
+      <div class="menu">   
+        <!-- <div class="dropdown-block">  -->
+          <!-- <div id="menu-button-block"> -->
+            <button class="settings-button" id="settings-page-button">            
               <svg>  
                 <rect class="svg-burger"></rect>
                 <rect class="svg-burger" y="8"></rect>
                 <rect class="svg-burger" y="16"></rect>
               </svg>          
             </button>
+          <!-- </div>         -->
+        <!-- </div>  -->
+      </div>
+   
+       <!-----------Блок выбора теста-------------------------------->  
+      
+    	
+      <div class="test-selector-page" id="test-selector">
+
+        <!-- here test buttons will be created -->
+      
+      </div>
+
+      <!-----------Конец блока выбора теста--------------------------------> 
+
+    <!-- </div> -->
+
+     
+        
+      <!-----------Блок настроек основной-------------------------------->  
+      <div class="settings-page" id="main-settings">  
+        
+        <p><b>Настройки профиля</b></p> 
+
+        <button class="settings-button" id="profile-page-button">Выбрать тесты</button><br>
+
+        <hr class="line">    
+
+        <p><b>Настройки тестирования</b></p>       
+        
+        <div class="toggle-button">
+          <div class="toggle-txt">
+            <label for="learn-mode-toggle" class='Toggle'>Режим обучения</label>
           </div>
-          
-            
-          <div class="dropdown-content" id="dropdown-menu-block"> 
-            <p><b>Раздел обучения</b></p> 
-
-            <!-- <div class="toggle_block">
-              <div class="toggle_txt">
-               <label class='Toggle'>Новые базы</label>
-              </div>
-              <div class="toggle_btn">
-              <label class='Toggle'>
-                <input type='checkbox' name='toggle' id='new_bases_toggle' class="Toggle__input" unchecked />
-                <span class="Toggle__display" hidden/>
-              </label>
-              </div>
-            </div> -->
-
-           
-
-
-            <!-- turn on 5 level -->
-            <div class="toggle_block">
-              <div class="toggle_txt">
-               <label class='Toggle'>5 разряд</label>
-              </div>
-              <div class="toggle_btn">
-              <label class='Toggle'>
-                <input type='checkbox' name='toggle' id='level-5-toggle' class="Toggle__input toggle-rank" unchecked />
-                <span class="Toggle__display" hidden/>
-              </label>
-              </div>
-            </div>
-
-             <!-- turn on 6 level -->
-             <div class="toggle_block">
-              <div class="toggle_txt">
-               <label class='Toggle'>6 разряд</label>
-              </div>
-              <div class="toggle_btn">
-              <label class='Toggle'>
-                <input type='checkbox' name='toggle' id='level-6-toggle' class="Toggle__input toggle-rank" checked />
-                <span class="Toggle__display" hidden/>
-              </label>
-              </div>
-            </div>
-
-            <!-- <div class="toggle_block">
-              <div class="toggle_txt">
-               <label class='Toggle'>Тренировка</label>
-              </div>
-              <div class="toggle_btn">
-              <label class='Toggle'>
-                <input type='checkbox' name='toggle' id='corrector' class="Toggle__input" unchecked />
-                <span class="Toggle__display" hidden/>
-              </label>
-              </div>
-            </div> -->
-            <br><br>
-
-            <hr class="line">
-
-            <p><b>Режим тестирования</b></p>
-           
-            <div class="toggle_block">
-              <div class="toggle_txt">
-               <label class='Toggle'>Режим обучения</label>
-              </div>
-              <div class="toggle_btn">
-              <label class='Toggle'>
-                <input type='checkbox' name='toggle' id='learn-mode-toggle' class="Toggle__input" unchecked />
-                <span class="Toggle__display" hidden/>
-              </label>
-              </div>
-            </div>
-
-           
-            <br><br>
-           
-           <hr class="line"> 
-            
-            <p><b>Оформление</b></p> 
-            <div class="outline">
-              <label id="font-size-sample">-- Образец шрифта -- </label>
-            </div>
-            <!-- <hr class="line"> -->
-            <button class="font-size-change" id="font-increase" >Увеличить шрифт</button>              
-            <button class="font-size-change" id="font-decrease">Уменьшить шрифт</button>  
-            <button class="font-size-change" id="font-default">Шрифт по-умолчанию</button>  
-            <!--<hr class="line">-->     
-
-            <div class="toggle_block">
-              <div class="toggle_txt">
-               <label class='Toggle'>Темная тема</label>
-              </div>
-              <div class="toggle_btn">
-              <label class='Toggle'>
-                <input type='checkbox' name='toggle' id="theme-toggle" class="Toggle__input" unchecked />
-                <span class="Toggle__display" hidden />
-              </label>
-              </div>
-            </div><br><br>
-            
-<!--             <hr class="line">
-            
-            <p><b>История тестирования</b></p>
-            
-<!--             <button class="menu_button" id="history_remover" onclick="clearCurrentHistory()">Удалить текущую</button><br> -->
-
-<!--             <button class="menu_button" id="cashe_remover" onclick="clearCaches()">Очистить кэш</button><br> -->
-
-<!--             <button class="menu_button" id="history_remover" onclick="clearAllHistory()">Удалить историю</button><br> --> 
-
-            <hr class="line">
-
-            
-            <p><b>Дополнительно</b></p>
-            
-               <button class="menu_button" id="history_remover" onclick="clearHistory()">Удалить историю</button><br>
-
-               <button class="menu_button" id="default-settings" onclick="removeSettings()">Сбросить настройки</button><br>
-
-               <button class="menu_button" id="cashe_remover" onclick="clearCaches()">Очистить кэш</button><br> 
-            
-               <button class="menu_button" id="help_button" onclick="showHelpPage()">Справка</button>
-            <!-- <button class="menu_button" id="help_button" onclick="dd()">Справка</button> -->
-            
-            <hr class="line">
-
-            
-            <button class="close_button" id="button_hide" onclick="showHideMenu()">Закрыть</button>
-            <br>
-            
+          <div class="toggle-btn">
+          <label class='Toggle'>
+            <input type='checkbox' name='toggle' id='learn-mode-toggle' class="Toggle__input" />
+            <span class="Toggle__display" hidden/>
+          </label>
           </div>
         </div>
+        <br><br>
+           
+        <hr class="line"> 
+            
+        <p><b>Оформление</b></p> 
 
-        <!-- <div class="hist-block">
-          <button  class="history_button" id="">История</button>
-        </div>  -->
+        <div class="outline">
+          <label id="font-size-sample">-- Образец шрифта -- </label>
+        </div>
         
+        <button class="font-size-change" id="font-increase" >Увеличить шрифт</button>              
+        <button class="font-size-change" id="font-decrease">Уменьшить шрифт</button>  
+        <button class="font-size-change" id="font-default">Шрифт по-умолчанию</button>  
+             
+
+        <div class="toggle-button">
+          <div class="toggle-txt">
+            <label for="theme-toggle" class='Toggle'>Темная тема</label>
+          </div>
+          <div class="toggle-btn">
+          <label class='Toggle'>
+            <input type='checkbox' name='toggle' id="theme-toggle" class="Toggle__input"/>
+            <span class="Toggle__display" hidden />
+          </label>
+          </div>
+        </div><br><br>
+
+        <hr class="line">
+            
+        <p><b>Дополнительно</b></p>
+        
+        <button class="settings-button" id="history-remover">Удалить историю</button><br>
+
+        <button class="settings-button" id="default-settings">Сбросить настройки</button><br>
+
+        <button class="settings-button" id="cache-remover">Очистить кэш</button><br> 
+    
+        <button class="settings-button" id="show-help">Справка</button>        
+        
+        <!-- <hr class="line"> -->
+        
+        <!-- <button class="close_button" id="button_hide" onclick="showHideMenu()">Закрыть</button><br> -->
+            
+          <!-- </div>
+        </div> -->
+
+       
+
       </div>
+
+      <!-----------Конец блока настроек--------------------------------> 
+
+      <!-----------Блок настроек профиля-------------------------------->
+
+      
+
+      <div class="profile-page" id="test-profile">       
+           
+        <!-- <div >
+          <button padding-bottom="2%" class="menu-button" id="help-hide" onclick="hideProfilePage()"><< Назад</button><br><br>          
+        </div> -->
+
+        <br><br><div class="back-button-block">
+          <button class="navigation-button" id="go-back">Назад</button><br><br>
+        </div><br>
+    
+        <!-- <fieldset class="fieldset" id="divisionSet"> -->
+          <!-- <legend class="legend"> Подразделение </legend>           -->
+          <!-- <br><input type="radio" id="pir" name="div" >
+          <label for="pir">Пиролиз</label><br><br>
+          <input type="radio" id="per" name="div" >
+          <label for="per">Перегонка</label><br><br>
+          <input type="radio" id="hyd" name="div">
+          <label for="hyd">Гидрирование</label><br><br>
+          <input type="radio" id="sep" name="div" checked>
+          <label for="sep">Газоразделение</label><br><br>
+          <input type="radio" id="com" name="div">
+          <label for="com">Компрессия</label><br><br> -->
+        <!-- </fieldset><br><br> -->
+        <!-- <fieldset class="fieldset" id="levelSet">
+        <legend class="legend">Уровень</legend>         
+          <br><input type="radio" id="lev6Plus" name="lev" checked>
+          <label for="lev6Plus">Старший</label><br><br>
+          <input type="radio" id="lev6" name="lev">
+          <label for="lev6">6 разряд</label><br><br>
+          <input type="radio" id="lev5" name="lev" >
+          <label for="lev5">5 разряд</label><br><br>  
+        </fieldset><br><br> -->
+
+        </div>
+
+      <!-----------Конец блока настроек профиля-------------------------------->
+
+
+
+      <!-----------Блока результатов тестирования-------------------------------->
+        
+      
+         
       
 
         
@@ -183,12 +181,7 @@
       </div>  
 
       
-        
-    	<div id="levels-buttons-block" class="buttons-block">
-
-        <!-- here test buttons will be created -->
       
-      </div>
       
     	<div class="results-block" id="test-result-block">		
     		<!-- <p id="test-result"></p> -->
@@ -213,11 +206,11 @@
      
       <div class="footer" id="navigation-block">    
         <div class="home-block" id="button-home-block">  
-          <button class="footer_button" id="button-home" >На главную</button>
+          <button class="navigation-button" id="button-home" >На главную</button>
         </div>
        
         <div class="next-block" id="button-next-block">
-          <button class="footer_button" id="button-next" >Следующий</button>
+          <button class="navigation-button" id="button-next" >Следующий</button>
         </div><br><br>
       </div>
 
@@ -225,7 +218,7 @@
 
       <div id="questions-list-page" class="list-page">
         <div >
-          <button class="footer_button" id="btn-hide-list" >Назад</button><br><br>          
+          <button class="navigation-button" id="btn-hide-list" >Назад</button><br><br>          
         </div><br>
         <div id="questions-list-block">
 
@@ -256,16 +249,16 @@
 
       <!-- list block for viewing a list of questions -->
 
-      <!-- page of help -->
+      <!-- Блок справки -->
       <div class="help-page" id="help-block"><br>
 
         <div >
-            <button class="footer_button" id="help_hide_top" onclick="hideHelpPage()">На главную</button><br><br>          
+            <button class="navigation-button" id="help_hide_top" onclick="hideHelpPage()">На главную</button><br><br>          
         </div>
 
         <div class="help-text-format">  
         
-<!--          <br><div >
+        <!--          <br><div >
             <button class="footer_button" id="help_hide" onclick="hideHelpPage()">На главную</button><br><br>          
         </div> -->
 
@@ -324,24 +317,24 @@
         </div> <br>
                
         <div >
-            <button padding-bottom="2%" class="footer_button" id="help_hide_bottom" onclick="hideHelpPage()">На главную</button><br><br>          
+            <button padding-bottom="2%" class="navigation-button" id="help_hide_bottom" onclick="hideHelpPage()">На главную</button><br><br>          
         </div>
-<!--         <div >             
+        <!--         <div >             
          <br><br>
         </div> -->
        
         
       </div>
-<!--     </div> -->
+          </div>
     
-    <script src="/assets/js/ui.js"></script>    
-    <script src="/assets/js/ot.js"></script> 
-    <script src="/assets/js/ot2025.js"></script>   
-    <script src="/assets/js/st5.js"></script>
-    <script src="/assets/js/st6.js"></script>
-    <script src="/assets/js/ex6.js"></script>
-    <script src="/assets/js/ex5.js"></script>
-    <script src="/assets/js/settings.js"></script>
+      <script src="/assets/js/ui.js"></script>    
+      <!-- <script src="/assets/js/ot.js"></script>  -->
+      <script src="/bases/ot_2026.js"></script>   
+      <!-- <script src="/assets/js/st5.js"></script>
+      <script src="/assets/js/st6.js"></script>
+      <script src="/assets/js/ex6.js"></script>
+      <script src="/assets/js/ex5.js"></script> -->
+      <script src="/assets/js/settings.js"></script>
     
     
   </body>

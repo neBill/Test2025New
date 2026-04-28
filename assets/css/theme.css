@@ -1,5 +1,5 @@
 
-.font-size-change, .close_button, .menu_button {
+.font-size-change, .close_button, .settings-button {
   border: 0;
   background-color: inherit;  
   padding-top: 16px;
@@ -12,7 +12,7 @@
  
 }
 
-.font-size-change:active, .menu_button:active, .close_button:active{
+.font-size-change:active, .settings-button:active, .close_button:active{
   color: var(--main-fg-color);  
 }
 
@@ -84,7 +84,7 @@ button.Toggle {
   
 }
 
-.toggle_block {
+.toggle-block {
 
   width: 100%;
   height: 45px;
@@ -93,25 +93,20 @@ button.Toggle {
   
 }
 
-.toggle_txt {
+.toggle-txt {
   float: left;
   /* background-color: red; */
   cursor: default;
   
   width: 70%;
 }
-.toggle_btn {
+.toggle-btn {
   float: right;
   width: 18%;
 }
 
 
-/*.Toggle:focus,
-.Toggle:focus:not(:focus-visible) .Toggle__display,
-.Toggle__input:focus:not(:focus-visible) + .Toggle__display {
-  outline: 0;
- 
-}*/
+
 
 .Toggle[aria-pressed="true"] .Toggle__display,
 .Toggle__input:checked + .Toggle__display {
@@ -139,7 +134,7 @@ input:checked + .slider:before {
      
 }
 
-
+/* ///////////////////////////////////////////// */
 
 
 
