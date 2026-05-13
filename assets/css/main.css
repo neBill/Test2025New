@@ -45,7 +45,7 @@ body.dark-theme {
   --font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.button, .test_button, .count_button, .option-button, .question-button {
+.button, .test-button, .count_button, .option-button, .question-button {
   width: 100%; 
   text-align: center;    
   font-size: var(--btn-font-size);
@@ -75,7 +75,7 @@ body.dark-theme {
  
   
 }
-.button, .test_button { 
+.button, .test-button { 
 
   height: 44px;
   max-height: 44px;

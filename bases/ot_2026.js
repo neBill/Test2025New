@@ -1,5 +1,4 @@
 const testBases = [
-
   {
     testTitle : "СТГ",
     testBody : [ 

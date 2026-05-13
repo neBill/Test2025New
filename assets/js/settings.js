@@ -1,5 +1,7 @@
 'use strict';
 
+//const { createElement } = require("react");
+
 
 let currentFontSize = 20; 
 
@@ -49,11 +51,13 @@ btnRemoveHistory.addEventListener("click",  clearHistory);
 
 btnRemoveCache.addEventListener("click",  clearCache);
 
-btnDefaultSettings.addEventListener("click",  removeSettings);
+btnRemoveSettings.addEventListener("click",  removeSettings);
 
 btnShowHelp.addEventListener("click",  showHelpPage);
 
-btnGoBack.addEventListener("click",  showHideProfilePage);
+btnSaveChoice.addEventListener("click",  saveSettings);
+
+//btnGoBack.addEventListener("click",  togglePage);
 
 
 function clearCache(){   
@@ -84,16 +88,53 @@ window.addEventListener("load", ()=>{
 
  // showMainPage();
 
-  //set saved  settings
-  if(localStorage.getItem('settings')) {   
+  removeButtons(); 
 
-    setSettings(JSON.parse(localStorage.getItem('settings')));  
+   const settings = localStorage.getItem('settings');
+
+  //set saved  settings
+  if(settings) {   
+
+    // const settings = localStorage.getItem('settings');
+
+    // if(Object.hasOwn(settings, SELECTED_TESTS)) {
+
+    //   console.log(settings[SELECTED_TESTS]);
+
+    // } else {
+
+    //   //console.log('ytn');
+
+    //   //removeButtons(); 
+
+
+    //   const testButton = createTestButton(0, 'Выбрать тесты');
+
+    //   //button.addEventListener('click', testButtonClick); 
+
+    //   testButton.addEventListener('click', () => togglePage(true))
+
+    //   divTestsSelector.appendChild(testButton);
+
+    //   console.log(testButton.textContent);
+
+
+    // }
+
+
+
+
+    setSettings(JSON.parse(settings));  
+
+
         
   } else {
 
-    //set end save default settings
-    setSettings(defaultSettings);  
-    localStorage.setItem("settings", JSON.stringify(defaultSettings));
+
+    //localStorage.setItem("settings", JSON.stringify(defaultSettings));    
+    setSettings(defaultSettings); 
+
+    createDefaultTestsSelector();
     
   }    
  
@@ -148,118 +189,279 @@ window.addEventListener('popstate', function() {
 
 // }
 
+function createDefaultTestsSelector() {
 
+  //const testButton = createTestButton('item', 'Выбрать тесты', () => togglePage(true));
 
+    //testButton.addEventListener('click', clickFunction); 
+  //testButton.addEventListener('click', testButtonClick);
 
-function createLevelsButtons(){  
+  // const lb = document.createElement('lable'); 
+  // lb.textContent = 'Выберите тесты';
 
-
-  // let testsList = [];
-
-
-
-  //  Object.keys(testBases).forEach(key => {
-
-  //   testsList.push(testBases[key].testTitle)
-   
-  // });
-
-  //alert(testsList)
+  const text = document.createElement('button'); 
+  text.className = 'settings-button';
+  text.textContent = 'Нет выбранных тестов';
 
   
-  Object.keys(testBases).forEach(key => {
-    const testButton = document.createElement('button');   
-    testButton.id = key;
-    testButton.className = "test_button";   
-    testButton.textContent = testBases[key].testTitle;
-    testButton.addEventListener('click', testButtonClick);  
-    divTestsSelector.appendChild(testButton);
-  });
- 
-   testButtonsContainer.classList.add('hidden');
+
+
+  divTestsSelector.appendChild(text);
+
+
 }
 
 
-btnShowProfilePage.addEventListener('click', showHideProfilePage)   
+function createTestsSelector(selectedTests){  
+
+  selectedTests.forEach((item) => { 
+
+    console.log(testBases.item)
+
+    const testButton = createTestButton(item, item, );
+
+    //testButton.addEventListener('click', clickFunction); 
+    testButton.addEventListener('click', testButtonClick);
+
+    divTestsSelector.appendChild(testButton);
+
+    //() => togglePage(true)
 
 
-function showHideProfilePage() {
+ });
 
-  // let display = divProfilePage.style.display; 
+  // Object.keys(testsBases).forEach(key => {   
+    
+  //   const testButton = createTestButton(key, testsBases[key].testTitle);
 
-  divProfilePage.classList.toggle('hidden', false);
+  //   //button.addEventListener('click', testButtonClick); 
 
-   const elementsToHide = [
+  //   divTestsSelector.appendChild(testButton);
+
+  // });
+
+  
+ 
+  // testButtonsContainer.classList.add('hidden');
+}
+
+function createTestButton(id, textContent, clickFunction){
+
+  const button = document.createElement('button');   
+  button.id = id;
+  button.className = "test-button";     
+  button.textContent = textContent;
+  button.addEventListener('click', clickFunction);  
+  return button;
+
+}
+
+
+//const listTemp = ['dddddd', 'vvvvv', 'yyyyy', 'mmmmmm']
+
+const togglePage = (showProfile) => {
+  divProfilePage.classList.toggle('hidden', !showProfile);
+  divMainSettings.classList.toggle('hidden', showProfile);
+  btnMenu.classList.toggle('hidden', showProfile); 
+
+  if(showProfile){
+    createProfilesList();
+  }else{
+    const checkedCheckBoxes = getSelectedValues(divChooseProfiles);   
+
+    console.log(checkedCheckBoxes[0])
+   
+
+
+    
+    
+  }
+
+  
+
+};
+
+btnShowProfilePage.addEventListener('click', () => togglePage(true));
+
+btnGoBack.addEventListener("click",  () => togglePage(false));
+
+
+// function hideProfilePage() {
+
+//    const elementsToHide = [
+//     divProfilePage     
+//   ]
+
+//   const elementsToShow = [ 
+//     divMainSettings,      
+//     btnMenu, 
+//   ]
+
+//   showHidePages(elementsToShow, elementsToHide);
+
+// }
+
+// function showProfilePage() {
+
+//    const elementsToHide = [       
+//     divMainSettings,      
+//     btnMenu    
+//   ]
+
+//   const elementsToShow = [ 
+//    divProfilePage
+//   ]
+  
+ 
+
+//   showHidePages(elementsToShow, elementsToHide);
+
+// }
+
+function showMainPage() {
+
+  const elementsToHide = [
+    
+    testButtonsContainer,
+    navigationContainer,
+    testResultsContainer,
+    questionsCounter,
+    helpSection,
+    listPageContainer,
     divMainSettings,
+    divProfilePage   
+      
+  ];
+
+  const elementsToShow = [    
+    
+    divTestsSelector,
+    btnMenu
+    
+  ];
+
+  // hideElements(elementsToHide);
+
+  // showElements(elementsToShow); 
+
+  showHidePages(elementsToShow, elementsToHide);
+
+  //removeButtons();  
+
+  //createLevelsButtons(testBases); 
+
+  pTestTitle.textContent = "";
+
+  
+
+}
+
+function showResultsPage() {  
+
+  const elementsToHide =[
+    testButtonsContainer,
+    pQuestionsCounter
+  ]
+
+  const elementsToShow =[   
+    divHome,
+    testResultsContainer
+  ]
+
+
+  // hideElements(elementsToHide);
+  // showElements(elementsToShow);
+
+  showHidePages(elementsToShow, elementsToHide);
+
+  btnHome.textContent = "На главную";
+  btnHome.value = "mainpage";
+
+}
+
+function showChosenTest(testName, counterText) {
+  const elementsToHide = [
+    divTestsSelector,
     // divMenuButton,    
+    divNext,
     btnMenu
   ]
 
   const elementsToShow = [ 
-   // testButtonsContainer,
-   // pQuestionsCounter,
-    //questionsCounter,
-   // navigationContainer,
-    //divHome   
+    testButtonsContainer,
+    pQuestionsCounter,
+    questionsCounter,
+    navigationContainer,
+    divHome   
   ]
+
+  // hideElements(elementsToHide);
+  // showElements(elementsToShow);  
+
+  showHidePages(elementsToShow, elementsToHide);
+
+ 
+
+  renderQuestionCounter(counterText);
+
+  pTestTitle.textContent = testName;
+  btnHome.textContent = "Завершить";
+  btnHome.value = "complite";
+}
+
+
+function showHidePages(showArray, hideArray){
+  hideArray.forEach(element => {
+      element.classList.add('hidden');
+  });
+  showArray.forEach(element => {
+      element.classList.remove('hidden');
+  });
+   
+}
+
+
+
+function createProfilesList(){
+
   
- // if(display === "block") {   
 
-  //  divProfilePage.style.display = "none"; 
-   // mainMenu.style.display = "block";
-   // header.style.display = "flex";
+  while (divChooseProfiles.firstChild) {
+    divChooseProfiles.removeChild(divChooseProfiles.firstChild);
+  }
 
-    // const divisions = document.getElementsByName('div');  
-    // const levels = document.getElementsByName('lev'); 
-    // let division;
-    // let level;
+  // testBases.forEach(key => {
+  Object.keys(testBases).forEach(key => {
+  // Создаём контейнер для чекбокса и подписи
+  const label = document.createElement('label');
+  label.style.display = 'block';
+  label.style.marginBottom = '10px';
 
-    // for(var i = 0; i < divisions.length; i++){
-    //   if(divisions[i].checked){
-    //       division = divisions[i].id;
-    //       break;
-    //   }        
-    // }
+  // Создаём сам чекбокс
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.value = testBases[key].testTitle;
 
-    // for(var i = 0; i < levels.length; i++){
-    //   if(levels[i].checked){
-    //       level = levels[i].id;
-    //       break;
-    //   }        
-    // }
+  // Добавляем текст подписи
+  const text = document.createTextNode(testBases[key].testTitle);
 
-    
+  // Собираем элементы вместе
+  label.appendChild(checkbox);
+  label.appendChild(text);
+  divChooseProfiles.appendChild(label);
+  });
 
- // } else {   
-
-  //  divProfilePage.style.display = "block";
-
-    //hideElements(elementsToHide);
-    //hideBlocks();
-
-    
-    //profileTitle
- // }
-
-
-  // const elementsToHide = [
-  //   divLevels,
-  //   divMenuButton,    
-  //   divNext
-  // ]
-
-  // const elementsToShow = [ 
-  //   testButtonsContainer,
-  //   pQuestionsCounter,
-  //   questionsCounter,
-  //   navigationContainer,
-  //   divHome   
-  // ]
-
-  hideElements(elementsToHide);
-  showElements(elementsToShow); 
 
 }
+
+function getSelectedValues(container) {
+  //nst container = document.getElementById(containerId);
+  const checkedCheckboxes = container.querySelectorAll('input[type="checkbox"]:checked');
+  const selectedValues = Array.from(checkedCheckboxes).map(cb => cb.value);
+  return selectedValues;
+}
+
+
 
 
 
@@ -268,7 +470,7 @@ function removeButtons() {
   divTestsSelector.innerHTML = '';  
 }
 
-// btnMenu.addEventListener("click", showHideMenu);
+
 
 function showHideMenu() {  
   // Так как класс есть, он будет убран
@@ -277,25 +479,39 @@ function showHideMenu() {
   divTestsSelector.classList.toggle('hidden')
 
 
-   if(divMainSettings.classList.contains('hidden')) {  
-    const currentSettings = {
-      isLearnMode : tglLearnMode.checked,
-      // isShuffle : tglShuffle.checked,
-      isDarkTheme : tglTheme.checked,
-      defRank : defaultRank,
-      fontSize : currentFontSize,
-      
+    if(divMainSettings.classList.contains('hidden')) {  
+
+      // Правильно (создаёт копию):
+      //const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
+
+      const currentSettings = {};
+
+      currentSettings.isLearnMode = tglLearnMode.checked;
+      currentSettings.isDarkTheme = tglTheme.checked;
+      currentSettings.fontSize = currentFontSize;
+
+      //const isSettings = localStorage.getItem("settings");
+     // const settings = localStorage.getItem("settings") ? currentSettings : defaultSettings;
+
+
+      setSettings(currentSettings);
+
+
+      saveSettings('settings', currentSettings);  
+
+      removeButtons();
+      //createLevelsButtons(testBases);
+
+
+      //createTestsSelector()
+
     }
 
-    const isSettings = localStorage.getItem("settings");
-    const settings = isSettings ? currentSettings : defaultSettings;
-    setSettings(settings);
-    saveData('settings', settings);   
-    removeButtons();
-    createLevelsButtons();
-  }
-
 }
+
+
+
+
 
 function removeSettings() {  
   localStorage.removeItem("settings");  
@@ -314,48 +530,77 @@ function showHelpPage() {
 
 
 
-function saveData(key, valueObject ){   
+function saveSettings(key, valueObject ){   
   localStorage.setItem(key, JSON.stringify(valueObject));
 }
 
+function updateTheme(isDark) {
+  tglTheme.checked = isDark;
+  docBody.className = isDark ? 'dark-theme' : 'light-theme';
+}
+
+function updateLearnMode(isLearn) {
+  tglLearnMode.checked = isLearn;
+}
+
+function updateFontSize(size) {
+  currentFontSize = size;
+  docBody.style.setProperty('--btn-font-size', `${size}px`);
+}
 
 function setSettings(settings) {
-  tglTheme.checked = settings.isDarkTheme; 
+
+  // const isDarkTheme = settings.isDarkTheme ?? false;
+  // const isLearnMode = settings.isLearnMode ?? false;
+  // const fontSize = settings.fontSize ?? 20;
+
+  const isDarkTheme = settings.isDarkTheme;
+  const isLearnMode = settings.isLearnMode;
+  const fontSize = settings.fontSize;
+  const selectedTests = settings.selectedTests;
+
+
+  if (!tglTheme || !tglLearnMode || !docBody) return;
+
+  updateTheme(isDarkTheme);
+  updateLearnMode(isLearnMode);
+  updateFontSize(fontSize);
+  //createTestsSelector(selectedTests, )
+}
+
+
+// function setSettings(settings) {
+
+//   tglTheme.checked = settings.isDarkTheme;  
+//   tglLearnMode.checked = settings.isLearnMode;   
+//   currentFontSize = settings.fontSize; 
+
+//   docBody.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
+//   let theme;
+//   tglTheme.checked === true  ? theme = 'dark-theme' : theme = 'light-theme';  
   
-  //tglShuffle.checked = settings.isShuffle;
+//   docBody.className = theme;
 
-  tglLearnMode.checked = settings.isLearnMode;  
-  defaultRank = settings.defRank;
-  currentFontSize = settings.fontSize;
-  //document.body.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
-
-  docBody.style.setProperty("--btn-font-size", `${settings.fontSize}px`);
-  let theme;
-  tglTheme.checked == true  ? theme = 'dark-theme' : theme = 'light-theme';  
-  //const theme = settings.isDarkTheme ? 'dark-theme' : 'light-theme';
-  docBody.className = theme;
-
-}
+// }
 
 
-function setRankToggles(rank){  
+// function setRankToggles(rank){  
 
-  tglLevel6.checked = rank === 'rank6';
-  tglLevel5.checked = rank !== 'rank6';
-  defaultRank = rank;
+//   tglLevel6.checked = rank === 'rank6';
+//   tglLevel5.checked = rank !== 'rank6';
+//   defaultRank = rank;
 
-  // const isRank6 = rank === 'rank6';
-  // lev6Toggle.checked = isRank6;
-  // lev5Toggle.checked = !isRank6;
-  // defaultRank = rank;
+//   // const isRank6 = rank === 'rank6';
+//   // lev6Toggle.checked = isRank6;
+//   // lev5Toggle.checked = !isRank6;
+//   // defaultRank = rank;
 
-}
+// }
 
 const defaultSettings = {
-  isLearnMode : false,
-  // isShuffle : false,
-  isDarkTheme : false,
-  defRank : 'rank6', 
-  fontSize : 20,  
+  isLearnMode : false, 
+  isDarkTheme : false,   
+  fontSize : 20,
+  selectedTests : ['Выбрать тесты']
 }
 

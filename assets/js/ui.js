@@ -16,10 +16,17 @@ let state = {
 };
 
 
+///////////////////////pages////////////////////////////////
+const divTestsSelector = document.getElementById('test-selector');
+const divProfilePage = document.getElementById('test-profile');
+const divMainSettings = document.getElementById('main-settings');
+
+
+
 
 const answerButtons = document.querySelectorAll('.option-button');
 const navigationContainer = document.getElementById('navigation-block');
-const divTestsSelector = document.getElementById('test-selector');
+//const divTestsSelector = document.getElementById('test-selector');
 const testButtonsContainer = document.getElementById('test-buttons-block');
 const btnMenu = document.getElementById('settings-page-button');
 const listPageContainer = document.getElementById('questions-list-page');
@@ -30,8 +37,9 @@ const questionsCounter = document.getElementById('questions-counter-block');
 const testResultsContainer = document.getElementById('test-result-block');
 // const tglLevel5 = document.getElementById('level-5-toggle');
 // const tglLevel6 = document.getElementById('level-6-toggle');
-const divMainSettings = document.getElementById('main-settings');
+// const divMainSettings = document.getElementById('main-settings');
 const btnGoBack = document.getElementById('go-back');
+const btnSaveChoice= document.getElementById('save-choice');
 const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
 const btnNext = document.getElementById('button-next');
@@ -51,17 +59,20 @@ const answerListContainer = document.getElementById('answer-list-block');
 const divListBlock = document.getElementById('questions-list-block');
 const btnHideList = document.getElementById('btn-hide-list');
 const btnShowProfilePage = document.getElementById('profile-page-button');
-const divProfilePage = document.getElementById('test-profile');
+// const divProfilePage = document.getElementById('test-profile');
 const btnRemoveHistory = document.getElementById('history-remover');
-const btnDefaultSettings = document.getElementById('default-settings');
+const btnRemoveSettings = document.getElementById('settings-remover');
 const btnRemoveCache = document.getElementById('cache-remover');
 const btnShowHelp = document.getElementById('show-help');
+const divChooseProfiles = document.getElementById('checkbox-container');
 
 
 
 
 
 const CORRECT_ANSWER_ID = 0;
+//const selectedTests = 'selectedTests'
+const SELECTED_TESTS = 'selectedTests';
 
 
 btnHideList.addEventListener('click', hideListBlock);
@@ -577,41 +588,41 @@ function runLernMode(){
 }
 
 
-function showMainPage() {
+// function showMainPage() {
 
-  const elementsToHide = [
+//   const elementsToHide = [
     
-    testButtonsContainer,
-    navigationContainer,
-    testResultsContainer,
-    questionsCounter,
-    helpSection,
-    listPageContainer,
-    divMainSettings   
+//     testButtonsContainer,
+//     navigationContainer,
+//     testResultsContainer,
+//     questionsCounter,
+//     helpSection,
+//     listPageContainer,
+//     divMainSettings   
       
-  ];
+//   ];
 
-  const elementsToShow = [
+//   const elementsToShow = [
     
-    // divMenuButton,
-    divTestsSelector,
-    btnMenu
+//     // divMenuButton,
+//     divTestsSelector,
+//     btnMenu
     
-  ];
+//   ];
 
-  hideElements(elementsToHide);
+//   hideElements(elementsToHide);
 
-  showElements(elementsToShow); 
+//   showElements(elementsToShow); 
 
-  removeButtons();  
+//   removeButtons();  
 
-  createLevelsButtons(); 
+//   createLevelsButtons(); 
 
-  pTestTitle.textContent = "";
+//   pTestTitle.textContent = "";
 
-  //alert('(')
+//   //alert('(')
 
-}
+// }
 
 function testButtonClick(event) { 
   
@@ -691,72 +702,72 @@ function chooseTest(testId, testTitle) {
 }
 
 
-function showResultsPage() {  
+// function showResultsPage() {  
 
-  const elementsToHide =[
-    testButtonsContainer,
-    pQuestionsCounter
-  ]
+//   const elementsToHide =[
+//     testButtonsContainer,
+//     pQuestionsCounter
+//   ]
 
-  const elementsToShow =[   
-    divHome,
-    testResultsContainer
-  ]
-
-
-  hideElements(elementsToHide);
-  showElements(elementsToShow);
-
-  btnHome.textContent = "На главную";
-  btnHome.value = "mainpage";
-
-}
+//   const elementsToShow =[   
+//     divHome,
+//     testResultsContainer
+//   ]
 
 
-function hideElements(elementsArray){
-  elementsArray.forEach(element => {
-      element.classList.add('hidden');
-  });
+//   hideElements(elementsToHide);
+//   showElements(elementsToShow);
+
+//   btnHome.textContent = "На главную";
+//   btnHome.value = "mainpage";
+
+// }
+
+
+// function hideElements(elementsArray){
+//   elementsArray.forEach(element => {
+//       element.classList.add('hidden');
+//   });
 
    
-}
+// }
 
-function showElements(elementsArray){  
-  elementsArray.forEach(element => {
-    element.classList.remove('hidden');
-  });
+// function showElements(elementsArray){  
+//   elementsArray.forEach(element => {
+//     element.classList.remove('hidden');
+//   });
 
-}
+// }
 
 
 
-function showChosenTest(testName, counterText) {
-  const elementsToHide = [
-    divTestsSelector,
-    // divMenuButton,    
-    divNext,
-    btnMenu
-  ]
+// function showChosenTest(testName, counterText) {
+//   const elementsToHide = [
+//     divTestsSelector,
+//     // divMenuButton,    
+//     divNext,
+//     btnMenu
+//   ]
 
-  const elementsToShow = [ 
-    testButtonsContainer,
-    pQuestionsCounter,
-    questionsCounter,
-    navigationContainer,
-    divHome   
-  ]
+//   const elementsToShow = [ 
+//     testButtonsContainer,
+//     pQuestionsCounter,
+//     questionsCounter,
+//     navigationContainer,
+//     divHome   
+//   ]
 
-  hideElements(elementsToHide);
-  showElements(elementsToShow);  
+//   hideElements(elementsToHide);
+//   showElements(elementsToShow);  
 
  
 
-  renderQuestionCounter(counterText);
+//   renderQuestionCounter(counterText);
 
-  pTestTitle.textContent = testName;
-  btnHome.textContent = "Завершить";
-  btnHome.value = "complite";
-}
+//   pTestTitle.textContent = testName;
+//   btnHome.textContent = "Завершить";
+//   btnHome.value = "complite";
+// }
 
 // btnMenu.addEventListener("click", showHideMenu)
 
