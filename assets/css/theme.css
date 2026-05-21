@@ -12,6 +12,8 @@
  
 }
 
+
+
 .font-size-change:active, .settings-button:active, .close_button:active{
   color: var(--main-fg-color);  
 }

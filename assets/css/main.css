@@ -534,86 +534,18 @@ display: flex;
 
 }
 
-.menu-btn-left, .menu-btn-right {
+.menu-btn {
   padding: 10px;
 }
 
 /* /////////////////////////////////////////////////// */
 
-.svg-btn {
-  width: 44px;
-  height: 44px;
-  border: none; 
-  background-color:var(--body-fon);
-  /* border-radius: 8px; */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.svg-btn svg {
-  color: var(--text-color)
-}
-
-/* .svg-btn:hover {
-  background-color: #4CAF50;
-} */
-/* 
-.svg-btn:hover svg {
-  color: white;
+/* .large-check {
+  width: 38px;
+  height: 38px;
 } */
 
 
-.simple-check-btn {
-  width: 48px;
-  height: 48px;
-  border: none;
-  background-color: var(--body-fon);
-  /* border-radius: 8px; */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  /* Никаких :hover, :active — фон и стиль не меняются */
-}
-
-/* .check-icon {
-  width: 20px;
-  height: 20px;
-  color: #4CAF50;
-} */
-
-/* Только фокус для доступности */
-/* .simple-check-btn:focus {
-  outline: 2px solid #2E7D32;
-  outline-offset: 2px;
-} */
-
-
-.static-transparent-btn {
-  width: 40px;
-  height: 40px;
-  background: transparent; /* полностью прозрачный фон */
-  border: none; /* нет бордюра */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin: 0; /* убираем возможные отступы */
- 
-  -webkit-tap-highlight-color: transparent; /* убирает подсветку на мобильных */
-}
-
-/* .check-icon {
-  width: 20px;
-  height: 20px;
-  
-  color: #4CAF50;
-} */
 
 
 

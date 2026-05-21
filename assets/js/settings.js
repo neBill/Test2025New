@@ -115,7 +115,7 @@ window.addEventListener("load", ()=>{
   //set saved  settings
   if(settings) {   
 
-    // const settings = localStorage.getItem('settings');
+     const savedSettings = localStorage.getItem('settings');
 
     // if(Object.hasOwn(settings, SELECTED_TESTS)) {
 
@@ -141,10 +141,22 @@ window.addEventListener("load", ()=>{
 
     // }
 
+     const settings = JSON.parse(JSON.stringify(defaultSettings));
+
+     settings.isLearnMode = savedSettings.isLearnMode;
+     settings.isDarkTheme = savedSettings.isDarkTheme;
+     settings.fontSize = savedSettings.fontSize;
 
 
 
-    setSettings(JSON.parse(settings));  
+    setSettings(settings);  
+
+    // const defaultSettings = {
+    //   isLearnMode : false, 
+    //   isDarkTheme : false,   
+    //   fontSize : 20,
+    //   selectedTests : []
+    // }
 
 
         
@@ -486,7 +498,12 @@ const menuController = {
     this.menuPage.classList.toggle('hidden');
     this.testSelector.classList.toggle('hidden'); 
     this.isVisible = true;
-    
+
+   
+    // const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
+
+    //console.log(' no set')
+
   },
 
   hide() {    
@@ -494,6 +511,16 @@ const menuController = {
     this.menuPage.classList.toggle('hidden');
     this.testSelector.classList.toggle('hidden'); 
     this.isVisible = false;
+
+    const settings = JSON.parse(JSON.stringify(defaultSettings));
+
+    settings.isLearnMode = tglLearnMode.checked;
+    settings.isDarkTheme = tglTheme.checked;
+    settings.fontSize = currentFontSize;
+
+    setSettings(settings); 
+
+    saveSettings();
    
   },
 
@@ -570,9 +597,6 @@ function showHideMenu() {
 }
 
 
-
-
-
 function removeSettings() {  
   localStorage.removeItem("settings");  
 }
@@ -588,10 +612,18 @@ function showHelpPage() {
 }
 
 
+function saveSettings(){  
 
+  const settings = {
 
-function saveSettings(key, valueObject ){   
-  localStorage.setItem(key, JSON.stringify(valueObject));
+    isLearnMode : tglLearnMode.checked, 
+    isDarkTheme : tglTheme.checked,   
+    fontSize : currentFontSize,
+    selectedTests : []
+
+  }  
+
+  localStorage.setItem('settings', JSON.stringify(settings));
 }
 
 function updateTheme(isDark) {
@@ -610,21 +642,11 @@ function updateFontSize(size) {
 
 function setSettings(settings) {
 
-  // const isDarkTheme = settings.isDarkTheme ?? false;
-  // const isLearnMode = settings.isLearnMode ?? false;
-  // const fontSize = settings.fontSize ?? 20;
-
-  const isDarkTheme = settings.isDarkTheme;
-  const isLearnMode = settings.isLearnMode;
-  const fontSize = settings.fontSize;
-  const selectedTests = settings.selectedTests;
-
-
   if (!tglTheme || !tglLearnMode || !docBody) return;
 
-  updateTheme(isDarkTheme);
-  updateLearnMode(isLearnMode);
-  updateFontSize(fontSize);
+  updateTheme(settings.isDarkTheme);
+  updateLearnMode(settings.isLearnMode);
+  updateFontSize(settings.fontSize);
   //createTestsSelector(selectedTests, )
 }
 
