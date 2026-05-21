@@ -425,6 +425,10 @@ svg{
   display: none;
 }
 
+.visible {
+  display: block;
+}
+
 .p-result {
   text-align: center;
   line-height: 0.5;
@@ -520,6 +524,96 @@ display: flex;
   
 }
 
+.menu-navigation-contaner {
+
+  display: flex;
+  justify-content: space-between; /* распределяет пространство между элементами */
+  align-items: center; /* выравнивает по вертикали */
+  padding: 10px;
+  /* background-color: #f0f0f0; */
+
+}
+
+.menu-btn-left, .menu-btn-right {
+  padding: 10px;
+}
+
+/* /////////////////////////////////////////////////// */
+
+.svg-btn {
+  width: 44px;
+  height: 44px;
+  border: none; 
+  background-color:var(--body-fon);
+  /* border-radius: 8px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.svg-btn svg {
+  color: var(--text-color)
+}
+
+/* .svg-btn:hover {
+  background-color: #4CAF50;
+} */
+/* 
+.svg-btn:hover svg {
+  color: white;
+} */
+
+
+.simple-check-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background-color: var(--body-fon);
+  /* border-radius: 8px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  /* Никаких :hover, :active — фон и стиль не меняются */
+}
+
+/* .check-icon {
+  width: 20px;
+  height: 20px;
+  color: #4CAF50;
+} */
+
+/* Только фокус для доступности */
+/* .simple-check-btn:focus {
+  outline: 2px solid #2E7D32;
+  outline-offset: 2px;
+} */
+
+
+.static-transparent-btn {
+  width: 40px;
+  height: 40px;
+  background: transparent; /* полностью прозрачный фон */
+  border: none; /* нет бордюра */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0; /* убираем возможные отступы */
+ 
+  -webkit-tap-highlight-color: transparent; /* убирает подсветку на мобильных */
+}
+
+/* .check-icon {
+  width: 20px;
+  height: 20px;
+  
+  color: #4CAF50;
+} */
 
 
 

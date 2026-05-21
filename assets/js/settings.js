@@ -45,7 +45,12 @@ btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
-btnMenu.addEventListener("click", showHideMenu);
+//btnMenu.addEventListener("click", showHideMenu);
+btnMenu.addEventListener("click",() => {
+
+  menuController.toggle();
+
+});
 
 btnRemoveHistory.addEventListener("click",  clearHistory);
 
@@ -55,7 +60,7 @@ btnRemoveSettings.addEventListener("click",  removeSettings);
 
 btnShowHelp.addEventListener("click",  showHelpPage);
 
-btnSaveChoice.addEventListener("click",  saveSettings);
+btnSaveSelectedTests.addEventListener("click",  saveSelectedTests);
 
 //btnGoBack.addEventListener("click",  togglePage);
 
@@ -79,6 +84,21 @@ function clearHistory() {
 
     localStorage.removeItem(localStorage.key(i));
 
+  }
+
+}
+
+function saveSelectedTests(){
+
+  const checkedCheckBoxes = getSelectedValues(divChooseProfiles);   
+
+  if(!checkedCheckBoxes.length ) {
+
+    console.log('Не выбрано')
+
+  }else{
+
+    console.log(checkedCheckBoxes.length)
   }
 
 }
@@ -189,26 +209,20 @@ window.addEventListener('popstate', function() {
 
 // }
 
-function createDefaultTestsSelector() {
+function createDefaultTestsSelector() { 
 
-  //const testButton = createTestButton('item', 'Выбрать тесты', () => togglePage(true));
+  const button = document.createElement('button'); 
+  button.className = 'test-button';
+  button.textContent = 'Выберите тесты для тренировки'; 
 
-    //testButton.addEventListener('click', clickFunction); 
-  //testButton.addEventListener('click', testButtonClick);
+  button.addEventListener('click', function() {   
 
-  // const lb = document.createElement('lable'); 
-  // lb.textContent = 'Выберите тесты';
+    togglePage(true);
+    this.remove();
 
-  const text = document.createElement('button'); 
-  text.className = 'settings-button';
-  text.textContent = 'Нет выбранных тестов';
+  });
 
-  
-
-
-  divTestsSelector.appendChild(text);
-
-
+  divTestsSelector.appendChild(button);  
 }
 
 
@@ -219,14 +233,10 @@ function createTestsSelector(selectedTests){
     console.log(testBases.item)
 
     const testButton = createTestButton(item, item, );
-
-    //testButton.addEventListener('click', clickFunction); 
+   
     testButton.addEventListener('click', testButtonClick);
 
-    divTestsSelector.appendChild(testButton);
-
-    //() => togglePage(true)
-
+    divTestsSelector.appendChild(testButton);   
 
  });
 
@@ -257,23 +267,18 @@ function createTestButton(id, textContent, clickFunction){
 }
 
 
-//const listTemp = ['dddddd', 'vvvvv', 'yyyyy', 'mmmmmm']
 
-const togglePage = (showProfile) => {
-  divProfilePage.classList.toggle('hidden', !showProfile);
+
+const togglePage = (showProfile, button) => {
+  divProfilePage.classList.toggle('hidden', !showProfile);  
   divMainSettings.classList.toggle('hidden', showProfile);
   btnMenu.classList.toggle('hidden', showProfile); 
 
   if(showProfile){
     createProfilesList();
   }else{
-    const checkedCheckBoxes = getSelectedValues(divChooseProfiles);   
-
-    console.log(checkedCheckBoxes[0])
-   
 
 
-    
     
   }
 
@@ -471,15 +476,48 @@ function removeButtons() {
 }
 
 
+const menuController = {
+
+  menuPage: divMainSettings,
+  testSelector: divTestsSelector,
+
+  show() {   
+ 
+    this.menuPage.classList.toggle('hidden');
+    this.testSelector.classList.toggle('hidden'); 
+    this.isVisible = true;
+    
+  },
+
+  hide() {    
+    
+    this.menuPage.classList.toggle('hidden');
+    this.testSelector.classList.toggle('hidden'); 
+    this.isVisible = false;
+   
+  },
+
+  toggle() {
+    if (!this.isVisible) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+};
+
+
 
 function showHideMenu() {  
   // Так как класс есть, он будет убран
    // А при повторном вызове будет снова добавлен  
   divMainSettings.classList.toggle('hidden')
-  divTestsSelector.classList.toggle('hidden')
+  //divTestsSelector.classList.toggle('hidden')
 
 
     if(divMainSettings.classList.contains('hidden')) {  
+
+      console.log('hid')
 
       // Правильно (создаёт копию):
       //const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
@@ -496,15 +534,37 @@ function showHideMenu() {
 
       setSettings(currentSettings);
 
-
       saveSettings('settings', currentSettings);  
 
       removeButtons();
       //createLevelsButtons(testBases);
 
+      const directChildren =divTestsSelector.children.length;
+
+      if(directChildren === 0) {
+
+        console.log(directChildren)
+        createDefaultTestsSelector();
+
+       // divTestsSelector.classList.add('hidden')
+        divTestsSelector.classList.remove('hidden')
+
+      } else{
+
+        createLevelsButtons(testBases);
+
+      }
+
+
 
       //createTestsSelector()
 
+    }else{
+
+
+      //divTestsSelector.classList.remove('hidden')
+      divTestsSelector.classList.add('hidden')
+      console.log('vis')
     }
 
 }
@@ -601,6 +661,6 @@ const defaultSettings = {
   isLearnMode : false, 
   isDarkTheme : false,   
   fontSize : 20,
-  selectedTests : ['Выбрать тесты']
+  selectedTests : []
 }
 

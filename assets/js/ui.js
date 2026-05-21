@@ -39,7 +39,7 @@ const testResultsContainer = document.getElementById('test-result-block');
 // const tglLevel6 = document.getElementById('level-6-toggle');
 // const divMainSettings = document.getElementById('main-settings');
 const btnGoBack = document.getElementById('go-back');
-const btnSaveChoice= document.getElementById('save-choice');
+const btnSaveSelectedTests= document.getElementById('save-selected-tests');
 const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
 const btnNext = document.getElementById('button-next');
@@ -67,7 +67,9 @@ const btnShowHelp = document.getElementById('show-help');
 const divChooseProfiles = document.getElementById('checkbox-container');
 
 
+// const checkedCheckBoxes = getSelectedValues(divChooseProfiles);   
 
+//     console.log(checkedCheckBoxes[0])
 
 
 const CORRECT_ANSWER_ID = 0;
