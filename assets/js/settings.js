@@ -5,7 +5,9 @@
 
 let currentFontSize = 20; 
 
-function increaseFontSize() {  
+function increaseFontSize() { 
+  
+
   const newFontSize = currentFontSize + 1; 
   setFontSize(newFontSize);
 
@@ -49,6 +51,7 @@ btnDefaultFontSize.addEventListener('click', defaultFontSize);
 btnMenu.addEventListener("click",() => {
 
   menuController.toggle();
+ // console.log('tyt')
 
 });
 
@@ -90,7 +93,7 @@ function clearHistory() {
 
 function saveSelectedTests(){
 
-  const checkedCheckBoxes = getSelectedValues(divChooseProfiles);   
+  const checkedCheckBoxes = getSelectedValues(divChooseProfiles);    
 
   if(!checkedCheckBoxes.length ) {
 
@@ -98,7 +101,28 @@ function saveSelectedTests(){
 
   }else{
 
-    console.log(checkedCheckBoxes.length)
+    const settings = JSON.parse(JSON.stringify(defaultSettings));
+
+    let testsList = [];
+
+
+    checkedCheckBoxes.forEach(element => {
+
+      testsList.push(element)
+
+      //console.log(element)
+      
+    });
+
+    settings.selectedTests = testsList;
+
+    saveSettings(settings);
+
+
+    console.log(settings.selectedTests[0])
+
+
+
   }
 
 }
@@ -110,12 +134,37 @@ window.addEventListener("load", ()=>{
 
   removeButtons(); 
 
-   const settings = localStorage.getItem('settings');
+
+ const isSettings = localStorage.getItem('settings');
+
+ let savedSettings;
+
+//  if(isSettings){
+//   console.log('yes');
+
+//  }else{
+//   console.log('no');
+
+//  }
+
+  //const savedSettings = JSON.parse(localStorage.getItem('settings'));
+
+
+
+  //console.log('first');
+
+
 
   //set saved  settings
-  if(settings) {   
+  if(isSettings) {   
 
-     const savedSettings = localStorage.getItem('settings');
+    console.log('yes');
+
+    savedSettings = JSON.parse(localStorage.getItem('settings'));
+
+    
+
+     //const savedSettings = localStorage.getItem('settings');
 
     // if(Object.hasOwn(settings, SELECTED_TESTS)) {
 
@@ -123,7 +172,7 @@ window.addEventListener("load", ()=>{
 
     // } else {
 
-    //   //console.log('ytn');
+    //console.log(savedSettings);
 
     //   //removeButtons(); 
 
@@ -136,20 +185,20 @@ window.addEventListener("load", ()=>{
 
     //   divTestsSelector.appendChild(testButton);
 
-    //   console.log(testButton.textContent);
+      // console.log(savedSettings.isDarkTheme);
 
 
     // }
 
-     const settings = JSON.parse(JSON.stringify(defaultSettings));
+    //  const settings = JSON.parse(JSON.stringify(savedSettings));
 
-     settings.isLearnMode = savedSettings.isLearnMode;
-     settings.isDarkTheme = savedSettings.isDarkTheme;
-     settings.fontSize = savedSettings.fontSize;
+    //  settings.isLearnMode = savedSettings.isLearnMode;
+    //  settings.isDarkTheme = savedSettings.isDarkTheme;
+    //  settings.fontSize = savedSettings.fontSize;
 
+    //console.log(savedSettings.isDarkTheme);
 
-
-    setSettings(settings);  
+    setSettings(savedSettings);  
 
     // const defaultSettings = {
     //   isLearnMode : false, 
@@ -162,9 +211,21 @@ window.addEventListener("load", ()=>{
         
   } else {
 
+    console.log('no');
 
-    //localStorage.setItem("settings", JSON.stringify(defaultSettings));    
+
+    //localStorage.setItem("settings", JSON.stringify(defaultSettings)); 
+    
+    // const settings = JSON.parse(JSON.stringify(defaultSettings));
+
+    //  settings.isLearnMode = savedSettings.isLearnMode;
+    //  settings.isDarkTheme = savedSettings.isDarkTheme;
+    //  settings.fontSize = savedSettings.fontSize;
+
+
     setSettings(defaultSettings); 
+
+    saveSettings(defaultSettings);
 
     createDefaultTestsSelector();
     
@@ -512,15 +573,51 @@ const menuController = {
     this.testSelector.classList.toggle('hidden'); 
     this.isVisible = false;
 
-    const settings = JSON.parse(JSON.stringify(defaultSettings));
+    let settings;
 
-    settings.isLearnMode = tglLearnMode.checked;
-    settings.isDarkTheme = tglTheme.checked;
-    settings.fontSize = currentFontSize;
+    const raw = localStorage.getItem('settings');
+
+    if (raw !== null) {
+      //const user = JSON.parse(raw);
+      // работаем с user
+      console.log('tcnm');
+
+    } else {
+      console.log('Настройки по умолчанию');
+
+      settings = JSON.parse(JSON.stringify(defaultSettings));
+       
+
+    }
+
+
+    //const settings = JSON.parse(JSON.stringify(defaultSettings));
+
+    
+
+
+    
+
+    // settings.isLearnMode = tglLearnMode.checked;
+    // settings.isDarkTheme = tglTheme.checked;
+
+
+    //settings.fontSize = currentFontSize;
+
+    console.log('hide')
 
     setSettings(settings); 
 
-    saveSettings();
+    // const settings = {
+
+  //   isLearnMode : tglLearnMode.checked, 
+  //   isDarkTheme : tglTheme.checked,   
+  //   fontSize : currentFontSize,
+  //   selectedTests : []
+
+  // }
+
+    saveSettings(settings);
    
   },
 
@@ -561,7 +658,9 @@ function showHideMenu() {
 
       setSettings(currentSettings);
 
-      saveSettings('settings', currentSettings);  
+      saveSettings(currentSettings);  
+
+      console.log("def")
 
       removeButtons();
       //createLevelsButtons(testBases);
@@ -599,6 +698,9 @@ function showHideMenu() {
 
 function removeSettings() {  
   localStorage.removeItem("settings");  
+  setSettings(defaultSettings);
+
+
 }
 
 
@@ -612,22 +714,24 @@ function showHelpPage() {
 }
 
 
-function saveSettings(){  
+function saveSettings(settings){  
 
-  const settings = {
+  // const settings = {
 
-    isLearnMode : tglLearnMode.checked, 
-    isDarkTheme : tglTheme.checked,   
-    fontSize : currentFontSize,
-    selectedTests : []
+  //   isLearnMode : tglLearnMode.checked, 
+  //   isDarkTheme : tglTheme.checked,   
+  //   fontSize : currentFontSize,
+  //   selectedTests : []
 
-  }  
+  // }  
 
   localStorage.setItem('settings', JSON.stringify(settings));
 }
 
 function updateTheme(isDark) {
   tglTheme.checked = isDark;
+
+  //console.log(isDark)
   docBody.className = isDark ? 'dark-theme' : 'light-theme';
 }
 
@@ -642,7 +746,11 @@ function updateFontSize(size) {
 
 function setSettings(settings) {
 
+  //console.log(settings.isDarkTheme)
+
   if (!tglTheme || !tglLearnMode || !docBody) return;
+
+
 
   updateTheme(settings.isDarkTheme);
   updateLearnMode(settings.isLearnMode);
