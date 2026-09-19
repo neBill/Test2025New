@@ -48,12 +48,16 @@ btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
 //btnMenu.addEventListener("click", showHideMenu);
-btnMenu.addEventListener("click",() => {
+// btnMenu.addEventListener("click",() => {
 
-  menuController.toggle();
- // console.log('tyt')
+//   menuController.toggle();
+//  // console.log('tyt')
 
-});
+// });
+
+btnMenu.addEventListener("click",() => toggleSettingsPage());
+
+
 
 btnRemoveHistory.addEventListener("click",  clearHistory);
 
@@ -64,6 +68,11 @@ btnRemoveSettings.addEventListener("click",  removeSettings);
 btnShowHelp.addEventListener("click",  showHelpPage);
 
 btnSaveSelectedTests.addEventListener("click",  saveSelectedTests);
+
+btnShowProfilePage.addEventListener('click', () => toggleProfilePage());
+
+btnGoBack.addEventListener("click",  () => toggleProfilePage());
+
 
 //btnGoBack.addEventListener("click",  togglePage);
 
@@ -303,7 +312,7 @@ function createDefaultTestsSelector() {
 
   button.addEventListener('click', function() {   
 
-    togglePage(true);
+    toggleProfilePage();
     this.remove();
 
   });
@@ -352,29 +361,37 @@ function createTestButton(id, textContent, clickFunction){
 
 }
 
+const toggleProfilePage = () => {
+  const isProfileHidden = divProfilePage.classList.contains('hidden');
 
+  // Переключаем явно: если был скрыт — показываем, и наоборот
+  if (isProfileHidden) {
+    divProfilePage.classList.remove('hidden');
+    divMainSettings.classList.add('hidden');
+    btnMenu.classList.add('hidden');
 
-
-const togglePage = (showProfile, button) => {
-  divProfilePage.classList.toggle('hidden', !showProfile);  
-  divMainSettings.classList.toggle('hidden', showProfile);
-  btnMenu.classList.toggle('hidden', showProfile); 
-
-  if(showProfile){
     createProfilesList();
-  }else{
 
+  } else {
+    divProfilePage.classList.add('hidden');
+    divMainSettings.classList.remove('hidden');
+    btnMenu.classList.remove('hidden');
 
-    
+    // const listContainer = document.querySelector('.profiles-list');
+    // if (listContainer) {
+    //   listContainer.innerHTML = '';
+    // }
   }
-
-  
-
 };
 
-btnShowProfilePage.addEventListener('click', () => togglePage(true));
 
-btnGoBack.addEventListener("click",  () => togglePage(false));
+
+
+
+
+// btnShowProfilePage.addEventListener('click', () => togglePage(true));
+
+// btnGoBack.addEventListener("click",  () => togglePage(false));
 
 
 // function hideProfilePage() {
@@ -562,13 +579,47 @@ function removeButtons() {
 }
 
 
+const toggleSettingsPage = () => {
+
+  //console.log('ffff')
+
+  const isSettingsHidden = divMainSettings.classList.contains('hidden');
+
+  
+  if (isSettingsHidden) {
+
+    //divProfilePage.classList.remove('hidden');
+   // divMainSettings.classList.add('hidden');
+   // btnMenu.classList.add('hidden');
+
+   divMainSettings.classList.remove('hidden');
+   divTestsSelector.classList.add('hidden')
+
+   // createProfilesList();
+
+  } else {
+
+
+    //divProfilePage.classList.add('hidden');
+    //divMainSettings.classList.remove('hidden');
+   // btnMenu.classList.remove('hidden');
+
+    divMainSettings.classList.add('hidden');
+    divTestsSelector.classList.remove('hidden')
+  
+  }
+};
+
+
 const menuController = {
   
 
   menuPage: divMainSettings,
   testSelector: divTestsSelector,
 
-  show() {   
+  show() {  
+    
+    console.log('show')
  
     this.menuPage.classList.toggle('hidden');
     this.testSelector.classList.toggle('hidden'); 
@@ -596,7 +647,7 @@ const menuController = {
     if (raw !== null) {
       //const user = JSON.parse(raw);
       // работаем с user
-      console.log('tcnm');
+      
 
     } else {
       console.log('Настройки по умолчанию');
@@ -620,7 +671,7 @@ const menuController = {
 
     //settings.fontSize = currentFontSize;
 
-    console.log('hide')
+    //console.log('hide')
 
     setSettings(settings); 
 
@@ -639,12 +690,19 @@ const menuController = {
 
   toggle() {
 
-    console.log('work')
+    //console.log('work')
 
     if (!this.isVisible) {
       this.show();
+
+     // console.log('show')
+
     } else {
       this.hide();
+
+       //console.log('hide')
+
+
     }
   }
 };
@@ -657,12 +715,12 @@ function showHideMenu() {
   divMainSettings.classList.toggle('hidden')
   //divTestsSelector.classList.toggle('hidden')
 
-    console.log('work')
+    //console.log('work')
 
 
     if(divMainSettings.classList.contains('hidden')) {  
 
-      console.log('hide')
+      //console.log('hide')
 
       // Правильно (создаёт копию):
       //const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
