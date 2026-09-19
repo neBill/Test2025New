@@ -549,6 +549,23 @@ function createProfilesList(){
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.value = testBases[key].testTitle;
+  checkbox.dataset.feature = testBases[key].testId;
+
+  // Сразу вешаем слушатель на этот конкретный input
+  checkbox.addEventListener('change', checkboxChange)
+    // {
+    // const value = checkbox.checked;
+    // console.log('Изменение:', key, value);
+
+    // Сохранение
+    // const settings = JSON.parse(localStorage.getItem('myAppSettings') || '{}');
+    // settings[key] = value;
+    // localStorage.setItem('myAppSettings', JSON.stringify(settings));
+
+    
+  //});
+
+  //console.log(testBases[key].testId)
 
   // Добавляем текст подписи
   const text = document.createTextNode(testBases[key].testTitle);
@@ -561,6 +578,51 @@ function createProfilesList(){
 
 
 }
+..............................................
+function checkboxChange(e) {
+  const el = e.target;
+  const key = el.dataset.feature;
+  const value = el.checked;
+
+  console.log('Чекбокс:', key, 'Значение:', value);
+
+  // 1. Собираем все отмеченные тесты по нужному селектору
+  // Подставь сюда свой селектор для чекбоксов тестов
+  const checkedTests = Array.from(
+    document.querySelectorAll('.test-checkbox:checked')
+  ).map(cb => cb.value); // или cb.dataset.id, если у тебя ID в data-атрибуте
+
+  // 2. Получаем текущие настройки
+  let settings = JSON.parse(localStorage.getItem('settings') || '{}');
+
+  // 3. Перезаписываем список выбранных
+  settings.selectedTests = checkedTests;
+
+  // 4. Сохраняем
+  saveSettings(settings);
+}
+.........................................................
+
+// function checkboxChange(e) {
+//   const el = e.target; // это и есть тот самый чекбокс
+//   const key = el.dataset.feature;
+//   const value = el.checked;
+
+//   console.log(key,value)
+
+//   // Получаем текущие настройки (если нет — пустой объект)
+// let settings = JSON.parse(localStorage.getItem('settings') || '{}');
+
+// // Обновляем только нужное поле
+// settings.selectedTests.push(el.value);
+
+// // Сохраняем обратно
+// //localStorage.setItem('settings', JSON.stringify(settings));
+
+//   saveSettings(settings);
+//   // дальше логика сохранения...
+// }
+
 
 function getSelectedValues(container) {
   //nst container = document.getElementById(containerId);
@@ -610,6 +672,8 @@ const toggleSettingsPage = () => {
     removeButtons();
 
     createDefaultTestsSelector();
+
+    console.log("main")
   
   }
 };
