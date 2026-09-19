@@ -162,6 +162,16 @@ window.addEventListener("load", ()=>{
 
     savedSettings = JSON.parse(localStorage.getItem('settings'));
 
+    if(savedSettings.selectedTests.length === 0){
+
+      createDefaultTestsSelector();
+
+    }else{
+
+      createTestsSelector(savedSettings.selectedTests);
+
+    }
+
     
 
      //const savedSettings = localStorage.getItem('settings');
@@ -232,6 +242,9 @@ window.addEventListener("load", ()=>{
   }    
  
   //createLevelsButtons();
+
+  //createDefaultTestsSelector();
+
   showMainPage();
   
 });
@@ -286,7 +299,7 @@ function createDefaultTestsSelector() {
 
   const button = document.createElement('button'); 
   button.className = 'test-button';
-  button.textContent = 'Выберите тесты для тренировки'; 
+  button.textContent = 'Выбрать тесты'; 
 
   button.addEventListener('click', function() {   
 
@@ -550,6 +563,7 @@ function removeButtons() {
 
 
 const menuController = {
+  
 
   menuPage: divMainSettings,
   testSelector: divTestsSelector,
@@ -568,6 +582,8 @@ const menuController = {
   },
 
   hide() {    
+
+    console.log('hide')
     
     this.menuPage.classList.toggle('hidden');
     this.testSelector.classList.toggle('hidden'); 
@@ -622,6 +638,9 @@ const menuController = {
   },
 
   toggle() {
+
+    console.log('work')
+
     if (!this.isVisible) {
       this.show();
     } else {
@@ -638,10 +657,12 @@ function showHideMenu() {
   divMainSettings.classList.toggle('hidden')
   //divTestsSelector.classList.toggle('hidden')
 
+    console.log('work')
+
 
     if(divMainSettings.classList.contains('hidden')) {  
 
-      console.log('hid')
+      console.log('hide')
 
       // Правильно (создаёт копию):
       //const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
@@ -655,12 +676,14 @@ function showHideMenu() {
       //const isSettings = localStorage.getItem("settings");
      // const settings = localStorage.getItem("settings") ? currentSettings : defaultSettings;
 
+     //..............сохранение изменений настроек и загрузка их.......................................
+
 
       setSettings(currentSettings);
 
       saveSettings(currentSettings);  
 
-      console.log("def")
+      console.log("saved")
 
       removeButtons();
       //createLevelsButtons(testBases);
@@ -690,7 +713,7 @@ function showHideMenu() {
 
       //divTestsSelector.classList.remove('hidden')
       divTestsSelector.classList.add('hidden')
-      console.log('vis')
+      console.log('visible')
     }
 
 }
@@ -749,6 +772,8 @@ function setSettings(settings) {
   //console.log(settings.isDarkTheme)
 
   if (!tglTheme || !tglLearnMode || !docBody) return;
+
+  console.log(settings)
 
 
 
