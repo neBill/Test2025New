@@ -606,106 +606,110 @@ const toggleSettingsPage = () => {
 
     divMainSettings.classList.add('hidden');
     divTestsSelector.classList.remove('hidden')
+
+    removeButtons();
+
+    createDefaultTestsSelector();
   
   }
 };
 
 
-const menuController = {
+// const menuController = {
   
 
-  menuPage: divMainSettings,
-  testSelector: divTestsSelector,
+//   menuPage: divMainSettings,
+//   testSelector: divTestsSelector,
 
-  show() {  
+//   show() {  
     
-    console.log('show')
+//     console.log('show')
  
-    this.menuPage.classList.toggle('hidden');
-    this.testSelector.classList.toggle('hidden'); 
-    this.isVisible = true;
+//     this.menuPage.classList.toggle('hidden');
+//     this.testSelector.classList.toggle('hidden'); 
+//     this.isVisible = true;
 
    
-    // const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
+//     // const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
 
-    //console.log(' no set')
+//     //console.log(' no set')
 
-  },
+//   },
 
-  hide() {    
+//   hide() {    
 
-    console.log('hide')
+//     console.log('hide')
     
-    this.menuPage.classList.toggle('hidden');
-    this.testSelector.classList.toggle('hidden'); 
-    this.isVisible = false;
+//     this.menuPage.classList.toggle('hidden');
+//     this.testSelector.classList.toggle('hidden'); 
+//     this.isVisible = false;
 
-    let settings;
+//     let settings;
 
-    const raw = localStorage.getItem('settings');
+//     const raw = localStorage.getItem('settings');
 
-    if (raw !== null) {
-      //const user = JSON.parse(raw);
-      // работаем с user
+//     if (raw !== null) {
+//       //const user = JSON.parse(raw);
+//       // работаем с user
       
 
-    } else {
-      console.log('Настройки по умолчанию');
+//     } else {
+//       console.log('Настройки по умолчанию');
 
-      settings = JSON.parse(JSON.stringify(defaultSettings));
+//       settings = JSON.parse(JSON.stringify(defaultSettings));
        
 
-    }
+//     }
 
 
-    //const settings = JSON.parse(JSON.stringify(defaultSettings));
-
-    
-
+//     //const settings = JSON.parse(JSON.stringify(defaultSettings));
 
     
 
-    // settings.isLearnMode = tglLearnMode.checked;
-    // settings.isDarkTheme = tglTheme.checked;
+
+    
+
+//     // settings.isLearnMode = tglLearnMode.checked;
+//     // settings.isDarkTheme = tglTheme.checked;
 
 
-    //settings.fontSize = currentFontSize;
+//     //settings.fontSize = currentFontSize;
 
-    //console.log('hide')
+//     //console.log('hide')
 
-    setSettings(settings); 
+//     setSettings(settings); 
 
-    // const settings = {
+//     // const settings = {
 
-  //   isLearnMode : tglLearnMode.checked, 
-  //   isDarkTheme : tglTheme.checked,   
-  //   fontSize : currentFontSize,
-  //   selectedTests : []
+//   //   isLearnMode : tglLearnMode.checked, 
+//   //   isDarkTheme : tglTheme.checked,   
+//   //   fontSize : currentFontSize,
+//   //   selectedTests : []
 
-  // }
+//   // }
 
-    saveSettings(settings);
+//     saveSettings(settings);
    
-  },
+//   },
 
-  toggle() {
+//   toggle() {
 
-    //console.log('work')
+//     //console.log('work')
 
-    if (!this.isVisible) {
-      this.show();
+//     if (!this.isVisible) {
+//       this.show();
 
-     // console.log('show')
+//      // console.log('show')
 
-    } else {
-      this.hide();
+//     } else {
+//       this.hide();
 
-       //console.log('hide')
+//        //console.log('hide')
 
 
-    }
-  }
-};
+//     }
+//   }
+// };
 
 
 
