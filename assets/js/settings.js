@@ -67,7 +67,7 @@ btnRemoveSettings.addEventListener("click",  removeSettings);
 
 btnShowHelp.addEventListener("click",  showHelpPage);
 
-btnSaveSelectedTests.addEventListener("click",  saveSelectedTests);
+//btnSaveSelectedTests.addEventListener("click",  saveSelectedTests);
 
 btnShowProfilePage.addEventListener('click', () => toggleProfilePage());
 
@@ -100,41 +100,41 @@ function clearHistory() {
 
 }
 
-function saveSelectedTests(){
+// function saveSelectedTests(){
 
-  const checkedCheckBoxes = getSelectedValues(divChooseProfiles);    
+//   const checkedCheckBoxes = getSelectedValues(divChooseProfiles);    
 
-  if(!checkedCheckBoxes.length ) {
+//   if(!checkedCheckBoxes.length ) {
 
-    console.log('Не выбрано')
+//     console.log('Не выбрано')
 
-  }else{
+//   }else{
 
-    const settings = JSON.parse(JSON.stringify(defaultSettings));
+//     const settings = JSON.parse(JSON.stringify(defaultSettings));
 
-    let testsList = [];
+//     let testsList = [];
 
 
-    checkedCheckBoxes.forEach(element => {
+//     checkedCheckBoxes.forEach(element => {
 
-      testsList.push(element)
+//       testsList.push(element)
 
-      //console.log(element)
+//       //console.log(element)
       
-    });
+//     });
 
-    settings.selectedTests = testsList;
+//     settings.selectedTests = testsList;
 
-    saveSettings(settings);
-
-
-    console.log(settings.selectedTests[0])
+//     saveSettings(settings);
 
 
+//     console.log(settings.selectedTests[0])
 
-  }
 
-}
+
+//   }
+
+// }
 
 
 window.addEventListener("load", ()=>{  
@@ -540,87 +540,118 @@ function createProfilesList(){
 
   // testBases.forEach(key => {
   Object.keys(testBases).forEach(key => {
-  // Создаём контейнер для чекбокса и подписи
-  const label = document.createElement('label');
-  label.style.display = 'block';
-  label.style.marginBottom = '10px';
+    // Создаём контейнер для чекбокса и подписи
+    const label = document.createElement('label');
+    label.style.display = 'block';
+    label.style.marginBottom = '10px';
 
-  // Создаём сам чекбокс
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.value = testBases[key].testTitle;
-  checkbox.dataset.feature = testBases[key].testId;
+    // Создаём сам чекбокс
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = testBases[key].testTitle;
+    checkbox.dataset.feature = testBases[key].testId;
 
-  // Сразу вешаем слушатель на этот конкретный input
-  checkbox.addEventListener('change', checkboxChange)
-    // {
-    // const value = checkbox.checked;
-    // console.log('Изменение:', key, value);
-
-    // Сохранение
-    // const settings = JSON.parse(localStorage.getItem('myAppSettings') || '{}');
-    // settings[key] = value;
-    // localStorage.setItem('myAppSettings', JSON.stringify(settings));
-
+    const id = testBases[key].testId.toString()
     
-  //});
 
-  //console.log(testBases[key].testId)
+    // Сразу вешаем слушатель на этот конкретный input
+    checkbox.addEventListener('change', checkboxChange)
+      // {
+      // const value = checkbox.checked;
+      // console.log('Изменение:', key, value);
 
-  // Добавляем текст подписи
-  const text = document.createTextNode(testBases[key].testTitle);
+      // Сохранение
+    const settings = JSON.parse(localStorage.getItem('settings') || '{}');
 
-  // Собираем элементы вместе
-  label.appendChild(checkbox);
-  label.appendChild(text);
-  divChooseProfiles.appendChild(label);
+    //console.log(testBases[key].testId)
+
+    let checkedState = settings.selectedTests.indexOf(id);
+
+    console.log(checkedState)
+
+    if(checkedState != -1){
+
+      checkbox.checked = true;
+
+    }
+
+      // settings[key] = value;
+      // localStorage.setItem('myAppSettings', JSON.stringify(settings));
+
+      
+    //});
+
+    //console.log(testBases[key].testId)
+
+    // Добавляем текст подписи
+    const text = document.createTextNode(testBases[key].testTitle);
+
+    // Собираем элементы вместе
+    label.appendChild(checkbox);
+    label.appendChild(text);
+    divChooseProfiles.appendChild(label);
   });
 
 
 }
-..............................................
+
+
 function checkboxChange(e) {
   const el = e.target;
-  const key = el.dataset.feature;
-  const value = el.checked;
+  const id = el.dataset.feature;
+  const isChecked = el.checked;
 
-  console.log('Чекбокс:', key, 'Значение:', value);
+  console.log('Чекбокс:', id, 'Значение:', isChecked);
 
-  // 1. Собираем все отмеченные тесты по нужному селектору
-  // Подставь сюда свой селектор для чекбоксов тестов
-  const checkedTests = Array.from(
-    document.querySelectorAll('.test-checkbox:checked')
-  ).map(cb => cb.value); // или cb.dataset.id, если у тебя ID в data-атрибуте
-
-  // 2. Получаем текущие настройки
+  // Получаем настройки, по умолчанию — пустой объект
   let settings = JSON.parse(localStorage.getItem('settings') || '{}');
 
-  // 3. Перезаписываем список выбранных
-  settings.selectedTests = checkedTests;
+  // Гарантируем, что selectedTests — это массив
+  if (!Array.isArray(settings.selectedTests)) {
+    settings.selectedTests = [];
+  }
 
-  // 4. Сохраняем
-  saveSettings(settings);
+  if (isChecked) {
+    // Добавляем только если ещё нет (защита от дублей)
+    if (!settings.selectedTests.includes(id)) {
+      settings.selectedTests.push(id);
+    }
+  } else {
+    const index = settings.selectedTests.indexOf(id);
+    if (index !== -1) {
+      settings.selectedTests.splice(index, 1);
+    }
+    // Если index === -1 — значит, элемента не было, ничего не делаем
+  }
+
+  localStorage.setItem('settings', JSON.stringify(settings));
 }
-.........................................................
+
 
 // function checkboxChange(e) {
-//   const el = e.target; // это и есть тот самый чекбокс
-//   const key = el.dataset.feature;
-//   const value = el.checked;
+//   const el = e.target;
+//   const id = el.dataset.feature;
+//   const isChecked = el.checked;
 
-//   console.log(key,value)
+//   console.log('Чекбокс:', id, 'Значение:', isChecked);
 
-//   // Получаем текущие настройки (если нет — пустой объект)
-// let settings = JSON.parse(localStorage.getItem('settings') || '{}');
 
-// // Обновляем только нужное поле
-// settings.selectedTests.push(el.value);
+//   let settings = JSON.parse(localStorage.getItem('settings') || '{}');
 
-// // Сохраняем обратно
-// //localStorage.setItem('settings', JSON.stringify(settings));
+//   if(isChecked){
 
-//   saveSettings(settings);
-//   // дальше логика сохранения...
+//     settings.selectedTests.push(id)
+
+//   }else{
+
+//     const index = settings.selectedTests.indexOf(id);
+
+//     settings.selectedTests.splice(index, 1);
+
+//   }  
+  
+//   localStorage.setItem('settings', JSON.stringify(settings));
+
 // }
 
 
@@ -630,9 +661,6 @@ function getSelectedValues(container) {
   const selectedValues = Array.from(checkedCheckboxes).map(cb => cb.value);
   return selectedValues;
 }
-
-
-
 
 
 
