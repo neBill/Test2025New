@@ -20,10 +20,6 @@ let state = {
 const divTestsSelector = document.getElementById('test-selector');
 const divProfilePage = document.getElementById('test-profile');
 const divMainSettings = document.getElementById('main-settings');
-
-
-
-
 const answerButtons = document.querySelectorAll('.option-button');
 const navigationContainer = document.getElementById('navigation-block');
 //const divTestsSelector = document.getElementById('test-selector');
@@ -58,8 +54,11 @@ const col2 = document.getElementById('col2');
 const answerListContainer = document.getElementById('answer-list-block');
 const divListBlock = document.getElementById('questions-list-block');
 const btnHideList = document.getElementById('btn-hide-list');
-const btnShowProfilePage = document.getElementById('profile-page-button');
-// const divProfilePage = document.getElementById('test-profile');
+const btnShowProfilePage = document.getElementById('settings-profile-page-button');
+const btnMainOpenProfilePage = document.getElementById('main-profile-page-button');
+
+const divDefaultTestSelectionBlock = document.getElementById('default-test-selector-block');
+
 const btnRemoveHistory = document.getElementById('history-remover');
 const btnRemoveSettings = document.getElementById('settings-remover');
 const btnRemoveCache = document.getElementById('cache-remover');
@@ -627,10 +626,14 @@ function runLernMode(){
 // }
 
 function testButtonClick(event) { 
+
+  
   
   const testTitle = event.target.textContent;
   currentTest.id = event.target.id;  
   chooseTest(currentTest.id, testTitle);   
+
+ 
  
 }
 

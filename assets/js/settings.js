@@ -47,15 +47,26 @@ btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
-//btnMenu.addEventListener("click", showHideMenu);
-// btnMenu.addEventListener("click",() => {
 
-//   menuController.toggle();
-//  // console.log('tyt')
-
-// });
 
 btnMenu.addEventListener("click",() => toggleSettingsPage());
+
+// const handleMenuClick = () => {
+
+//   //toggleSettingsPage();
+
+//  // removeButtons();
+
+//   //createDefaultTestsSelector();
+
+//  //console.log("main")
+
+//   toggleSettingsPage();
+  
+// };
+
+
+
 
 
 
@@ -71,10 +82,28 @@ btnShowHelp.addEventListener("click",  showHelpPage);
 
 btnShowProfilePage.addEventListener('click', () => toggleProfilePage());
 
-btnGoBack.addEventListener("click",  () => toggleProfilePage());
+//btnGoBack.addEventListener("click",  () => toggleProfilePage());
+
+btnGoBack.addEventListener('click', function() {
+  toggleProfilePage();
+  divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
+});
 
 
-//btnGoBack.addEventListener("click",  togglePage);
+btnMainOpenProfilePage.addEventListener('click', function() {
+  toggleProfilePage();
+  divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
+});
+
+
+function ShowMainOpenProfilePageButton() {
+
+  // const btn = document.getElementById('settings-page-button');
+  if (btnMainOpenProfilePage) {
+    divDefaultTestSelectionBlock.classList.remove('hidden');
+  }
+}
+
 
 
 function clearCache(){   
@@ -136,127 +165,143 @@ function clearHistory() {
 
 // }
 
+window.addEventListener('load', () => {
 
-window.addEventListener("load", ()=>{  
+  checkSettingsAndApply();
+  
 
- // showMainPage();
+  // const settings = localStorage.getItem('settings');
+  // let savedSettings = null;
 
-  removeButtons(); 
+  // // 2. Безопасный парсинг
+  // if (settings) {
+  //   try {
+  //     savedSettings = JSON.parse(settings);
+  //     console.log('Настройки загружены из localStorage');
+  //   } catch (e) {
+  //     console.error('Ошибка парсинга настроек, сбрасываем на дефолт', e);
+  //     savedSettings = null;
+  //   }
+  // }
 
-
- const isSettings = localStorage.getItem('settings');
-
- let savedSettings;
-
-//  if(isSettings){
-//   console.log('yes');
-
-//  }else{
-//   console.log('no');
-
-//  }
-
-  //const savedSettings = JSON.parse(localStorage.getItem('settings'));
-
-
-
-  //console.log('first');
-
-
-
-  //set saved  settings
-  if(isSettings) {   
-
-    console.log('yes');
-
-    savedSettings = JSON.parse(localStorage.getItem('settings'));
-
-    if(savedSettings.selectedTests.length === 0){
-
-      createDefaultTestsSelector();
-
-    }else{
-
-      createTestsSelector(savedSettings.selectedTests);
-
-    }
-
-    
-
-     //const savedSettings = localStorage.getItem('settings');
-
-    // if(Object.hasOwn(settings, SELECTED_TESTS)) {
-
-    //   console.log(settings[SELECTED_TESTS]);
-
-    // } else {
-
-    //console.log(savedSettings);
-
-    //   //removeButtons(); 
-
-
-    //   const testButton = createTestButton(0, 'Выбрать тесты');
-
-    //   //button.addEventListener('click', testButtonClick); 
-
-    //   testButton.addEventListener('click', () => togglePage(true))
-
-    //   divTestsSelector.appendChild(testButton);
-
-      // console.log(savedSettings.isDarkTheme);
-
-
-    // }
-
-    //  const settings = JSON.parse(JSON.stringify(savedSettings));
-
-    //  settings.isLearnMode = savedSettings.isLearnMode;
-    //  settings.isDarkTheme = savedSettings.isDarkTheme;
-    //  settings.fontSize = savedSettings.fontSize;
-
-    //console.log(savedSettings.isDarkTheme);
-
-    setSettings(savedSettings);  
-
-    // const defaultSettings = {
-    //   isLearnMode : false, 
-    //   isDarkTheme : false,   
-    //   fontSize : 20,
-    //   selectedTests : []
-    // }
-
-
-        
-  } else {
-
-    console.log('no');
-
-
-    //localStorage.setItem("settings", JSON.stringify(defaultSettings)); 
-    
-    // const settings = JSON.parse(JSON.stringify(defaultSettings));
-
-    //  settings.isLearnMode = savedSettings.isLearnMode;
-    //  settings.isDarkTheme = savedSettings.isDarkTheme;
-    //  settings.fontSize = savedSettings.fontSize;
-
-
-    setSettings(defaultSettings); 
-
-    saveSettings(defaultSettings);
-
-    createDefaultTestsSelector();
-    
-  }    
- 
-  //createLevelsButtons();
-
-  //createDefaultTestsSelector();
+  // // 3. Единая логика применения настроек
+  // if (savedSettings && Array.isArray(savedSettings.selectedTests)) {
+  //   if (savedSettings.selectedTests.length === 0) {
+  //     createDefaultTestsSelector();
+  //   } else {
+  //     createTestsSelector(savedSettings.selectedTests);
+  //   }
+  //   setSettings(savedSettings);
+  // } else {
+  //   // Нет настроек или они битые — применяем дефолт
+  //   setSettings(defaultSettings);
+  //   saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
+  //   createDefaultTestsSelector();
+  // }
 
   showMainPage();
-  
 });
+
+
+function updateSettingsButtonVisibility(isVisible) {
+  // const btn = document.getElementById('settings-page-button');
+  // if (!btn) return;
+
+  if (isVisible) {
+    btnMenu.classList.remove('hidden');
+  } else {
+    btnMenu.classList.add('hidden');
+  }
+}
+
+
+function checkSettingsAndApply() {
+
+  const settings = localStorage.getItem('settings');
+  let savedSettings = null;
+
+  // 2. Безопасный парсинг
+  if (settings) {
+    try {
+      savedSettings = JSON.parse(settings);
+      console.log('Настройки загружены из localStorage');
+    } catch (e) {
+      console.error('Ошибка парсинга настроек, сбрасываем на дефолт', e);
+      savedSettings = null;
+    }
+  }
+
+  // 3. Единая логика применения настроек
+  if (savedSettings && Array.isArray(savedSettings.selectedTests)) {
+    if (savedSettings.selectedTests.length === 0) {
+      //createDefaultTestsSelector();
+      ShowMainOpenProfilePageButton();
+
+
+    } else {
+      createTestsSelector(savedSettings.selectedTests);
+    }
+    setSettings(savedSettings);
+  } else {
+    // Нет настроек или они битые — применяем дефолт
+    setSettings(defaultSettings);
+    saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
+
+    //createDefaultTestsSelector();
+    ShowMainOpenProfilePageButton();
+  }
+
+}
+
+
+
+// window.addEventListener("load", ()=>{  
+
+ 
+
+//   removeButtons(); 
+
+
+//  const isSettings = localStorage.getItem('settings');
+
+//  let savedSettings;
+
+  
+//   if(isSettings) {   
+
+//     console.log('настройки есть');
+
+//     savedSettings = JSON.parse(localStorage.getItem('settings'));
+
+//     if(savedSettings.selectedTests.length === 0){
+
+//       createDefaultTestsSelector();      
+
+//     }else{
+
+//       createTestsSelector(savedSettings.selectedTests);     
+
+//     }
+    
+    
+//     setSettings(savedSettings);  
+
+        
+//   } else {
+
+    
+//     setSettings(defaultSettings); 
+
+//     saveSettings(defaultSettings);
+
+//     createDefaultTestsSelector();
+    
+//   }    
+  
+
+//   showMainPage();
+  
+// });
 
 //лечение выхода из приложения при нажании кнопки назад в андроид
 window.addEventListener('load', function() {
@@ -304,30 +349,37 @@ window.addEventListener('popstate', function() {
 
 // }
 
-function createDefaultTestsSelector() { 
+// function createDefaultTestsSelector() { 
 
-  const button = document.createElement('button'); 
-  button.className = 'test-button';
-  button.textContent = 'Выбрать тесты'; 
+//   const button = document.createElement('button'); 
+//   button.className = 'test-button';
+//   button.textContent = 'Выбрать тесты'; 
+//   button.id = 'testProfileSelectorButton'
 
-  button.addEventListener('click', function() {   
+//   button.addEventListener('click', function() {   
 
-    toggleProfilePage();
-    this.remove();
+//     toggleProfilePage(); 
+//     this.classList.add('hidden'); // скрываем визуально
 
-  });
+//   });
 
-  divTestsSelector.appendChild(button);  
-}
+//   divTestsSelector.appendChild(button);  
+// }
 
 
 function createTestsSelector(selectedTests){  
 
+
+
   selectedTests.forEach((item) => { 
 
-    console.log(testBases.item)
+    //console.log(testBases)
 
-    const testButton = createTestButton(item, item, );
+    const text = testBases[item].testTitle
+
+    const id = testBases[item].testId
+
+    const testButton = createTestButton(id, text);
    
     testButton.addEventListener('click', testButtonClick);
 
@@ -350,38 +402,46 @@ function createTestsSelector(selectedTests){
   // testButtonsContainer.classList.add('hidden');
 }
 
-function createTestButton(id, textContent, clickFunction){
+// function createTestButton(id, textContent, clickFunction){
+function createTestButton(id, textContent){
+
+ // console.log(id)
 
   const button = document.createElement('button');   
   button.id = id;
   button.className = "test-button";     
   button.textContent = textContent;
-  button.addEventListener('click', clickFunction);  
+ // button.addEventListener('click', clickFunction);  
   return button;
 
 }
 
 const toggleProfilePage = () => {
   const isProfileHidden = divProfilePage.classList.contains('hidden');
+  let isVisible;
 
   // Переключаем явно: если был скрыт — показываем, и наоборот
   if (isProfileHidden) {
     divProfilePage.classList.remove('hidden');
     divMainSettings.classList.add('hidden');
-    btnMenu.classList.add('hidden');
+    //btnMenu.classList.add('hidden');
+    // updateSettingsButtonVisibility(false);
+    isVisible = false;
 
     createProfilesList();
 
   } else {
     divProfilePage.classList.add('hidden');
     divMainSettings.classList.remove('hidden');
-    btnMenu.classList.remove('hidden');
+    //btnMenu.classList.remove('hidden');
 
-    // const listContainer = document.querySelector('.profiles-list');
-    // if (listContainer) {
-    //   listContainer.innerHTML = '';
-    // }
+    // updateSettingsButtonVisibility(true);
+    isVisible = true;
+
+   
   }
+
+  updateSettingsButtonVisibility(isVisible);
 };
 
 
@@ -391,7 +451,7 @@ const toggleProfilePage = () => {
 
 // btnShowProfilePage.addEventListener('click', () => togglePage(true));
 
-// btnGoBack.addEventListener("click",  () => togglePage(false));
+
 
 
 // function hideProfilePage() {
@@ -444,9 +504,12 @@ function showMainPage() {
   const elementsToShow = [    
     
     divTestsSelector,
-    btnMenu
+    //btnMenu
+
     
   ];
+
+  updateSettingsButtonVisibility(true)
 
   // hideElements(elementsToHide);
 
@@ -487,13 +550,17 @@ function showResultsPage() {
 
 }
 
+  
+
 function showChosenTest(testName, counterText) {
   const elementsToHide = [
     divTestsSelector,
     // divMenuButton,    
     divNext,
-    btnMenu
+    //btnMenu
   ]
+
+
 
   const elementsToShow = [ 
     testButtonsContainer,
@@ -508,6 +575,13 @@ function showChosenTest(testName, counterText) {
 
   showHidePages(elementsToShow, elementsToHide);
 
+  updateSettingsButtonVisibility(false)
+
+  
+
+  //showHidePages();
+
+  //console.log('тест выбран');
  
 
   renderQuestionCounter(counterText);
@@ -515,16 +589,21 @@ function showChosenTest(testName, counterText) {
   pTestTitle.textContent = testName;
   btnHome.textContent = "Завершить";
   btnHome.value = "complite";
+
+  // console.log('меню скрыто')
 }
 
 
-function showHidePages(showArray, hideArray){
-  hideArray.forEach(element => {
-      element.classList.add('hidden');
-  });
-  showArray.forEach(element => {
+function showHidePages(arrayToShow, arrayToHide){
+ 
+  arrayToShow.forEach(element => {
       element.classList.remove('hidden');
   });
+   arrayToHide.forEach(element => {
+      element.classList.add('hidden');
+  });
+
+
    
 }
 
@@ -567,7 +646,7 @@ function createProfilesList(){
 
     let checkedState = settings.selectedTests.indexOf(id);
 
-    console.log(checkedState)
+    //console.log(checkedState)
 
     if(checkedState != -1){
 
@@ -601,7 +680,7 @@ function checkboxChange(e) {
   const id = el.dataset.feature;
   const isChecked = el.checked;
 
-  console.log('Чекбокс:', id, 'Значение:', isChecked);
+ // console.log('Чекбокс:', id, 'Значение:', isChecked);
 
   // Получаем настройки, по умолчанию — пустой объект
   let settings = JSON.parse(localStorage.getItem('settings') || '{}');
@@ -625,34 +704,42 @@ function checkboxChange(e) {
   }
 
   localStorage.setItem('settings', JSON.stringify(settings));
+
+  settings = JSON.parse(localStorage.getItem('settings') || '{}');
+
+
+
+  if(settings.selectedTests.length === 0){
+
+    //показать кнопку выбора тестов
+
+    console.log('тесты отсутствуют, чекбокс выбран')
+
+    //createDefaultTestsSelector();
+
+    ShowMainOpenProfilePageButton();
+
+
+  }else{
+
+    //показать кнопки выбранных тестов
+
+    //document.getElementById('testProfileSelectorButton').remove();
+
+    //deleteButton()
+
+    console.log('тесты в наличии')
+
+    createTestsSelector(settings.selectedTests);
+    
+
+  }
+
+  
+
+
 }
 
-
-// function checkboxChange(e) {
-//   const el = e.target;
-//   const id = el.dataset.feature;
-//   const isChecked = el.checked;
-
-//   console.log('Чекбокс:', id, 'Значение:', isChecked);
-
-
-//   let settings = JSON.parse(localStorage.getItem('settings') || '{}');
-
-//   if(isChecked){
-
-//     settings.selectedTests.push(id)
-
-//   }else{
-
-//     const index = settings.selectedTests.indexOf(id);
-
-//     settings.selectedTests.splice(index, 1);
-
-//   }  
-  
-//   localStorage.setItem('settings', JSON.stringify(settings));
-
-// }
 
 
 function getSelectedValues(container) {
@@ -668,209 +755,34 @@ function removeButtons() {
   divTestsSelector.innerHTML = '';  
 }
 
+function showSettingsPage() {
+  divMainSettings.classList.remove('hidden');
+  divTestsSelector.classList.add('hidden');
+  divDefaultTestSelectionBlock.classList.add('hidden');
+}
+
+function hideSettingsPage() {
+  divMainSettings.classList.add('hidden');
+  divTestsSelector.classList.remove('hidden'); 
+  //divDefaultTestSelectionBlock.classList.add('hidden'); 
+ 
+  
+  removeButtons();
+  checkSettingsAndApply();
+}
 
 const toggleSettingsPage = () => {
 
-  //console.log('ffff')
-
   const isSettingsHidden = divMainSettings.classList.contains('hidden');
-
-  
   if (isSettingsHidden) {
-
-    //divProfilePage.classList.remove('hidden');
-   // divMainSettings.classList.add('hidden');
-   // btnMenu.classList.add('hidden');
-
-   divMainSettings.classList.remove('hidden');
-   divTestsSelector.classList.add('hidden')
-
-   // createProfilesList();
-
+    showSettingsPage();
   } else {
-
-
-    //divProfilePage.classList.add('hidden');
-    //divMainSettings.classList.remove('hidden');
-   // btnMenu.classList.remove('hidden');
-
-    divMainSettings.classList.add('hidden');
-    divTestsSelector.classList.remove('hidden')
-
-    removeButtons();
-
-    createDefaultTestsSelector();
-
-    console.log("main")
-  
+    hideSettingsPage();
   }
 };
 
 
-// const menuController = {
-  
 
-//   menuPage: divMainSettings,
-//   testSelector: divTestsSelector,
-
-//   show() {  
-    
-//     console.log('show')
- 
-//     this.menuPage.classList.toggle('hidden');
-//     this.testSelector.classList.toggle('hidden'); 
-//     this.isVisible = true;
-
-   
-//     // const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
-
-//     //console.log(' no set')
-
-//   },
-
-//   hide() {    
-
-//     console.log('hide')
-    
-//     this.menuPage.classList.toggle('hidden');
-//     this.testSelector.classList.toggle('hidden'); 
-//     this.isVisible = false;
-
-//     let settings;
-
-//     const raw = localStorage.getItem('settings');
-
-//     if (raw !== null) {
-//       //const user = JSON.parse(raw);
-//       // работаем с user
-      
-
-//     } else {
-//       console.log('Настройки по умолчанию');
-
-//       settings = JSON.parse(JSON.stringify(defaultSettings));
-       
-
-//     }
-
-
-//     //const settings = JSON.parse(JSON.stringify(defaultSettings));
-
-    
-
-
-    
-
-//     // settings.isLearnMode = tglLearnMode.checked;
-//     // settings.isDarkTheme = tglTheme.checked;
-
-
-//     //settings.fontSize = currentFontSize;
-
-//     //console.log('hide')
-
-//     setSettings(settings); 
-
-//     // const settings = {
-
-//   //   isLearnMode : tglLearnMode.checked, 
-//   //   isDarkTheme : tglTheme.checked,   
-//   //   fontSize : currentFontSize,
-//   //   selectedTests : []
-
-//   // }
-
-//     saveSettings(settings);
-   
-//   },
-
-//   toggle() {
-
-//     //console.log('work')
-
-//     if (!this.isVisible) {
-//       this.show();
-
-//      // console.log('show')
-
-//     } else {
-//       this.hide();
-
-//        //console.log('hide')
-
-
-//     }
-//   }
-// };
-
-
-
-function showHideMenu() {  
-  // Так как класс есть, он будет убран
-   // А при повторном вызове будет снова добавлен  
-  divMainSettings.classList.toggle('hidden')
-  //divTestsSelector.classList.toggle('hidden')
-
-    //console.log('work')
-
-
-    if(divMainSettings.classList.contains('hidden')) {  
-
-      //console.log('hide')
-
-      // Правильно (создаёт копию):
-      //const currentSettings = JSON.parse(JSON.stringify(defaultSettings));
-
-      const currentSettings = {};
-
-      currentSettings.isLearnMode = tglLearnMode.checked;
-      currentSettings.isDarkTheme = tglTheme.checked;
-      currentSettings.fontSize = currentFontSize;
-
-      //const isSettings = localStorage.getItem("settings");
-     // const settings = localStorage.getItem("settings") ? currentSettings : defaultSettings;
-
-     //..............сохранение изменений настроек и загрузка их.......................................
-
-
-      setSettings(currentSettings);
-
-      saveSettings(currentSettings);  
-
-      console.log("saved")
-
-      removeButtons();
-      //createLevelsButtons(testBases);
-
-      const directChildren =divTestsSelector.children.length;
-
-      if(directChildren === 0) {
-
-        console.log(directChildren)
-        createDefaultTestsSelector();
-
-       // divTestsSelector.classList.add('hidden')
-        divTestsSelector.classList.remove('hidden')
-
-      } else{
-
-        createLevelsButtons(testBases);
-
-      }
-
-
-
-      //createTestsSelector()
-
-    }else{
-
-
-      //divTestsSelector.classList.remove('hidden')
-      divTestsSelector.classList.add('hidden')
-      console.log('visible')
-    }
-
-}
 
 
 function removeSettings() {  
@@ -927,7 +839,7 @@ function setSettings(settings) {
 
   if (!tglTheme || !tglLearnMode || !docBody) return;
 
-  console.log(settings)
+  //console.log(settings)
 
 
 

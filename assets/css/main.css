@@ -110,7 +110,8 @@ body.dark-theme {
 }
 
 .test-selector-page {     
-  padding:  2% 25% 5% 25%;    
+  padding:  2% 25% 5% 25%; 
+  background-color: #04FB39;   
 }
 
 .test-block{  
@@ -276,7 +277,7 @@ button::-moz-focus-inner {
 
 /*menu button*/
 
-.settings-button {
+.settings-button, .settings-show-button {
    
     color: var(--text-color);    
     background-color: var(--body-fon);
