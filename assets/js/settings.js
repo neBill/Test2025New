@@ -755,33 +755,75 @@ function removeButtons() {
   divTestsSelector.innerHTML = '';  
 }
 
+//////////////////////////////
+
+// function showSettingsPage() {
+//   divMainSettings.classList.remove('hidden');
+//   divTestsSelector.classList.add('hidden');
+//   divDefaultTestSelectionBlock.classList.add('hidden');
+// }
+
+// function hideSettingsPage() {
+//   divMainSettings.classList.add('hidden');
+//   divTestsSelector.classList.remove('hidden'); 
+//   //divDefaultTestSelectionBlock.classList.add('hidden');
+  
+//  //if tests are not chosen - show button 'choose'
+//  //else - do not
+  
+//   //removeButtons();
+//   //checkSettingsAndApply();
+// }
+
+// const toggleSettingsPage = () => {
+
+//   const isSettingsHidden = divMainSettings.classList.contains('hidden');
+//   if (isSettingsHidden) {
+//     showSettingsPage();
+//   } else {
+//     hideSettingsPage();
+//     removeButtons();
+//     checkSettingsAndApply();
+//   }
+// };
+
+//////////////////////////////////////
+
+function toggleClass(element, className, shouldAdd) {
+  if (!element) return;
+  if (shouldAdd) {
+    element.classList.add(className);
+  } else {
+    element.classList.remove(className);
+  }
+}
+
 function showSettingsPage() {
-  divMainSettings.classList.remove('hidden');
-  divTestsSelector.classList.add('hidden');
-  divDefaultTestSelectionBlock.classList.add('hidden');
+  toggleClass(divMainSettings, 'hidden', false);
+  toggleClass(divTestsSelector, 'hidden', true);
+  toggleClass(divDefaultTestSelectionBlock, 'hidden', true);
 }
 
 function hideSettingsPage() {
-  divMainSettings.classList.add('hidden');
-  divTestsSelector.classList.remove('hidden'); 
-  //divDefaultTestSelectionBlock.classList.add('hidden'); 
- 
-  
-  removeButtons();
-  checkSettingsAndApply();
+  toggleClass(divMainSettings, 'hidden', true);
+  toggleClass(divTestsSelector, 'hidden', false);
+  // Логику с кнопкой «выбрать» лучше вынести отдельно, см. ниже
 }
 
 const toggleSettingsPage = () => {
-
-  const isSettingsHidden = divMainSettings.classList.contains('hidden');
+  const isSettingsHidden = divMainSettings?.classList.contains('hidden');
+  
   if (isSettingsHidden) {
     showSettingsPage();
   } else {
     hideSettingsPage();
+    removeButtons?.();
+    checkSettingsAndApply?.();
   }
 };
 
 
+////////////////////////////////////
 
 
 
