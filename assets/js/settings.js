@@ -98,35 +98,43 @@ btnShowHelp.addEventListener("click",  showHelpPage);
 //   divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
 // });
 
-btnGoBack.addEventListener('click', function() {
+$('go-back').addEventListener('click', ()=> {
 
-  checkSettingsAndApply()
-
-  //startTestSelection();
+  checkSettingsAndApply();  
 
   showPage('main-settings');
 
   showSettingsButton(true);
 
+});
 
-  //toggleProfilePage();
-  //divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
+$('settings-profile-page-button').addEventListener('click', ()=> {  
+
+  showPage('test-profile'); 
+
+});
+
+$('main-profile-page-button').addEventListener('click', ()=> {  
+
+  showPage('test-profile'); 
+
 });
 
 
-btnMainOpenProfilePage.addEventListener('click', function() {
-  toggleProfilePage();
-  divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
-});
+
+// btnMainOpenProfilePage.addEventListener('click', function() {
+//   toggleProfilePage();
+//   divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
+// });
 
 
-function ShowMainOpenProfilePageButton() {
+// function ShowMainOpenProfilePageButton() {
 
-  // const btn = document.getElementById('settings-page-button');
-  if (btnMainOpenProfilePage) {
-    divDefaultTestSelectionBlock.classList.remove('hidden');
-  }
-}
+//   // const btn = document.getElementById('settings-page-button');
+//   if (btnMainOpenProfilePage) {
+//     divDefaultTestSelectionBlock.classList.remove('hidden');
+//   }
+// }
 
 
 
@@ -190,18 +198,9 @@ function clearHistory() {
 // }
 
 window.addEventListener('load', () => {
-
-  checkSettingsAndApply();
-  
-
-
+  checkSettingsAndApply(); 
   //showMainPage();
-
-
-
   startTestSelection();
-
-
 });
 
 
@@ -252,7 +251,7 @@ function checkSettingsAndApply() {
     saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
 
     //createDefaultTestsSelector();
-    ShowMainOpenProfilePageButton();
+   // ShowMainOpenProfilePageButton();
   }
 
 }
@@ -505,33 +504,28 @@ function showPage(pageId) {
 
 //let _currentTest = null;
 
-const profileButtons = [
-  document.getElementById('main-profile-page-button'),
-  document.getElementById('settings-profile-page-button')
-].filter(Boolean);
+// const profileButtons = [
+//   document.getElementById('main-profile-page-button'),
+//   document.getElementById('settings-profile-page-button')
+// ].filter(Boolean);
 
-function syncProfileButtons() {
-  const shouldShow = _currentTest === null;
-  profileButtons.forEach(btn => {
-    btn.classList.toggle('hidden', !shouldShow);
-  });
-}
+// function syncProfileButtons() {
+//   const shouldShow = _currentTest === null;
+//   profileButtons.forEach(btn => {
+//     btn.classList.toggle('hidden', !shouldShow);
+//   });
+// }
 
-function startTestSelection() {
-  //_currentTest = null; // тест ещё не выбран
-  showPage('default-test-selector-block'); // показываем список тестов
-  //syncProfileButtons();      // кнопки «Выбрать тесты» должны быть видны
+function startTestSelection() {  
+  showPage('default-test-selector-block'); // показываем список тестов  
 }
 
 function showSettingsButton(isVisible){
-
   const button = $('settings-page-button')
-
   console.log(isVisible)
   if(button){
     button.classList.toggle('hidden', !isVisible);
   }
-
 }
 
 

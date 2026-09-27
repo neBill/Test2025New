@@ -34,7 +34,7 @@ const testResultsContainer = document.getElementById('test-result-block');
 // const tglLevel5 = document.getElementById('level-5-toggle');
 // const tglLevel6 = document.getElementById('level-6-toggle');
 // const divMainSettings = document.getElementById('main-settings');
-const btnGoBack = document.getElementById('go-back');
+//const btnGoBack = document.getElementById('go-back');
 //const btnSaveSelectedTests= document.getElementById('save-selected-tests');
 const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
@@ -55,7 +55,7 @@ const answerListContainer = document.getElementById('answer-list-block');
 const divListBlock = document.getElementById('questions-list-block');
 const btnHideList = document.getElementById('btn-hide-list');
 const btnShowProfilePage = document.getElementById('settings-profile-page-button');
-const btnMainOpenProfilePage = document.getElementById('main-profile-page-button');
+//const btnMainOpenProfilePage = document.getElementById('main-profile-page-button');
 
 const divDefaultTestSelectionBlock = document.getElementById('default-test-selector-block');
 
