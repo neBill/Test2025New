@@ -12,6 +12,7 @@ body.light-theme {
 
   --main-border: 0px;
   --body-fon: #ADD8E6;
+  /* --body-fon: #dfd552; */
   --text-color: #007373;
   --toogle-on-color: #0079f2;
   --font-weight:bold;
@@ -543,7 +544,7 @@ display: flex;
 
 .page-panel {
   position: relative; /* или absolute, если хочешь накладывать друг на друга */
-  width: 100%;
+  /* width: 100%; */
 }
 
 .page-panel.hidden {

@@ -48,8 +48,15 @@ btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
 
+// Глобально только то, что нужно часто и во многих местах
+function $(id) {
+  return document.getElementById(id);
+}
+
+
 
 btnMenu.addEventListener("click",() => toggleSettingsPage());
+
 
 // const handleMenuClick = () => {
 
@@ -80,13 +87,30 @@ btnShowHelp.addEventListener("click",  showHelpPage);
 
 //btnSaveSelectedTests.addEventListener("click",  saveSelectedTests);
 
-btnShowProfilePage.addEventListener('click', () => toggleProfilePage());
+ btnShowProfilePage.addEventListener('click', () => toggleProfilePage());
+
+//btnShowProfilePage.addEventListener('click', () => startTestSelection());
 
 //btnGoBack.addEventListener("click",  () => toggleProfilePage());
 
+// btnGoBack.addEventListener('click', function() {
+//   toggleProfilePage();
+//   divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
+// });
+
 btnGoBack.addEventListener('click', function() {
-  toggleProfilePage();
-  divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
+
+  checkSettingsAndApply()
+
+  //startTestSelection();
+
+  showPage('main-settings');
+
+  showSettingsButton(true);
+
+
+  //toggleProfilePage();
+  //divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
 });
 
 
@@ -173,6 +197,8 @@ window.addEventListener('load', () => {
 
   //showMainPage();
 
+
+
   startTestSelection();
 
 
@@ -211,7 +237,9 @@ function checkSettingsAndApply() {
   if (savedSettings && Array.isArray(savedSettings.selectedTests)) {
     if (savedSettings.selectedTests.length === 0) {
       //createDefaultTestsSelector();
-      ShowMainOpenProfilePageButton();
+      //ShowMainOpenProfilePageButton();
+
+      startTestSelection();
 
 
     } else {
@@ -463,21 +491,19 @@ const toggleProfilePage = () => {
 // }
 
 ////////////////////////////////////////////////////////////////////////////
-
+//Скрываем все страницы, Показываем нужную
 function showPage(pageId) {
   // Скрываем все страницы
   document.querySelectorAll('.page-panel').forEach(el => el.classList.add('hidden'));
-
-  // Показываем нужную
-  const page = document.getElementById(pageId);
+  // Показываем нужную  
+  const page = $(pageId); 
   if (page) {
     page.classList.remove('hidden');
   }
-
-  syncProfileButtons(); // обновляем видимость кнопок «Выбрать тесты»
+  //syncProfileButtons(); // обновляем видимость кнопок «Выбрать тесты»
 }
 
-let currentTest = null;
+//let _currentTest = null;
 
 const profileButtons = [
   document.getElementById('main-profile-page-button'),
@@ -485,23 +511,29 @@ const profileButtons = [
 ].filter(Boolean);
 
 function syncProfileButtons() {
-  const shouldShow = currentTest === null;
+  const shouldShow = _currentTest === null;
   profileButtons.forEach(btn => {
     btn.classList.toggle('hidden', !shouldShow);
   });
 }
 
 function startTestSelection() {
-  currentTest = null; // тест ещё не выбран
-  showPage('test-selector'); // показываем список тестов
-  syncProfileButtons();      // кнопки «Выбрать тесты» должны быть видны
+  //_currentTest = null; // тест ещё не выбран
+  showPage('default-test-selector-block'); // показываем список тестов
+  //syncProfileButtons();      // кнопки «Выбрать тесты» должны быть видны
 }
 
-function startTestSelection() {
-  currentTest = null; // тест ещё не выбран
-  showPage('test-selector'); // показываем список тестов
-  syncProfileButtons();      // кнопки «Выбрать тесты» должны быть видны
+function showSettingsButton(isVisible){
+
+  const button = $('settings-page-button')
+
+  console.log(isVisible)
+  if(button){
+    button.classList.toggle('hidden', !isVisible);
+  }
+
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
