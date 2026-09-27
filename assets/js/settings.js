@@ -170,36 +170,12 @@ window.addEventListener('load', () => {
   checkSettingsAndApply();
   
 
-  // const settings = localStorage.getItem('settings');
-  // let savedSettings = null;
 
-  // // 2. Безопасный парсинг
-  // if (settings) {
-  //   try {
-  //     savedSettings = JSON.parse(settings);
-  //     console.log('Настройки загружены из localStorage');
-  //   } catch (e) {
-  //     console.error('Ошибка парсинга настроек, сбрасываем на дефолт', e);
-  //     savedSettings = null;
-  //   }
-  // }
+  //showMainPage();
 
-  // // 3. Единая логика применения настроек
-  // if (savedSettings && Array.isArray(savedSettings.selectedTests)) {
-  //   if (savedSettings.selectedTests.length === 0) {
-  //     createDefaultTestsSelector();
-  //   } else {
-  //     createTestsSelector(savedSettings.selectedTests);
-  //   }
-  //   setSettings(savedSettings);
-  // } else {
-  //   // Нет настроек или они битые — применяем дефолт
-  //   setSettings(defaultSettings);
-  //   saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
-  //   createDefaultTestsSelector();
-  // }
+  startTestSelection();
 
-  showMainPage();
+
 });
 
 
@@ -485,6 +461,50 @@ const toggleProfilePage = () => {
 //   showHidePages(elementsToShow, elementsToHide);
 
 // }
+
+////////////////////////////////////////////////////////////////////////////
+
+function showPage(pageId) {
+  // Скрываем все страницы
+  document.querySelectorAll('.page-panel').forEach(el => el.classList.add('hidden'));
+
+  // Показываем нужную
+  const page = document.getElementById(pageId);
+  if (page) {
+    page.classList.remove('hidden');
+  }
+
+  syncProfileButtons(); // обновляем видимость кнопок «Выбрать тесты»
+}
+
+let currentTest = null;
+
+const profileButtons = [
+  document.getElementById('main-profile-page-button'),
+  document.getElementById('settings-profile-page-button')
+].filter(Boolean);
+
+function syncProfileButtons() {
+  const shouldShow = currentTest === null;
+  profileButtons.forEach(btn => {
+    btn.classList.toggle('hidden', !shouldShow);
+  });
+}
+
+function startTestSelection() {
+  currentTest = null; // тест ещё не выбран
+  showPage('test-selector'); // показываем список тестов
+  syncProfileButtons();      // кнопки «Выбрать тесты» должны быть видны
+}
+
+function startTestSelection() {
+  currentTest = null; // тест ещё не выбран
+  showPage('test-selector'); // показываем список тестов
+  syncProfileButtons();      // кнопки «Выбрать тесты» должны быть видны
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 function showMainPage() {
 

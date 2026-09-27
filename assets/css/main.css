@@ -541,10 +541,15 @@ display: flex;
 
 /* /////////////////////////////////////////////////// */
 
-/* .large-check {
-  width: 38px;
-  height: 38px;
-} */
+.page-panel {
+  position: relative; /* или absolute, если хочешь накладывать друг на друга */
+  width: 100%;
+}
+
+.page-panel.hidden {
+  display: none;
+}
+
 
 
 
