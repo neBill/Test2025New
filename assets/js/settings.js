@@ -53,29 +53,7 @@ function $(id) {
   return document.getElementById(id);
 }
 
-
-
 btnMenu.addEventListener("click",() => toggleSettingsPage());
-
-
-// const handleMenuClick = () => {
-
-//   //toggleSettingsPage();
-
-//  // removeButtons();
-
-//   //createDefaultTestsSelector();
-
-//  //console.log("main")
-
-//   toggleSettingsPage();
-  
-// };
-
-
-
-
-
 
 btnRemoveHistory.addEventListener("click",  clearHistory);
 
@@ -87,16 +65,7 @@ btnShowHelp.addEventListener("click",  showHelpPage);
 
 //btnSaveSelectedTests.addEventListener("click",  saveSelectedTests);
 
- btnShowProfilePage.addEventListener('click', () => toggleProfilePage());
-
-//btnShowProfilePage.addEventListener('click', () => startTestSelection());
-
-//btnGoBack.addEventListener("click",  () => toggleProfilePage());
-
-// btnGoBack.addEventListener('click', function() {
-//   toggleProfilePage();
-//   divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
-// });
+ 
 
 $('go-back').addEventListener('click', ()=> {
 
@@ -110,31 +79,24 @@ $('go-back').addEventListener('click', ()=> {
 
 $('settings-profile-page-button').addEventListener('click', ()=> {  
 
+  createProfilesList();
+
   showPage('test-profile'); 
+
+  showSettingsButton(false);
 
 });
 
 $('main-profile-page-button').addEventListener('click', ()=> {  
 
-  showPage('test-profile'); 
+  createProfilesList();
+
+  showPage('test-profile');   
+
+  showSettingsButton(false);
 
 });
 
-
-
-// btnMainOpenProfilePage.addEventListener('click', function() {
-//   toggleProfilePage();
-//   divDefaultTestSelectionBlock.classList.add('hidden'); // скрываем визуально
-// });
-
-
-// function ShowMainOpenProfilePageButton() {
-
-//   // const btn = document.getElementById('settings-page-button');
-//   if (btnMainOpenProfilePage) {
-//     divDefaultTestSelectionBlock.classList.remove('hidden');
-//   }
-// }
 
 
 
@@ -199,8 +161,9 @@ function clearHistory() {
 
 window.addEventListener('load', () => {
   checkSettingsAndApply(); 
-  //showMainPage();
+  
   startTestSelection();
+  
 });
 
 
@@ -372,11 +335,7 @@ window.addEventListener('popstate', function() {
 
 function createTestsSelector(selectedTests){  
 
-
-
-  selectedTests.forEach((item) => { 
-
-    //console.log(testBases)
+  selectedTests.forEach((item) => {     
 
     const text = testBases[item].testTitle
 
@@ -389,105 +348,22 @@ function createTestsSelector(selectedTests){
     divTestsSelector.appendChild(testButton);   
 
  });
-
-  // Object.keys(testsBases).forEach(key => {   
-    
-  //   const testButton = createTestButton(key, testsBases[key].testTitle);
-
-  //   //button.addEventListener('click', testButtonClick); 
-
-  //   divTestsSelector.appendChild(testButton);
-
-  // });
-
   
- 
-  // testButtonsContainer.classList.add('hidden');
 }
 
 // function createTestButton(id, textContent, clickFunction){
-function createTestButton(id, textContent){
-
- // console.log(id)
+function createTestButton(id, textContent){ 
 
   const button = document.createElement('button');   
   button.id = id;
   button.className = "test-button";     
   button.textContent = textContent;
- // button.addEventListener('click', clickFunction);  
+  
   return button;
 
 }
 
-const toggleProfilePage = () => {
-  const isProfileHidden = divProfilePage.classList.contains('hidden');
-  let isVisible;
 
-  // Переключаем явно: если был скрыт — показываем, и наоборот
-  if (isProfileHidden) {
-    divProfilePage.classList.remove('hidden');
-    divMainSettings.classList.add('hidden');
-    //btnMenu.classList.add('hidden');
-    // updateSettingsButtonVisibility(false);
-    isVisible = false;
-
-    createProfilesList();
-
-  } else {
-    divProfilePage.classList.add('hidden');
-    divMainSettings.classList.remove('hidden');
-    //btnMenu.classList.remove('hidden');
-
-    // updateSettingsButtonVisibility(true);
-    isVisible = true;
-
-   
-  }
-
-  updateSettingsButtonVisibility(isVisible);
-};
-
-
-
-
-
-
-// btnShowProfilePage.addEventListener('click', () => togglePage(true));
-
-
-
-
-// function hideProfilePage() {
-
-//    const elementsToHide = [
-//     divProfilePage     
-//   ]
-
-//   const elementsToShow = [ 
-//     divMainSettings,      
-//     btnMenu, 
-//   ]
-
-//   showHidePages(elementsToShow, elementsToHide);
-
-// }
-
-// function showProfilePage() {
-
-//    const elementsToHide = [       
-//     divMainSettings,      
-//     btnMenu    
-//   ]
-
-//   const elementsToShow = [ 
-//    divProfilePage
-//   ]
-  
- 
-
-//   showHidePages(elementsToShow, elementsToHide);
-
-// }
 
 ////////////////////////////////////////////////////////////////////////////
 //Скрываем все страницы, Показываем нужную
@@ -499,22 +375,8 @@ function showPage(pageId) {
   if (page) {
     page.classList.remove('hidden');
   }
-  //syncProfileButtons(); // обновляем видимость кнопок «Выбрать тесты»
+  
 }
-
-//let _currentTest = null;
-
-// const profileButtons = [
-//   document.getElementById('main-profile-page-button'),
-//   document.getElementById('settings-profile-page-button')
-// ].filter(Boolean);
-
-// function syncProfileButtons() {
-//   const shouldShow = _currentTest === null;
-//   profileButtons.forEach(btn => {
-//     btn.classList.toggle('hidden', !shouldShow);
-//   });
-// }
 
 function startTestSelection() {  
   showPage('default-test-selector-block'); // показываем список тестов  
@@ -527,8 +389,6 @@ function showSettingsButton(isVisible){
     button.classList.toggle('hidden', !isVisible);
   }
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -724,9 +584,7 @@ function createProfilesList(){
 function checkboxChange(e) {
   const el = e.target;
   const id = el.dataset.feature;
-  const isChecked = el.checked;
-
- // console.log('Чекбокс:', id, 'Значение:', isChecked);
+  const isChecked = el.checked; 
 
   // Получаем настройки, по умолчанию — пустой объект
   let settings = JSON.parse(localStorage.getItem('settings') || '{}');
@@ -753,17 +611,14 @@ function checkboxChange(e) {
 
   settings = JSON.parse(localStorage.getItem('settings') || '{}');
 
-
-
   if(settings.selectedTests.length === 0){
 
     //показать кнопку выбора тестов
-
     console.log('тесты отсутствуют, чекбокс выбран')
 
     //createDefaultTestsSelector();
 
-    ShowMainOpenProfilePageButton();
+    //ShowMainOpenProfilePageButton();
 
 
   }else{

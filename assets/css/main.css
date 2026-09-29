@@ -112,7 +112,7 @@ body.dark-theme {
 
 .test-selector-page {     
   padding:  2% 25% 5% 25%; 
-  background-color: #04FB39;   
+  /* background-color: #04FB39;    */
 }
 
 .test-block{  
