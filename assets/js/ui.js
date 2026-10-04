@@ -23,7 +23,7 @@ const divMainSettings = document.getElementById('main-settings');
 const answerButtons = document.querySelectorAll('.option-button');
 const navigationContainer = document.getElementById('navigation-block');
 //const divTestsSelector = document.getElementById('test-selector');
-const testButtonsContainer = document.getElementById('test-buttons-block');
+const divTestPage = document.getElementById('test-page');
 //const btnMenu = document.getElementById('settings-page-button');
 const listPageContainer = document.getElementById('questions-list-page');
 const tglLearnMode = document.getElementById('learn-mode-toggle');
@@ -483,7 +483,7 @@ function showSelectedMistake(btnId) {
   
   
   
-  [testResultsContainer, testButtonsContainer].forEach(container => 
+  [testResultsContainer, divTestPage].forEach(container => 
     container.classList.remove('hidden')
   );
   

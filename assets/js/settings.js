@@ -407,7 +407,7 @@ function showMainPage() {
 
   const elementsToHide = [
     
-    testButtonsContainer,
+    divTestPage,
     navigationContainer,
     testResultsContainer,
     questionsCounter,
@@ -449,7 +449,7 @@ function showMainPage() {
 function showResultsPage() {  
 
   const elementsToHide =[
-    testButtonsContainer,
+    divTestPage,
     pQuestionsCounter
   ]
 
@@ -471,40 +471,49 @@ function showResultsPage() {
 
   
 
-function showChosenTest(testName, counterText) {
-  const elementsToHide = [
-    divTestsSelector,
-    // divMenuButton,    
-    divNext,
-    //btnMenu
-  ]
+// function showChosenTest(testName, counterText) {
+//   const elementsToHide = [
+//     divTestsSelector,       
+//     divNext,   
+//   ]
 
+//   const elementsToShow = [ 
+//     divTestPage,
+//     pQuestionsCounter,
+//     questionsCounter,
+//     navigationContainer,
+//     divHome   
+//   ]
 
-
-  const elementsToShow = [ 
-    testButtonsContainer,
-    pQuestionsCounter,
-    questionsCounter,
-    navigationContainer,
-    divHome   
-  ]
-
-  // hideElements(elementsToHide);
-  // showElements(elementsToShow);  
-
-  showHidePages(elementsToShow, elementsToHide);
-
-  //updateSettingsButtonVisibility(false)
-  showSettingsButton(false)
+//   showHidePages(elementsToShow, elementsToHide);
   
+//   showSettingsButton(false)  
 
+//   renderQuestionCounter(counterText);
 
-  
-
-  //showHidePages();
-
-  //console.log('тест выбран');
+//   pTestTitle.textContent = testName;
+//   btnHome.textContent = "Завершить";
+//   btnHome.value = "complite";
  
+// }
+
+function showChosenTest(testName, counterText) {
+  // const elementsToHide = [
+  //   divTestsSelector,       
+  //   divNext,   
+  // ]
+
+  // const elementsToShow = [ 
+  //   divTestPage,
+  //   pQuestionsCounter,
+  //   questionsCounter,
+  //   navigationContainer,
+  //   divHome   
+  // ]
+
+  // showHidePages(elementsToShow, elementsToHide);
+  
+  showSettingsButton(false)  
 
   renderQuestionCounter(counterText);
 
@@ -512,8 +521,13 @@ function showChosenTest(testName, counterText) {
   btnHome.textContent = "Завершить";
   btnHome.value = "complite";
 
-  // console.log('меню скрыто')
+  showPage('test-page'); 
+ 
 }
+
+
+
+
 
 
 function showHidePages(arrayToShow, arrayToHide){
