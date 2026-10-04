@@ -174,10 +174,7 @@ window.addEventListener('load', () => {
 });
 
 
-function updateSettingsButtonVisibility(isVisible) {
-  // const btn = document.getElementById('settings-page-button');
-  // if (!btn) return;
-
+function updateSettingsButtonVisibility(isVisible) { 
   if (isVisible) {
     btnMenu.classList.remove('hidden');
   } else {
@@ -187,57 +184,74 @@ function updateSettingsButtonVisibility(isVisible) {
 
 
 function checkSettingsAndApply() {
+  const raw = localStorage.getItem('settings');
 
-  const settings = localStorage.getItem('settings');
-  let savedSettings = null;
-
-  // 2. Безопасный парсинг
-  if (settings) {
-
-    console.log("Настройки есть")
-    try {
-      savedSettings = JSON.parse(settings);
-      console.log('Настройки загружены из localStorage');
-    } catch (e) {
-      console.error('Ошибка парсинга настроек, сбрасываем на дефолт', e);
-      savedSettings = null;
-    }
+  if (!raw) {
+    setSettings(defaultSettings);
+    saveSettings(defaultSettings);
+    showPage('default-test-selector');
+    return;
   }
 
-  // 3. Единая логика применения настроек
+  let savedSettings;
+
+  try {
+    savedSettings = JSON.parse(raw);
+  } catch (e) {
+    setSettings(defaultSettings);
+    saveSettings(defaultSettings);
+    showPage('default-test-selector');
+    return;
+  }
+
   if (savedSettings && Array.isArray(savedSettings.selectedTests)) {
     if (savedSettings.selectedTests.length === 0) {
-      //createDefaultTestsSelector();
-      //ShowMainOpenProfilePageButton();
-
-      console.log("Нет выбранных тестов")
-
-      //startTestSelection();
-      showPage('default-test-selector'); // показываем список тестов
-
-
+      showPage('default-test-selector');
     } else {
       createTestsSelector(savedSettings.selectedTests);
-
-      console.log("Есть выбранные тесты")
-      showPage('test-selector'); // показываем список тестов
+      showPage('test-selector');
     }
-
     setSettings(savedSettings);
   } else {
-    // Нет настроек или они битые — применяем дефолт
-    console.log("Настройки нет вообще");
-
-
     setSettings(defaultSettings);
-    saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
-
-    showPage('default-test-selector'); // показываем список тестов
-
-    
+    saveSettings(defaultSettings);
+    showPage('default-test-selector');
   }
-
 }
+
+
+
+// function checkSettingsAndApply() {
+
+//   const settings = localStorage.getItem('settings');
+//   let savedSettings = null;  
+
+//   if (settings) {
+    
+//     try {
+//       savedSettings = JSON.parse(settings);      
+//     } catch (e) {      
+//       savedSettings = null;
+//     }
+//   }
+  
+//   if (savedSettings && Array.isArray(savedSettings.selectedTests)) {
+//     if (savedSettings.selectedTests.length === 0) {    
+//       showPage('default-test-selector'); // показываем список тестов
+//     } else {
+//       createTestsSelector(savedSettings.selectedTests);     
+//       showPage('test-selector'); // показываем список тестов
+//     }
+
+//     setSettings(savedSettings);
+//   } else {
+//     // Нет настроек или они битые — применяем дефолт   
+//     setSettings(defaultSettings);
+//     saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
+//     showPage('default-test-selector'); // показываем список тестов    
+//   }
+
+// }
 
 
 
