@@ -53,7 +53,22 @@ function $(id) {
   return document.getElementById(id);
 }
 
-btnMenu.addEventListener("click",() => toggleSettingsPage());
+//btnMenu.addEventListener("click",() => toggleSettingsPage());
+
+const toggleSettingsPage = () => {
+  const isSettingsHidden = divMainSettings?.classList.contains('hidden');
+  
+  if (isSettingsHidden) {
+    showSettingsPage();
+  } else {
+    hideSettingsPage();
+    removeButtons?.();
+    checkSettingsAndApply?.();
+  }
+};
+
+$('settings-page-button').addEventListener('click', ()=> toggleSettingsPage())
+
 
 btnRemoveHistory.addEventListener("click",  clearHistory);
 
@@ -174,11 +189,19 @@ window.addEventListener('load', () => {
 });
 
 
-function updateSettingsButtonVisibility(isVisible) { 
-  if (isVisible) {
-    btnMenu.classList.remove('hidden');
-  } else {
-    btnMenu.classList.add('hidden');
+// function updateSettingsButtonVisibility(isVisible) { 
+//   if (isVisible) {
+//     btnMenu.classList.remove('hidden');
+//   } else {
+//     btnMenu.classList.add('hidden');
+//   }
+// }
+
+function showSettingsButton(isVisible){
+  const button = $('settings-page-button')
+  
+  if(button){
+    button.classList.toggle('hidden', !isVisible);
   }
 }
 
@@ -370,13 +393,13 @@ function showPage(pageId) {
 //   showPage('default-test-selector-block'); // показываем список тестов  
 // }
 
-function showSettingsButton(isVisible){
-  const button = $('settings-page-button')
-  console.log(isVisible)
-  if(button){
-    button.classList.toggle('hidden', !isVisible);
-  }
-}
+// function showSettingsButton(isVisible){
+//   const button = $('settings-page-button')
+//   console.log(isVisible)
+//   if(button){
+//     button.classList.toggle('hidden', !isVisible);
+//   }
+// }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -403,7 +426,9 @@ function showMainPage() {
     
   ];
 
-  updateSettingsButtonVisibility(true)
+  //updateSettingsButtonVisibility(true)
+
+  showSettingsButton(true)
 
   // hideElements(elementsToHide);
 
@@ -469,7 +494,10 @@ function showChosenTest(testName, counterText) {
 
   showHidePages(elementsToShow, elementsToHide);
 
-  updateSettingsButtonVisibility(false)
+  //updateSettingsButtonVisibility(false)
+  showSettingsButton(false)
+  
+
 
   
 
@@ -699,17 +727,17 @@ function hideSettingsPage() {
   // Логику с кнопкой «выбрать» лучше вынести отдельно, см. ниже
 }
 
-const toggleSettingsPage = () => {
-  const isSettingsHidden = divMainSettings?.classList.contains('hidden');
+// const toggleSettingsPage = () => {
+//   const isSettingsHidden = divMainSettings?.classList.contains('hidden');
   
-  if (isSettingsHidden) {
-    showSettingsPage();
-  } else {
-    hideSettingsPage();
-    removeButtons?.();
-    checkSettingsAndApply?.();
-  }
-};
+//   if (isSettingsHidden) {
+//     showSettingsPage();
+//   } else {
+//     hideSettingsPage();
+//     removeButtons?.();
+//     checkSettingsAndApply?.();
+//   }
+// };
 
 
 ////////////////////////////////////
