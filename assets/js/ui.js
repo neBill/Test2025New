@@ -57,7 +57,7 @@ const btnHideList = document.getElementById('btn-hide-list');
 const btnShowProfilePage = document.getElementById('settings-profile-page-button');
 //const btnMainOpenProfilePage = document.getElementById('main-profile-page-button');
 
-const divDefaultTestSelectionBlock = document.getElementById('default-test-selector-block');
+const divDefaultTestSelector = document.getElementById('default-test-selector');
 
 const btnRemoveHistory = document.getElementById('history-remover');
 const btnRemoveSettings = document.getElementById('settings-remover');

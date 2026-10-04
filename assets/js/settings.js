@@ -160,9 +160,16 @@ function clearHistory() {
 // }
 
 window.addEventListener('load', () => {
-  checkSettingsAndApply(); 
+ //checkSettingsAndApply(); 
   
-  startTestSelection();
+  //startTestSelection();
+
+  //showPage('default-test-selector-block'); // показываем список тестов 
+
+  // removeButtons?.();
+     checkSettingsAndApply?.();
+
+    // showPage('test-selector'); // показываем список тестов
   
 });
 
@@ -186,6 +193,8 @@ function checkSettingsAndApply() {
 
   // 2. Безопасный парсинг
   if (settings) {
+
+    console.log("Настройки есть")
     try {
       savedSettings = JSON.parse(settings);
       console.log('Настройки загружены из localStorage');
@@ -201,73 +210,38 @@ function checkSettingsAndApply() {
       //createDefaultTestsSelector();
       //ShowMainOpenProfilePageButton();
 
-      startTestSelection();
+      console.log("Нет выбранных тестов")
+
+      //startTestSelection();
+      showPage('default-test-selector'); // показываем список тестов
 
 
     } else {
       createTestsSelector(savedSettings.selectedTests);
+
+      console.log("Есть выбранные тесты")
+      showPage('test-selector'); // показываем список тестов
     }
+
     setSettings(savedSettings);
   } else {
     // Нет настроек или они битые — применяем дефолт
+    console.log("Настройки нет вообще");
+
+
     setSettings(defaultSettings);
     saveSettings(defaultSettings); // сохраняем дефолт, чтобы дальше было с чем работать
 
-    //createDefaultTestsSelector();
-   // ShowMainOpenProfilePageButton();
+    showPage('default-test-selector'); // показываем список тестов
+
+    
   }
 
 }
 
 
 
-// window.addEventListener("load", ()=>{  
 
- 
-
-//   removeButtons(); 
-
-
-//  const isSettings = localStorage.getItem('settings');
-
-//  let savedSettings;
-
-  
-//   if(isSettings) {   
-
-//     console.log('настройки есть');
-
-//     savedSettings = JSON.parse(localStorage.getItem('settings'));
-
-//     if(savedSettings.selectedTests.length === 0){
-
-//       createDefaultTestsSelector();      
-
-//     }else{
-
-//       createTestsSelector(savedSettings.selectedTests);     
-
-//     }
-    
-    
-//     setSettings(savedSettings);  
-
-        
-//   } else {
-
-    
-//     setSettings(defaultSettings); 
-
-//     saveSettings(defaultSettings);
-
-//     createDefaultTestsSelector();
-    
-//   }    
-  
-
-//   showMainPage();
-  
-// });
 
 //лечение выхода из приложения при нажании кнопки назад в андроид
 window.addEventListener('load', function() {
@@ -378,9 +352,9 @@ function showPage(pageId) {
   
 }
 
-function startTestSelection() {  
-  showPage('default-test-selector-block'); // показываем список тестов  
-}
+// function startTestSelection() {  
+//   showPage('default-test-selector-block'); // показываем список тестов  
+// }
 
 function showSettingsButton(isVisible){
   const button = $('settings-page-button')
@@ -702,7 +676,7 @@ function toggleClass(element, className, shouldAdd) {
 function showSettingsPage() {
   toggleClass(divMainSettings, 'hidden', false);
   toggleClass(divTestsSelector, 'hidden', true);
-  toggleClass(divDefaultTestSelectionBlock, 'hidden', true);
+  toggleClass(divDefaultTestSelector, 'hidden', true);
 }
 
 function hideSettingsPage() {
