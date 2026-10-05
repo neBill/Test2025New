@@ -40,6 +40,7 @@ const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
 const btnNext = document.getElementById('button-next');
 const btnHome = document.getElementById('button-home');
+const btnCompleteTest = document.getElementById('complete-test-button');
 const helpSection = document.getElementById('help-block');
 const btnIncreaseFontSize = document.getElementById('font-increase');
 const btnDecreaseFontSize = document.getElementById('font-decrease');
@@ -529,6 +530,9 @@ function getCurrentQuestionBlock(questionIndex) {
   return questionBlock;
 }
 
+
+//btnCompleteTest.addEventListener("click", handleStopTest())   
+
 btnHome.addEventListener("click", function(event) {    
   const btnText = event.target.textContent;  
   if (btnText === "Завершить") {
@@ -541,17 +545,22 @@ btnHome.addEventListener("click", function(event) {
   }
 });
 
-function handleStopTest() {        
+btnCompleteTest.addEventListener("click", handleStopTest)    
  
-  if (state.wrongAnswers.length === 0) {     
+
+function handleStopTest() {    
+  
+  
+ 
+  if (state.wrongAnswers.length === 0) {    
+    
+    //console.log('ssss')
     showMainPage();     
     return;
   }else{
 
     
-  }
-   
-  
+  }   
   
   showResultsPage();
 
