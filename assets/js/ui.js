@@ -30,7 +30,7 @@ const tglLearnMode = document.getElementById('learn-mode-toggle');
 const btnQuestion = document.getElementById('question-button');
 const pQuestionsCounter = document.getElementById('questions-counter');
 const questionsCounter = document.getElementById('questions-counter-block');
-const testResultsContainer = document.getElementById('test-result-block');
+const testResultsContainer = document.getElementById('test-result-page');
 // const tglLevel5 = document.getElementById('level-5-toggle');
 // const tglLevel6 = document.getElementById('level-6-toggle');
 // const divMainSettings = document.getElementById('main-settings');
@@ -548,21 +548,25 @@ btnHome.addEventListener("click", function(event) {
 btnCompleteTest.addEventListener("click", handleStopTest)    
  
 
-function handleStopTest() {    
-  
-  
+function handleStopTest() {     
  
-  if (state.wrongAnswers.length === 0) {    
+  if (state.wrongAnswers.length === 0) {  
     
-    //console.log('ssss')
-    showMainPage();     
-    return;
-  }else{
+    removeButtons?.();
 
+    showSettingsButton(true);
+
+    checkSettingsAndApply();    
     
-  }   
-  
-  showResultsPage();
+    return;
+  }
+
+   
+  //showResultsPage();
+
+  //console.log("ddddddddd")
+
+  showPage('test-result-page')
 
   showTestResult(state); 
 
