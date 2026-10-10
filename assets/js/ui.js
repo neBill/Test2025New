@@ -15,6 +15,14 @@ let state = {
   retryQuestions : []
 };
 
+// Режимы кнопки: 'start', 'home'
+const MODE = {  
+  RESULTS: 'results',
+  HOME: 'home'
+};
+
+let mainButtonMode = MODE.HOME;
+
 
 ///////////////////////pages////////////////////////////////
 const divTestsSelector = document.getElementById('test-selector');
@@ -533,19 +541,31 @@ function getCurrentQuestionBlock(questionIndex) {
 
 //btnCompleteTest.addEventListener("click", handleStopTest())   
 
-btnHome.addEventListener("click", function(event) {    
-  const btnText = event.target.textContent;  
-  if (btnText === "Завершить") {
+// btnHome.addEventListener("click", function(event) {    
+//   const btnText = event.target.textContent;  
+//   if (btnText === "Завершить") {
+   
+//     handleStopTest();
+
+//   } else if (btnText === "На главную") {
+    
+//     showMainPage();
+//   }
+// });
+
+btnHome.addEventListener("click", ()=> {    
+    
+  if (mainButtonMode.RESULTS) {
    
     handleStopTest();
 
-  } else if (btnText === "На главную") {
+  } else if (mainButtonMode.HOME) {
     
     showMainPage();
   }
 });
 
-btnCompleteTest.addEventListener("click", handleStopTest)    
+//btnCompleteTest.addEventListener("click", handleStopTest)    
  
 
 function handleStopTest() {     
@@ -564,7 +584,7 @@ function handleStopTest() {
    
   //showResultsPage();
 
-  //console.log("ddddddddd")
+  
 
   showPage('test-result-page')
 
