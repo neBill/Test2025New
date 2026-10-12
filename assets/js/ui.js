@@ -24,6 +24,8 @@ const MODE = {
 let mainButtonMode = MODE.HOME;
 
 
+
+
 ///////////////////////pages////////////////////////////////
 const divTestsSelector = document.getElementById('test-selector');
 const divProfilePage = document.getElementById('test-profile');
