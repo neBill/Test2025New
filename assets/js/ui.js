@@ -15,14 +15,7 @@ let state = {
   retryQuestions : []
 };
 
-// Режимы кнопки: 'start', 'home'
-const MODE = {  
-  RESULTS: 'results',
-  HOME: 'home'
-};
-
-let mainButtonMode = MODE.HOME;
-
+// 
 
 
 
@@ -45,7 +38,7 @@ const testResultsContainer = document.getElementById('test-result-page');
 // const tglLevel6 = document.getElementById('level-6-toggle');
 // const divMainSettings = document.getElementById('main-settings');
 //const btnGoBack = document.getElementById('go-back');
-//const btnSaveSelectedTests= document.getElementById('save-selected-tests');
+const btnShowMainPage= document.getElementById('show-main-page-button');
 const divNext = document.getElementById('button-next-block');
 const divHome = document.getElementById('button-home-block');
 const btnNext = document.getElementById('button-next');
@@ -555,20 +548,26 @@ function getCurrentQuestionBlock(questionIndex) {
 //   }
 // });
 
-btnHome.addEventListener("click", ()=> {    
+// btnCompleteTest.addEventListener("click", handleStopTest) 
     
-  if (mainButtonMode.RESULTS) {
+  // if (mainButtonMode.RESULTS) {
    
-    handleStopTest();
+    // handleStopTest();
 
-  } else if (mainButtonMode.HOME) {
+  // } else if (mainButtonMode.HOME) {
     
-    showMainPage();
-  }
-});
+  //   showMainPage();
+  // }
+//});
 
-//btnCompleteTest.addEventListener("click", handleStopTest)    
+//btnShowMainPage.addEventListener("click", showMainPage()) 
+
+
+
+//$('settings-page-button').addEventListener('click', ()=> toggleSettingsPage())
+
  
+btnCompleteTest.addEventListener("click", handleStopTest) 
 
 function handleStopTest() {     
  
@@ -582,9 +581,6 @@ function handleStopTest() {
     
     return;
   }
-
-   
-  //showResultsPage();
 
   
 

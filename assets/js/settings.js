@@ -69,6 +69,8 @@ const toggleSettingsPage = () => {
 
 $('settings-page-button').addEventListener('click', ()=> toggleSettingsPage())
 
+$('show-main-page-button').addEventListener('click', ()=> showPage('default-test-selector')())
+
 
 btnRemoveHistory.addEventListener("click",  clearHistory);
 
