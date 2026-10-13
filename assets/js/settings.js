@@ -466,8 +466,8 @@ function showResultsPage() {
 
   showHidePages(elementsToShow, elementsToHide);
 
-  btnHome.textContent = "На главную";
-  btnHome.value = "mainpage";
+  // btnHome.textContent = "На главную";
+  // btnHome.value = "mainpage";
 
 }
 

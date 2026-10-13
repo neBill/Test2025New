@@ -424,25 +424,32 @@ function showTestResult(testParams){
 
   testReport = createUnSuccessReport(testParams);    
 
-  testResultsContainer.innerHTML = '';
+  const mistakesButtons = $('mistakes-buttons-block')
+
+  // $'testResultsContainer'.innerHTML = '';
+
+  mistakesButtons.innerHTML = '';
 
   printTestResult(testReport);
 
-  testResultsContainer.appendChild(buttons);  
+  mistakesButtons.appendChild(buttons);  
 
 }
 
 
 
  
-function printTestResult(arrayText){       
+function printTestResult(arrayText ){    
+  
+  const testInfoContainer = $('test-info-block')
+  testInfoContainer.innerHTML = '';
 
-  testResultsContainer.innerHTML = '';
+
   arrayText.forEach(text => {
     const line = document.createElement('p');
     line.textContent = text;
     line.className = 'p-result';     
-    testResultsContainer.appendChild(line);
+    testInfoContainer.appendChild(line);
   })     
 
  
