@@ -460,7 +460,9 @@ function createMistakesButtons(mistakesArray) {
       
   const mistakes = mistakesArray.length;
   const mistakeButtons = document.createElement('p');   
-  for (let i = 0; i < mistakes; i++) {    
+  for (let i = 0; i < mistakes; i++) {   
+    
+    //console.log(`erBtn${i}`)
     const btn = document.createElement('button');
     btn.id = `erBtn${i}`;
     btn.value = i;
@@ -469,8 +471,8 @@ function createMistakesButtons(mistakesArray) {
     btn.className = 'error-button';   
     btn.textContent = i + 1;      
 
-    btn.addEventListener('click', function() {      
-      showSelectedMistake(this.id);
+    btn.addEventListener('click', ()=> {      
+      showSelectedMistake(btn.id);
     });
 
     mistakeButtons.appendChild(btn);
@@ -491,12 +493,48 @@ function showSelectedMistake(btnId) {
 
 
   const questionBlock = testBases[currentTest.id].testBody[questionIndex];  
+
+
+  //testResultsContainer.classList.remove('hidden');
+  //divTestPage.classList.remove('hidden');
+
+  const optionsContainer  = $('show-mistaken-option-block')
+
+  optionsContainer.innerHTML = ''
+
+  //const btn = document.createElement('button')
+
+
+
+  for(let i = 0; i < 5; i++){
+
+    const btn = document.createElement('button')
+    
+    if(i = 0){
+
+      btn.className = 'question-button'
+
+      const line = document.createElement('hr')
+
+      line.className = 'line'
+
+      optionsContainer.appendChild(btn)
+
+    }else {
+      btn.className = 'option-button'
+
+    }
+    
+    
+    optionsContainer.appendChild(btn)
+
+  }
   
   
   
-  [testResultsContainer, divTestPage].forEach(container => 
-    container.classList.remove('hidden')
-  );
+  // [testResultsContainer, divTestPage].forEach(container => 
+  //   container.classList.remove('hidden')
+  // );
   
   fillQuestionBlock(questionBlock);  
   highlightOptions(targetBtn); 
