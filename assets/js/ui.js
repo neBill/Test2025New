@@ -580,7 +580,7 @@ function handleStopTest() {
  
   if (state.wrongAnswers.length === 0) {  
     
-    removeButtons?.();
+   // removeButtons?.();
 
     showSettingsButton(true);
 

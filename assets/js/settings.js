@@ -69,7 +69,15 @@ const toggleSettingsPage = () => {
 
 $('settings-page-button').addEventListener('click', ()=> toggleSettingsPage())
 
-$('show-main-page-button').addEventListener('click', ()=> showPage('default-test-selector')())
+// $('show-main-page-button').addEventListener('click', ()=> {
+
+//   checkSettingsAndApply();  
+
+//   showPage('default-test-selector');
+
+//   showSettingsButton(true);
+
+// })
 
 
 btnRemoveHistory.addEventListener("click",  clearHistory);
@@ -113,6 +121,16 @@ $('main-profile-page-button').addEventListener('click', ()=> {
   showSettingsButton(false);
 
 });
+
+$('show-main-page-button').addEventListener('click', ()=> {
+
+  checkSettingsAndApply();  
+
+  //showPage('default-test-selector');
+
+  showSettingsButton(true);
+
+})
 
 
 
@@ -233,6 +251,8 @@ function checkSettingsAndApply() {
     if (savedSettings.selectedTests.length === 0) {
       showPage('default-test-selector');
     } else {
+
+      removeButtons();
       createTestsSelector(savedSettings.selectedTests);
       showPage('test-selector');
     }
