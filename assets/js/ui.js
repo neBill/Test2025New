@@ -23,7 +23,7 @@ let state = {
 const divTestsSelector = document.getElementById('test-selector');
 const divProfilePage = document.getElementById('test-profile');
 const divMainSettings = document.getElementById('main-settings');
-const answerButtons = document.querySelectorAll('.option-button');
+const testOptionsButtons = document.querySelectorAll('.option-button');
 const navigationContainer = document.getElementById('navigation-block');
 //const divTestsSelector = document.getElementById('test-selector');
 const divTestPage = document.getElementById('test-page');
@@ -279,7 +279,7 @@ const handleTestCompletion = (state) => {
 
 function navigateToNextQuestion(index) {  
   const questionBlock = getCurrentQuestionBlock(index);
-  fillQuestionBlock(questionBlock); 
+  fillQuestionBlock(questionBlock, testOptionsButtons); 
   
 }
 
@@ -292,18 +292,51 @@ function renderQuestionCounter(text){
 
 
    
-function fillQuestionBlock(questionBlock) {  
+// function fillQuestionBlock(questionBlock) {  
+  
+//   const REQUIRED_OPTIONS = 4;
+
+//   let answers = Array.isArray(questionBlock.answers)
+//     ? questionBlock.answers.map(a => ({ ...a }))
+//     : [];  
+
+//   for (let i = REQUIRED_OPTIONS - 1; i >= answers.length; i--) {
+//     answers.push({
+//       text: 'Нет варианта ответа (*)',
+//       correct: false,
+//       id: i
+//     });
+//   }
+  
+//    if(state.isShuffle) {    
+//     answers = shuffleArray(answers);   
+//    }
+  
+
+//   clearOptionsHighlight(testOptionsButtons);      
+
+//   testOptionsButtons.forEach((button, index) => {        
+//     const a = answers[index];     
+//     button.textContent = a.text; 
+//     button.dataset.success = a.success;
+//     button.dataset.answerId = a.id;
+//     button.disabled = false;  
+       
+//   }); 
+   
+//   btnQuestion.textContent = questionBlock.question; 
+  
+// }
+
+
+function fillQuestionBlock(questionBlock, buttons) {  
   
   const REQUIRED_OPTIONS = 4;
 
-  //console.log('questionBlock', questionBlock);
-
-
   let answers = Array.isArray(questionBlock.answers)
     ? questionBlock.answers.map(a => ({ ...a }))
-    : [];
+    : [];  
 
-    
   for (let i = REQUIRED_OPTIONS - 1; i >= answers.length; i--) {
     answers.push({
       text: 'Нет варианта ответа (*)',
@@ -315,21 +348,23 @@ function fillQuestionBlock(questionBlock) {
    if(state.isShuffle) {    
     answers = shuffleArray(answers);   
    }
+  
 
-  clearOptionsHighlight(answerButtons);  
+  clearOptionsHighlight(buttons);      
 
-  answerButtons.forEach((button, index) => {        
+  buttons.forEach((button, index) => {        
     const a = answers[index];     
     button.textContent = a.text; 
     button.dataset.success = a.success;
     button.dataset.answerId = a.id;
-    button.disabled = false;     
+    button.disabled = false;  
+       
   }); 
    
-  btnQuestion.textContent = questionBlock.question;
- 
+  btnQuestion.textContent = questionBlock.question; 
   
 }
+
 
 
 function shuffleArray(array) {
@@ -471,9 +506,9 @@ function createMistakesButtons(mistakesArray) {
     btn.className = 'error-button';   
     btn.textContent = i + 1;      
 
-    btn.addEventListener('click', ()=> {      
-      showSelectedMistake(btn.id);
-    });
+    // btn.addEventListener('click', ()=> {      
+    //   showSelectedMistake(btn.id);
+    // });
 
     mistakeButtons.appendChild(btn);
   }  
@@ -484,6 +519,7 @@ function createMistakesButtons(mistakesArray) {
 
 function showSelectedMistake(btnId) {   
 
+  
   const targetBtn = document.getElementById(btnId);
   const btns = document.querySelectorAll('.error-button');
   
@@ -491,42 +527,37 @@ function showSelectedMistake(btnId) {
     
   const questionIndex = targetBtn.dataset.questionIndex;   
 
-
   const questionBlock = testBases[currentTest.id].testBody[questionIndex];  
-
-
-  //testResultsContainer.classList.remove('hidden');
-  //divTestPage.classList.remove('hidden');
 
   const optionsContainer  = $('show-mistaken-option-block')
 
   optionsContainer.innerHTML = ''
 
-  //const btn = document.createElement('button')
-
-
-
   for(let i = 0; i < 5; i++){
 
     const btn = document.createElement('button')
     
-    if(i = 0){
+    if(i === 0){
 
       btn.className = 'question-button'
 
-      const line = document.createElement('hr')
+      const line = document.createElement('hr')     
 
-      line.className = 'line'
+      line.className = 'line'     
 
       optionsContainer.appendChild(btn)
+
+      optionsContainer.appendChild(line)
 
     }else {
       btn.className = 'option-button'
 
+      optionsContainer.appendChild(btn)
+
     }
     
     
-    optionsContainer.appendChild(btn)
+    //optionsContainer.appendChild(btn)
 
   }
   
@@ -535,8 +566,11 @@ function showSelectedMistake(btnId) {
   // [testResultsContainer, divTestPage].forEach(container => 
   //   container.classList.remove('hidden')
   // );
+
   
-  fillQuestionBlock(questionBlock);  
+  
+  fillQuestionBlock(questionBlock, );  
+
   highlightOptions(targetBtn); 
   lockOptionButtons('.option-button'); 
 }
@@ -547,8 +581,9 @@ function highlightOptions(targetBtn) {
   const selectedAnswer = targetBtn.dataset.userOption;  
   
   const correctAnswerId = 'option0';
-  clearOptionsHighlight(answerButtons)
-  answerButtons.forEach(button => {
+  clearOptionsHighlight(testOptionsButtons);
+
+  testOptionsButtons.forEach(button => {
       
     if (button.id === correctAnswerId) {    
       button.classList.add('correct');      

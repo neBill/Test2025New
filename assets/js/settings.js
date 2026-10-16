@@ -47,6 +47,20 @@ btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 
 btnDefaultFontSize.addEventListener('click', defaultFontSize);
 
+//слушатель на блоке кнопок ошибок
+$('mistakes-buttons-block').addEventListener('click', (e) => {
+  const btn = e.target.closest('.error-button');
+  if (!btn) return;
+
+ // console.log('Клик по кнопке:', btn);
+ 
+  showSelectedMistake(btn.id)
+
+
+});
+
+
+
 
 // Глобально только то, что нужно часто и во многих местах
 function $(id) {
