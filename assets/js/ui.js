@@ -45,9 +45,11 @@ const btnNext = document.getElementById('button-next');
 const btnHome = document.getElementById('button-home');
 const btnCompleteTest = document.getElementById('complete-test-button');
 const helpSection = document.getElementById('help-block');
-const btnIncreaseFontSize = document.getElementById('font-increase');
-const btnDecreaseFontSize = document.getElementById('font-decrease');
-const btnDefaultFontSize = document.getElementById('font-default');
+
+// const btnIncreaseFontSize = document.getElementById('font-increase');
+// const btnDecreaseFontSize = document.getElementById('font-decrease');
+// const btnDefaultFontSize = document.getElementById('font-default');
+
 const lbFontSizeSample = document.getElementById('font-size-sample');
 const tglTheme =  document.getElementById('theme-toggle'); 
 const pTestTitle = document.getElementById('test-title');
@@ -89,7 +91,12 @@ class CurrentTest {
    }
 }
 
-const currentTest = new CurrentTest();
+//const currentTest = new CurrentTest();
+
+let currentTest; // нет new CurrentTest()
+
+
+
 
 //навешиваем на кнопки вариантов событие клик
 document.querySelectorAll('.option-button').forEach(button => {
@@ -225,7 +232,9 @@ const handleTestCompletion = (state) => {
 
     state.isMistakes = true;      
 
-    showResultsPage(); 
+    // showResultsPage(); 
+
+    showPage('test-result-page')
 
     showTestResult(state);   
 
@@ -240,7 +249,9 @@ const handleTestCompletion = (state) => {
 
   }else{
     
-    showResultsPage();     
+    // showResultsPage();     
+
+    showPage('test-result-page')
 
     printTestResult(createSuccessReport()); 
 
@@ -278,8 +289,14 @@ const handleTestCompletion = (state) => {
 
 
 function navigateToNextQuestion(index) {  
+
   const questionBlock = getCurrentQuestionBlock(index);
-  fillQuestionBlock(questionBlock, testOptionsButtons); 
+
+  const optionsContainer = document.getElementById('option-buttons-block');
+
+  const buttons = optionsContainer.querySelectorAll('.option-button');
+
+  fillQuestionBlock(questionBlock, buttons, btnQuestion); 
   
 }
 
@@ -329,7 +346,7 @@ function renderQuestionCounter(text){
 // }
 
 
-function fillQuestionBlock(questionBlock, buttons) {  
+function fillQuestionBlock(questionBlock, optionButtons, questionButton) {  
   
   const REQUIRED_OPTIONS = 4;
 
@@ -350,9 +367,9 @@ function fillQuestionBlock(questionBlock, buttons) {
    }
   
 
-  clearOptionsHighlight(buttons);      
+  clearOptionsHighlight(optionButtons);      
 
-  buttons.forEach((button, index) => {        
+  optionButtons.forEach((button, index) => {        
     const a = answers[index];     
     button.textContent = a.text; 
     button.dataset.success = a.success;
@@ -361,7 +378,7 @@ function fillQuestionBlock(questionBlock, buttons) {
        
   }); 
    
-  btnQuestion.textContent = questionBlock.question; 
+  questionButton.textContent = questionBlock.question; 
   
 }
 
@@ -473,11 +490,23 @@ function showTestResult(testParams){
 
 
 
+
  
 function printTestResult(arrayText ){    
   
   const testInfoContainer = $('test-info-block')
+
+
+  const mistakesButtonsContainer = $('mistakes-buttons-block')
+
+  const showMistakenOption = $('show-mistaken-option-block')
+
+
+  mistakesButtonsContainer.innerHTML = '';
+  showMistakenOption.innerHTML = '';
   testInfoContainer.innerHTML = '';
+
+
 
 
   arrayText.forEach(text => {
@@ -504,12 +533,7 @@ function createMistakesButtons(mistakesArray) {
     btn.dataset.questionIndex = mistakesArray[i].qId;
     btn.dataset.userOption = mistakesArray[i].aId;
     btn.className = 'error-button';   
-    btn.textContent = i + 1;      
-
-    // btn.addEventListener('click', ()=> {      
-    //   showSelectedMistake(btn.id);
-    // });
-
+    btn.textContent = i + 1;     
     mistakeButtons.appendChild(btn);
   }  
  return mistakeButtons;
@@ -567,9 +591,11 @@ function showSelectedMistake(btnId) {
   //   container.classList.remove('hidden')
   // );
 
+  const buttons = optionsContainer.querySelectorAll('.option-button');
+  const questionButton = optionsContainer.querySelector('.question-button');
   
   
-  fillQuestionBlock(questionBlock, );  
+  fillQuestionBlock(questionBlock, buttons, questionButton);  
 
   highlightOptions(targetBtn); 
   lockOptionButtons('.option-button'); 
@@ -653,16 +679,12 @@ function handleStopTest() {
  
   if (state.wrongAnswers.length === 0) {  
     
-   // removeButtons?.();
-
     showSettingsButton(true);
 
     checkSettingsAndApply();    
     
     return;
-  }
-
-  
+  }  
 
   showPage('test-result-page')
 
@@ -675,7 +697,13 @@ function handleStopTest() {
 btnNext.addEventListener("click", function() {
 
   const questionBlock = getCurrentQuestionBlock(state.currentIndex);
-  fillQuestionBlock(questionBlock);
+
+  const optionsContainer = document.getElementById('option-buttons-block');
+
+  const buttons = optionsContainer.querySelectorAll('.option-button');
+
+  fillQuestionBlock(questionBlock, buttons, btnQuestion);
+
   btnNext.classList.add('hidden');
 
 })
@@ -687,7 +715,6 @@ function saveTestHistory(testInfo) {
   localStorage.setItem(currentTest.id, JSON.stringify(testInfo));   
 
 }
-
 
 
 function runLernMode(){
@@ -741,8 +768,12 @@ function testButtonClick(event) {
   
   
   const testTitle = event.target.textContent;
-  currentTest.id = event.target.id;  
-  chooseTest(currentTest.id, testTitle);   
+  // currentTest.id = event.target.id; 
+  
+  const testId = event.target.id;
+  // chooseTest(currentTest.id, testTitle);   
+
+  chooseTest(testId, testTitle); 
 
  
  
@@ -772,6 +803,8 @@ function getTestState(testId) {
 
 
 function chooseTest(testId, testTitle) {  
+
+  currentTest = new CurrentTest(testBases[testId], testId);
 
   clearTestState();
 
@@ -813,7 +846,11 @@ function chooseTest(testId, testTitle) {
 
   const questionBlock = getCurrentQuestionBlock(questionIndex);
 
-  fillQuestionBlock(questionBlock); 
+  const optionsContainer = document.getElementById('option-buttons-block');
+
+  const buttons = optionsContainer.querySelectorAll('.option-button');
+
+  fillQuestionBlock(questionBlock, buttons, btnQuestion); 
  
 }
 

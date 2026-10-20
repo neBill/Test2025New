@@ -1,12 +1,9 @@
 'use strict';
 
-//const { createElement } = require("react");
-
 
 let currentFontSize = 20; 
 
-function increaseFontSize() { 
-  
+function increaseFontSize() {   
 
   const newFontSize = currentFontSize + 1; 
   setFontSize(newFontSize);
@@ -41,28 +38,29 @@ function setFontSize(fontSize) {
 }
 
 
-btnIncreaseFontSize.addEventListener('click', increaseFontSize);
+// btnIncreaseFontSize.addEventListener('click', increaseFontSize);
 
-btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
+// btnDecreaseFontSize.addEventListener('click', decreaseFontSize);
 
-btnDefaultFontSize.addEventListener('click', defaultFontSize);
+// btnDefaultFontSize.addEventListener('click', defaultFontSize);
+
+$('font-increase').addEventListener('click', increaseFontSize);
+
+$('font-decrease').addEventListener('click', decreaseFontSize);
+
+$('font-default').addEventListener('click', defaultFontSize);
+
 
 //слушатель на блоке кнопок ошибок
 $('mistakes-buttons-block').addEventListener('click', (e) => {
   const btn = e.target.closest('.error-button');
-  if (!btn) return;
-
- // console.log('Клик по кнопке:', btn);
+  if (!btn) return; 
  
   showSelectedMistake(btn.id)
-
 
 });
 
 
-
-
-// Глобально только то, что нужно часто и во многих местах
 function $(id) {
   return document.getElementById(id);
 }
@@ -137,6 +135,11 @@ $('main-profile-page-button').addEventListener('click', ()=> {
 });
 
 $('show-main-page-button').addEventListener('click', ()=> {
+
+
+  const optionsContainer  = $('show-mistaken-option-block')
+
+  optionsContainer.innerHTML = ''
 
   checkSettingsAndApply();  
 
@@ -439,71 +442,73 @@ function showPage(pageId) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-function showMainPage() {
+// function showMainPage() {
 
-  const elementsToHide = [
+//   const elementsToHide = [
     
-    divTestPage,
-    navigationContainer,
-    testResultsContainer,
-    questionsCounter,
-    helpSection,
-    listPageContainer,
-    divMainSettings,
-    divProfilePage   
+//     divTestPage,
+//     navigationContainer,
+//     testResultsContainer,
+//     questionsCounter,
+//     helpSection,
+//     listPageContainer,
+//     divMainSettings,
+//     divProfilePage   
       
-  ];
+//   ];
 
-  const elementsToShow = [    
+//   const elementsToShow = [    
     
-    divTestsSelector,
-    //btnMenu
+//     divTestsSelector,
+//     //btnMenu
 
     
-  ];
+//   ];
 
-  //updateSettingsButtonVisibility(true)
+//   //updateSettingsButtonVisibility(true)
 
-  showSettingsButton(true)
+//   showSettingsButton(true)
 
-  // hideElements(elementsToHide);
+//   // hideElements(elementsToHide);
 
-  // showElements(elementsToShow); 
+//   // showElements(elementsToShow); 
 
-  showHidePages(elementsToShow, elementsToHide);
+//   showHidePages(elementsToShow, elementsToHide);
 
-  //removeButtons();  
+//   //removeButtons();  
 
-  //createLevelsButtons(testBases); 
+//   //createLevelsButtons(testBases); 
 
-  pTestTitle.textContent = "";
+//   pTestTitle.textContent = "";
 
   
 
-}
+// }
 
-function showResultsPage() {  
+// function showResultsPage() {  
 
-  const elementsToHide =[
-    divTestPage,
-    pQuestionsCounter
-  ]
+//   showPage('test-result-page')
 
-  const elementsToShow =[   
-    divHome,
-    testResultsContainer
-  ]
+//   // const elementsToHide =[
+//   //   divTestPage,
+//   //   // pQuestionsCounter
+//   // ]
+
+//   // const elementsToShow =[   
+//   //   divHome,
+//   //   testResultsContainer
+//   // ]
 
 
-  // hideElements(elementsToHide);
-  // showElements(elementsToShow);
+//   // hideElements(elementsToHide);
+//   // showElements(elementsToShow);
 
-  showHidePages(elementsToShow, elementsToHide);
+//  // showHidePages(elementsToShow, elementsToHide);
 
-  // btnHome.textContent = "На главную";
-  // btnHome.value = "mainpage";
+//   // btnHome.textContent = "На главную";
+//   // btnHome.value = "mainpage";
 
-}
+// }
 
   
 
@@ -566,18 +571,18 @@ function showChosenTest(testName, counterText) {
 
 
 
-function showHidePages(arrayToShow, arrayToHide){
+// function showHidePages(arrayToShow, arrayToHide){
  
-  arrayToShow.forEach(element => {
-      element.classList.remove('hidden');
-  });
-   arrayToHide.forEach(element => {
-      element.classList.add('hidden');
-  });
+//   arrayToShow.forEach(element => {
+//       element.classList.remove('hidden');
+//   });
+//    arrayToHide.forEach(element => {
+//       element.classList.add('hidden');
+//   });
 
 
    
-}
+// }
 
 
 
@@ -681,11 +686,6 @@ function checkboxChange(e) {
 
     //показать кнопку выбора тестов
     console.log('тесты отсутствуют, чекбокс выбран')
-
-    //createDefaultTestsSelector();
-
-    //ShowMainOpenProfilePageButton();
-
 
   }else{
 
