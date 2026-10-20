@@ -152,19 +152,23 @@ $('show-main-page-button').addEventListener('click', ()=> {
 
  $('theme-toggle').addEventListener('change', changeTheme)
 
- function changeTheme(){
+ function changeTheme(){   
 
-   console.log('hhhhhh')
+  const settings = JSON.parse(localStorage.getItem('settings'))
 
-   const settings = localStorage.getItem('settings')
+  const toggleState = 
+
+
    
-  console.log(settings)
+  console.log(settings.isDarkTheme)
+
+  console.log('=== Скрипт загружен ===');
 
 
  }
 
 
-console.log('=== Скрипт загружен ===');
+
 
 
 
