@@ -150,6 +150,26 @@ $('show-main-page-button').addEventListener('click', ()=> {
 })
 
 
+ $('theme-toggle').addEventListener('change', changeTheme)
+
+ function changeTheme(){
+
+   console.log('hhhhhh')
+
+   const settings = localStorage.getItem('settings')
+   
+  console.log(settings)
+
+
+ }
+
+
+console.log('=== Скрипт загружен ===');
+
+
+
+
+
 
 
 function clearCache(){   
