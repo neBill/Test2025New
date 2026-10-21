@@ -152,18 +152,27 @@ $('show-main-page-button').addEventListener('click', ()=> {
 
  $('theme-toggle').addEventListener('change', changeTheme)
 
- function changeTheme(){   
+ function changeTheme(e){   
 
-  const settings = JSON.parse(localStorage.getItem('settings'))
+  
+// Получаем актуальное состояние самого переключателя
+  const toggleState = e.currentTarget.checked; // true или false
 
-  const toggleState = 
+  // Читаем текущие настройки
+  let settings = JSON.parse(localStorage.getItem('settings'));  
+ 
+  // Обновляем настройку
+  settings.isDarkTheme = toggleState;
 
+  // Сохраняем обратно
+  localStorage.setItem('settings', JSON.stringify(settings));
 
-   
-  console.log(settings.isDarkTheme)
+  // console.log('Настройки:', settings);
+  // console.log('Тёмная тема:', settings.isDarkTheme);
 
-  console.log('=== Скрипт загружен ===');
-
+  // Дальше применяем тему к странице, например:
+ // applyTheme(settings.isDarkTheme);
+  updateTheme(settings.isDarkTheme)
 
  }
 
@@ -820,6 +829,14 @@ function hideSettingsPage() {
 
 function removeSettings() {  
   localStorage.removeItem("settings");  
+  // setSettings(defaultSettings);
+
+ 
+
+  // 2. Сразу ставим дефолтные настройки
+  // Важно: сохраняем как строку, как ты делал в changeTheme
+  localStorage.setItem('settings', JSON.stringify(defaultSettings));
+
   setSettings(defaultSettings);
 
 
