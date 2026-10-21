@@ -245,27 +245,11 @@ function clearHistory() {
 // }
 
 window.addEventListener('load', () => {
- //checkSettingsAndApply(); 
   
-  //startTestSelection();
-
-  //showPage('default-test-selector-block'); // показываем список тестов 
-
-  // removeButtons?.();
-     checkSettingsAndApply?.();
-
-    // showPage('test-selector'); // показываем список тестов
+  checkSettingsAndApply?.();  
   
 });
 
-
-// function updateSettingsButtonVisibility(isVisible) { 
-//   if (isVisible) {
-//     btnMenu.classList.remove('hidden');
-//   } else {
-//     btnMenu.classList.add('hidden');
-//   }
-// }
 
 function showSettingsButton(isVisible){
   const button = $('settings-page-button')

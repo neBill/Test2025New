@@ -494,12 +494,11 @@ function showTestResult(testParams){
  
 function printTestResult(arrayText ){    
   
-  const testInfoContainer = $('test-info-block')
+  const testInfoContainer = $('test-info-block');
 
+  const mistakesButtonsContainer = $('mistakes-buttons-block');
 
-  const mistakesButtonsContainer = $('mistakes-buttons-block')
-
-  const showMistakenOption = $('show-mistaken-option-block')
+  const showMistakenOption = $('show-mistaken-option-block');
 
 
   mistakesButtonsContainer.innerHTML = '';
@@ -545,6 +544,7 @@ function showSelectedMistake(btnId) {
 
   
   const targetBtn = document.getElementById(btnId);
+
   const btns = document.querySelectorAll('.error-button');
   
   btns.forEach(btn => btn.classList.toggle('active-button', btn === targetBtn));
@@ -598,27 +598,82 @@ function showSelectedMistake(btnId) {
   fillQuestionBlock(questionBlock, buttons, questionButton);  
 
   highlightOptions(targetBtn); 
+
+
   lockOptionButtons('.option-button'); 
 }
 
 
 
-function highlightOptions(targetBtn) {
-  const selectedAnswer = targetBtn.dataset.userOption;  
-  
-  const correctAnswerId = 'option0';
-  clearOptionsHighlight(testOptionsButtons);
+// function highlightOptions(targetBtn) {
 
-  testOptionsButtons.forEach(button => {
+//   const selectedAnswer = targetBtn.dataset.userOption;   
+  
+//   const correctAnswerId = 'option0';
+
+//   const optionButtons = document.querySelectorAll('.option-button');
+
+//   clearOptionsHighlight(optionButtons); 
+
+//   optionButtons.forEach(button => {    
       
-    if (button.id === correctAnswerId) {    
-      button.classList.add('correct');      
-    }    
-    if (button.id === `option${selectedAnswer}`) {
-      button.classList.add('incorrect');
+//     if (button.id === correctAnswerId) {   
+      
+//       console.log(button.id)
+
+//       button.classList.add('correct');  
+      
+      
+//     }    
+//     if (button.id === `option${selectedAnswer}`) {
+//       button.classList.add('incorrect');
+//     }
+//   }); 
+// }
+
+
+function highlightOptions(targetBtn) {
+  const selectedAnswer = targetBtn.dataset.userOption;
+
+  // 1. Проверка наличия атрибута
+  if (typeof selectedAnswer === 'undefined' || selectedAnswer === null) {
+    console.error('❌ У кнопки нет data-user-option. Проверь HTML.');
+    return;
+  }
+
+  const correctAnswerId = 'option0'; // позже замени на значение из текущего вопроса
+  const optionButtons = document.querySelectorAll('.option-button');
+
+  if (optionButtons.length === 0) {
+    console.error('❌ Не найдены кнопки .option-button. Проверь селектор и DOM.');
+    return;
+  }
+
+  // Сброс классов
+  optionButtons.forEach(btn => {
+    btn.classList.remove('correct', 'incorrect');
+  });
+
+  console.log('🔍 Запуск подсветки: correctAnswerId =', correctAnswerId, '| selectedAnswer =', selectedAnswer);
+
+  optionButtons.forEach((button, idx) => {
+    const selectedId = `option${selectedAnswer}`;
+
+    console.log(`[Кнопка ${idx}] id="${button.id}" | ищем correct="${correctAnswerId}" | ищем selected="${selectedId}"`);
+
+    if (button.id === correctAnswerId) {
+      button.classList.add('correct');
+      console.log(`✅ Кнопка ${idx} получила класс correct`);
     }
-  }); 
+
+    if (button.id === selectedId) {
+      button.classList.add('incorrect');
+      console.log(`❌ Кнопка ${idx} получила класс incorrect`);
+    }
+  });
 }
+
+
 
 function clearOptionsHighlight(buttons){
   buttons.forEach(button => {
