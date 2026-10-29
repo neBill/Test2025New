@@ -540,138 +540,222 @@ function createMistakesButtons(mistakesArray) {
 
 
 
-function showSelectedMistake(btnId) {   
+// function showSelectedMistake(btnId) {   
 
   
-  const targetBtn = document.getElementById(btnId);
+//   const targetBtn = document.getElementById(btnId);
 
-  const btns = document.querySelectorAll('.error-button');
+//   const btns = document.querySelectorAll('.error-button');
   
-  btns.forEach(btn => btn.classList.toggle('active-button', btn === targetBtn));
+//   btns.forEach(btn => btn.classList.toggle('active-button', btn === targetBtn));
     
-  const questionIndex = targetBtn.dataset.questionIndex;   
+//   const questionIndex = targetBtn.dataset.questionIndex;   
 
-  const questionBlock = testBases[currentTest.id].testBody[questionIndex];  
+//   const questionBlock = testBases[currentTest.id].testBody[questionIndex];  
 
-  const optionsContainer  = $('show-mistaken-option-block')
+//   const optionsContainer  = $('show-mistaken-option-block');
 
-  optionsContainer.innerHTML = ''
+//   optionsContainer.innerHTML = '';
 
-  for(let i = 0; i < 5; i++){
+//   const qbtn = document.createElement('button');
 
-    const btn = document.createElement('button')
+//   qbtn.className = 'question-button';
+
+//   const line = document.createElement('hr');     
+
+//   line.className = 'line';    
+
+//   optionsContainer.appendChild(qbtn);
+
+//   optionsContainer.appendChild(line);
+
+
+//   for(let i = 0; i < 4; i++){
+
+//     const btn = document.createElement('button');
+
+//     btn.id = `option${i.toString()}`;
     
-    if(i === 0){
+//     btn.className = 'option-button';
 
-      btn.className = 'question-button'
+//     optionsContainer.appendChild(btn)  ; 
 
-      const line = document.createElement('hr')     
+//   }   
 
-      line.className = 'line'     
+//   const buttons = optionsContainer.querySelectorAll('.option-button');
 
-      optionsContainer.appendChild(btn)
-
-      optionsContainer.appendChild(line)
-
-    }else {
-      btn.className = 'option-button'
-
-      optionsContainer.appendChild(btn)
-
-    }
-    
-    
-    //optionsContainer.appendChild(btn)
-
-  }
+//   const questionButton = optionsContainer.querySelector('.question-button');  
   
-  
-  
-  // [testResultsContainer, divTestPage].forEach(container => 
-  //   container.classList.remove('hidden')
-  // );
+//   fillQuestionBlock(questionBlock, buttons, questionButton);  
 
-  const buttons = optionsContainer.querySelectorAll('.option-button');
-  const questionButton = optionsContainer.querySelector('.question-button');
-  
-  
-  fillQuestionBlock(questionBlock, buttons, questionButton);  
+//   highlightOptions(targetBtn); 
 
-  highlightOptions(targetBtn); 
-
-
-  lockOptionButtons('.option-button'); 
-}
-
-
-
-// function highlightOptions(targetBtn) {
-
-//   const selectedAnswer = targetBtn.dataset.userOption;   
-  
-//   const correctAnswerId = 'option0';
-
-//   const optionButtons = document.querySelectorAll('.option-button');
-
-//   clearOptionsHighlight(optionButtons); 
-
-//   optionButtons.forEach(button => {    
-      
-//     if (button.id === correctAnswerId) {   
-      
-//       console.log(button.id)
-
-//       button.classList.add('correct');  
-      
-      
-//     }    
-//     if (button.id === `option${selectedAnswer}`) {
-//       button.classList.add('incorrect');
-//     }
-//   }); 
+//   lockOptionButtons('.option-button'); 
 // }
 
 
+
 function highlightOptions(targetBtn) {
-  const selectedAnswer = targetBtn.dataset.userOption;
 
-  // 1. Проверка наличия атрибута
-  if (typeof selectedAnswer === 'undefined' || selectedAnswer === null) {
-    console.error('❌ У кнопки нет data-user-option. Проверь HTML.');
-    return;
-  }
+  const selectedAnswer = targetBtn.dataset.userOption;   
+  
+  const correctAnswerId = 'option0';
 
-  const correctAnswerId = 'option0'; // позже замени на значение из текущего вопроса
-  const optionButtons = document.querySelectorAll('.option-button');
+  const optionButtonsContainer = $('show-mistaken-option-block') 
 
-  if (optionButtons.length === 0) {
-    console.error('❌ Не найдены кнопки .option-button. Проверь селектор и DOM.');
-    return;
-  }
+  const optionButtons = optionButtonsContainer.querySelectorAll('.option-button');
 
-  // Сброс классов
-  optionButtons.forEach(btn => {
-    btn.classList.remove('correct', 'incorrect');
-  });
+  clearOptionsHighlight(optionButtons); 
 
-  console.log('🔍 Запуск подсветки: correctAnswerId =', correctAnswerId, '| selectedAnswer =', selectedAnswer);
-
-  optionButtons.forEach((button, idx) => {
-    const selectedId = `option${selectedAnswer}`;
-
-    console.log(`[Кнопка ${idx}] id="${button.id}" | ищем correct="${correctAnswerId}" | ищем selected="${selectedId}"`);
-
+  optionButtons.forEach(button => {   
+    
+    //console.log(button.id)
+      
     if (button.id === correctAnswerId) {
-      button.classList.add('correct');
-      console.log(`✅ Кнопка ${idx} получила класс correct`);
-    }
-
-    if (button.id === selectedId) {
+      button.classList.add('correct');   
+    }    
+    if (button.id === `option${selectedAnswer}`) {
       button.classList.add('incorrect');
-      console.log(`❌ Кнопка ${idx} получила класс incorrect`);
     }
-  });
+  }); 
 }
+
+
+// function showSelectedMistake(btnId) {
+//   const targetBtn = $(btnId); // твоя функция
+//   if (!targetBtn) {
+//     console.warn('Кнопка с id="' + btnId + '" не найдена');
+//     return;
+//   }
+
+//   // Подсветка активной кнопки ошибки
+//   const btns = document.querySelectorAll('.error-button');
+//   btns.forEach(btn => {
+//     btn.classList.toggle('active-button', btn === targetBtn);
+//   });
+
+//   const questionIndex = Number(targetBtn.dataset.questionIndex);
+//   if (isNaN(questionIndex)) {
+//     console.error('Некорректный questionIndex в dataset');
+//     return;
+//   }
+
+//   // Защита от отсутствия currentTest или теста
+//   if (!currentTest || !currentTest.id || !testBases[currentTest.id]) {
+//     console.error('Текущий тест не определён или не найден в testBases');
+//     return;
+//   }
+
+//   const testData = testBases[currentTest.id];
+//   const questionBlock = testData.testBody[questionIndex];
+
+//   // Используем твою функцию $
+//   const optionsContainer = $('show-mistaken-option-block');
+//   if (!optionsContainer) {
+//     console.error('Контейнер #show-mistaken-option-block не найден');
+//     return;
+//   }
+
+//   optionsContainer.innerHTML = ''; // очищаем
+
+//   // Кнопка вопроса
+//   const qbtn = document.createElement('button');
+//   qbtn.className = 'question-button';
+//   qbtn.type = 'button';
+//   // Если в questionBlock есть текст вопроса:
+//   // qbtn.textContent = questionBlock.questionText || 'Вопрос';
+//   optionsContainer.appendChild(qbtn);
+
+//   // Линия
+//   const line = document.createElement('hr');
+//   line.className = 'line';
+//   optionsContainer.appendChild(line);
+
+//   // Создаём 4 кнопки вариантов
+//   for (let i = 0; i < 4; i++) {
+//     const btn = document.createElement('button');
+//     btn.id = `option${i}`;
+//     btn.className = 'option-button';
+//     btn.type = 'button';
+//     optionsContainer.appendChild(btn);
+//   }
+
+//   const buttons = optionsContainer.querySelectorAll('.option-button');
+//   const questionButton = optionsContainer.querySelector('.question-button');
+
+//   fillQuestionBlock(questionBlock, buttons, questionButton);
+//   highlightOptions(targetBtn);
+//   lockOptionButtons('.option-button');
+// }
+
+
+//функция гугл
+
+function showSelectedMistake(btnId) {
+  // targetBtn — это чистый DOM-элемент, так как $(id) возвращает document.getElementById
+  const targetBtn = $(btnId); 
+  if (!targetBtn) {
+    console.warn('Кнопка с id="' + btnId + '" не найдена');
+    return;
+  }
+
+  // Подсветка активной кнопки ошибки
+  const btns = document.querySelectorAll('.error-button');
+  btns.forEach(btn => {
+    btn.classList.toggle('active-button', btn === targetBtn);
+  });
+
+  const questionIndex = Number(targetBtn.dataset.questionIndex);
+  if (isNaN(questionIndex)) {
+    console.error('Некорректный questionIndex в dataset');
+    return;
+  }
+
+  // Защита от отсутствия currentTest или теста
+  if (!currentTest || !currentTest.id || !testBases[currentTest.id]) {
+    console.error('Текущий тест не определён или не найден в testBases');
+    return;
+  }
+
+  const testData = testBases[currentTest.id];
+  const questionBlock = testData.testBody[questionIndex];
+
+  // Используем функцию $, которая ищет по ID
+  const optionsContainer = $('show-mistaken-option-block');
+  if (!optionsContainer) {
+    console.error('Контейнер #show-mistaken-option-block не найден');
+    return;
+  }
+
+  optionsContainer.innerHTML = ''; // очищаем
+
+  // Кнопка вопроса
+  const qbtn = document.createElement('button');
+  qbtn.className = 'question-button';
+  qbtn.type = 'button';
+  optionsContainer.appendChild(qbtn);
+
+  // Линия
+  const line = document.createElement('hr');
+  line.className = 'line';
+  optionsContainer.appendChild(line);
+
+  // Создаём 4 кнопки вариантов (убрали btn.id = `option${i}`, чтобы id не дублировались в DOM)
+  for (let i = 0; i < 4; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'option-button';
+    btn.type = 'button';
+    optionsContainer.appendChild(btn);
+  }
+
+  const buttons = optionsContainer.querySelectorAll('.option-button');
+  const questionButton = optionsContainer.querySelector('.question-button');
+
+  fillQuestionBlock(questionBlock, buttons, questionButton);
+  highlightOptions(targetBtn);
+  lockOptionButtons('.option-button'); // Корректно закрыли строку и функцию
+}
+
 
 
 
