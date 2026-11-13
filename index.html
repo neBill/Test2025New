@@ -1,318 +1,271 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
-  	<meta charset="UTF-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/theme.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
     <script src="/assets/js/app.js"></script>
-    <link type="image/png" sizes="192x192" rel="icon" href="/favicon.png">    
-    <meta name="apple-mobile-web-app-status-bar" content="#02abab"> 
-    <link rel="manifest" href="/manifest.json">  
-    <link rel="apple-touch-icon" href="/assets/images/logo-192x192.png"> 
+    <link type="image/png" sizes="192x192" rel="icon" href="/favicon.png" />
+    <meta name="apple-mobile-web-app-status-bar" content="#02abab" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/assets/images/logo-192x192.png" />
     <!-- <meta name="theme-color" content="#202430">     -->
-  	<title>Тест</title>
+    <title>Тест</title>
   </head>
-  
+
   <body>
     <!-----------Главный блок-------------------------------->
-  	<div>
-
+    <div>
       <!-----------Меню блок-------------------------------->
-      <div class="menu">   
+      <div class="menu">
         <!-- <div class="dropdown-block">  -->
-          <!-- <div id="menu-button-block"> -->
-            <!-- <button class="settings-button" id="settings-page-button">             -->
-              <button class="settings-show-button" id="settings-page-button"> 
-              <svg>  
-                <rect class="svg-burger"></rect>
-                <rect class="svg-burger" y="8"></rect>
-                <rect class="svg-burger" y="16"></rect>
-              </svg>          
-            </button>
-          <!-- </div>         -->
+        <!-- <div id="menu-button-block"> -->
+        <!-- <button class="settings-button" id="settings-page-button">             -->
+        <button class="settings-show-button" id="settings-page-button">
+          <svg>
+            <rect class="svg-burger"></rect>
+            <rect class="svg-burger" y="8"></rect>
+            <rect class="svg-burger" y="16"></rect>
+          </svg>
+        </button>
+        <!-- </div>         -->
         <!-- </div>  -->
       </div>
-   
-       <!-----------Блок выбора теста-------------------------------->  
-      
-    	<div class="test-selector-page page-panel hidden"  id="default-test-selector">
-        <button class="test-button" id="main-profile-page-button">Выбрать тесты</button><br>
-      </div>
-      
-      <div class="test-selector-page page-panel hidden" id="test-selector">          
 
-        <!-- here test buttons will be created -->
-      
+      <!-----------Блок выбора теста-------------------------------->
+
+      <div class="test-selector-page page-panel hidden" id="default-test-selector">
+        <button class="test-button" id="main-profile-page-button">Выбрать тесты</button><br />
       </div>
-      
-      <!-----------Конец блока выбора теста--------------------------------> 
+
+      <div class="test-selector-page page-panel hidden" id="test-selector">
+        <!-- here test buttons will be created -->
+      </div>
+
+      <!-----------Конец блока выбора теста-------------------------------->
 
       <!-- </div> -->
 
-     
-        
-      <!-----------Блок настроек основной-------------------------------->  
-      <div class="settings-page page-panel hidden" id="main-settings">  
-        
-        <p><b>Настройки профиля</b></p> 
+      <!-----------Блок настроек основной-------------------------------->
+      <div class="settings-page page-panel hidden" id="main-settings">
+        <p><b>Настройки профиля</b></p>
 
-        <button class="settings-button" id="settings-profile-page-button">Выбрать тесты</button><br>
+        <button class="settings-button" id="settings-profile-page-button">Выбрать тесты</button
+        ><br />
 
-        <hr class="line">    
+        <hr class="line" />
 
-        <p><b>Настройки тестирования</b></p>       
-        
+        <p><b>Настройки тестирования</b></p>
+
         <div class="toggle-button">
           <div class="toggle-txt">
-            <label for="learn-mode-toggle" class='Toggle'>Режим обучения</label>
+            <label for="learn-mode-toggle" class="Toggle">Режим обучения</label>
           </div>
           <div class="toggle-btn">
-          <label class='Toggle'>
-            <input type='checkbox' name='toggle' id='learn-mode-toggle' class="Toggle__input" />
-            <span class="Toggle__display" hidden/>
-          </label>
+            <label class="Toggle">
+              <input type="checkbox" name="toggle" id="learn-mode-toggle" class="Toggle__input" />
+              <span class="Toggle__display" hidden />
+            </label>
           </div>
         </div>
-        <br><br>
-           
-        <hr class="line"> 
-            
-        <p><b>Оформление</b></p> 
+        <br /><br />
+
+        <hr class="line" />
+
+        <p><b>Оформление</b></p>
 
         <div class="outline">
           <label id="font-size-sample">-- Образец шрифта -- </label>
         </div>
-        
-        <button class="font-size-change" id="font-increase" >Увеличить шрифт</button>              
-        <button class="font-size-change" id="font-decrease">Уменьшить шрифт</button>  
-        <button class="font-size-change" id="font-default">Шрифт по-умолчанию</button>  
-             
+
+        <button class="font-size-change" id="font-increase">Увеличить шрифт</button>
+        <button class="font-size-change" id="font-decrease">Уменьшить шрифт</button>
+        <button class="font-size-change" id="font-default">Шрифт по-умолчанию</button>
 
         <div class="toggle-button">
           <div class="toggle-txt">
-            <label for="theme-toggle" class='Toggle'>Темная тема</label>
+            <label for="theme-toggle" class="Toggle">Темная тема</label>
           </div>
           <div class="toggle-btn">
-          <label class='Toggle'>
-            <input type='checkbox' name='toggle' id="theme-toggle" class="Toggle__input"/>
-            <span class="Toggle__display" hidden />
-          </label>
+            <label class="Toggle">
+              <input type="checkbox" name="toggle" id="theme-toggle" class="Toggle__input" />
+              <span class="Toggle__display" hidden />
+            </label>
           </div>
-        </div><br><br>
+        </div>
+        <br /><br />
 
-        <hr class="line">
-            
+        <hr class="line" />
+
         <p><b>Дополнительно</b></p>
-        
-        <button class="settings-button" id="history-remover">Удалить историю</button><br>
 
-        <button class="settings-button" id="settings-remover">Сбросить настройки</button><br>
+        <button class="settings-button" id="history-remover">Удалить историю</button><br />
 
-        <button class="settings-button" id="cache-remover">Очистить кэш</button><br> 
-    
-        <button class="settings-button" id="show-help">Справка</button>        
-        
+        <button class="settings-button" id="settings-remover">Сбросить настройки</button><br />
+
+        <button class="settings-button" id="cache-remover">Очистить кэш</button><br />
+
+        <button class="settings-button" id="show-help">Справка</button>
+
         <!-- <hr class="line"> -->
-        
+
         <!-- <button class="close_button" id="button_hide" onclick="showHideMenu()">Закрыть</button><br> -->
-            
-          <!-- </div>
+
+        <!-- </div>
         </div> -->
-
-       
-
       </div>
 
-      <!-----------Конец блока настроек--------------------------------> 
+      <!-----------Конец блока настроек-------------------------------->
 
       <!-----------Блок настроек профиля-------------------------------->
 
-      
-
-      <div class="profile-page page-panel hidden" id="test-profile">    
-
-        <br><br>
+      <div class="profile-page page-panel hidden" id="test-profile">
+        <br /><br />
         <div class="menu-navigation-contaner">
           <button class="settings-button" id="go-back">Назад</button>
           <!-- <button class="settings-button" id="save-selected-tests">Сохранить</button> -->
-
-          
-
 
           <!-- <button class="settings-button" id="save-selected-tests">
             <svg class="large-check" viewBox="0 0 20 20">
               <path fill="currentColor" d="M8.5 12.5l-3-3-1.5 1.5 4.5 4.5 8-8-1.5-1.5z"/>
             </svg>
           </button> -->
-
-         
-
-
-
         </div>
 
-        <hr class="line"><br><br> 
+        <hr class="line" />
+        <br /><br />
 
         <div id="checkbox-container">
-
           <!-----------здесь будут чекбоксы-------------------------------->
-
         </div>
-
-    
       </div>
 
       <!-----------Конец блока настроек профиля-------------------------------->
 
-
-
       <!-----------Блок результатов тестирования-------------------------------->
-        
-      
-         
-      
+
       <!-- <div >
         
         <p id="test-title"></p>
         
       </div> -->
-      
+
       <!-- <div class="counter-block page-panel hidden" id="questions-counter-block">        
         <p class="p-result" id="questions-counter"></p>    
       </div>   -->
 
-      
-      
-      
-    	<div class="page-panel hidden" id="test-result-page">	
+      <div class="page-panel hidden" id="test-result-page">
         <!-- <div class="results-block page-panel hidden" id="test-result-page">	 -->
-        
-        <div id="test-info-block">  
-          
-        </div>
-    		
-        <div id="mistakes-buttons-block">  
-          
-        </div>
 
-        <div id="show-mistaken-option-block">  
-          
-        </div>
+        <div id="test-info-block"></div>
 
+        <div id="mistakes-buttons-block"></div>
 
+        <div id="show-mistaken-option-block"></div>
 
-        <br><br><br>
-        <div>  
+        <br /><br /><br />
+        <div>
           <button class="navigation-button" id="show-main-page-button">На главную</button>
         </div>
-    	</div>    
-      
-      
-    <!-----------Конец блока результатов тестирования-------------------------------->
+      </div>
 
-    <!-----------------------Блок тестирования-------------------------------->
-      
-      <div class="test-block page-panel hidden" id="test-page" > 
-        <div >        
-          <p id="test-title"></p>        
+      <!-----------Конец блока результатов тестирования-------------------------------->
+
+      <!-----------------------Блок тестирования-------------------------------->
+
+      <div class="test-block page-panel hidden" id="test-page">
+        <div>
+          <p id="test-title"></p>
         </div>
 
-        <div class="counter-block" id="questions-counter-block">        
-          <p class="p-result" id="questions-counter"></p>    
-        </div>  
+        <div class="counter-block" id="questions-counter-block">
+          <p class="p-result" id="questions-counter"></p>
+        </div>
 
         <button disabled class="question-button" id="question-button"></button>
-        <hr class="line">
-       
+        <hr class="line" />
+
         <div id="option-buttons-block">
           <!-- <div id="testButtons"> -->
           <!-- <button class="option_button" id="option0"></button>  -->
-          <button class="option-button" id="option0"></button>    
-          <button class="option-button" id="option1"></button>    
-          <button class="option-button" id="option2"></button>    
-          <button class="option-button" id="option3"></button> 
-        </div> <br><br><br>
-        <div class="home-block" >  
+          <button class="option-button" id="option0"></button>
+          <button class="option-button" id="option1"></button>
+          <button class="option-button" id="option2"></button>
+          <button class="option-button" id="option3"></button>
+        </div>
+        <br /><br /><br />
+        <div class="home-block">
           <button class="navigation-button" id="complete-test-button">Завершить</button>
         </div>
-      </div>        
-        
-    <!------------------------Конец блока тестирования-------------------------------->
+      </div>
 
-    <!-- <div class="home-block page-panel hidden" id="button-home-block">  
+      <!------------------------Конец блока тестирования-------------------------------->
+
+      <!-- <div class="home-block page-panel hidden" id="button-home-block">  
           <button class="navigation-button" id="complete-test-button">Завершить</button>
     </div> -->
 
-    <!---------------------------Блок кнопок навигации-------------------------------->
-    
+      <!---------------------------Блок кнопок навигации-------------------------------->
 
-      <div class="footer page-panel hidden" id="navigation-block">    
-        <div class="home-block" id="button-home-block">  
-          <button class="navigation-button" id="button-home" >На главную</button>
+      <div class="footer page-panel hidden" id="navigation-block">
+        <div class="home-block" id="button-home-block">
+          <button class="navigation-button" id="button-home">На главную</button>
         </div>
-       
+
         <div class="next-block" id="button-next-block">
-          <button class="navigation-button" id="button-next" >Следующий</button>
-        </div><br><br>
+          <button class="navigation-button" id="button-next">Следующий</button>
+        </div>
+        <br /><br />
       </div>
 
-
-
-    <!------------------------Конец блока кнопок навигации-------------------------------->  
+      <!------------------------Конец блока кнопок навигации-------------------------------->
 
       <!-- list block for viewing a list of questions -->
 
       <div class="list-page page-panel hidden" id="questions-list-page">
-        <div >
-          <button class="navigation-button" id="btn-hide-list" >Назад</button><br><br>          
-        </div><br>
+        <div><button class="navigation-button" id="btn-hide-list">Назад</button><br /><br /></div>
+        <br />
         <div id="questions-list-block">
-
           <div id="answer-list-block">
-              <div id="col1"></div>
-              <div id="col2"></div>
+            <div id="col1"></div>
+            <div id="col2"></div>
           </div>
-        
-        </div><br>     
+        </div>
+        <br />
 
-         <!-- Modal window -->
+        <!-- Modal window -->
         <div id="myModal" class="modal">
           <!-- Modal content -->
           <div class="modal-content">
             <span class="close-modal"></span>
-            
-            <div id="mod-content">
-             
-            </div>
-           
+
+            <div id="mod-content"></div>
           </div>
-        
         </div>
-
       </div>
-
-     
 
       <!-- list block for viewing a list of questions -->
 
       <!-- Блок справки -->
-      <div class="help-page page-panel hidden" id="help-block"><br>
+      <div class="help-page page-panel hidden" id="help-block">
+        <br />
 
-        <div >
-            <button class="navigation-button" id="help_hide_top" onclick="hideHelpPage()">На главную</button><br><br>          
+        <div>
+          <button class="navigation-button" id="help_hide_top" onclick="hideHelpPage()">
+            На главную</button
+          ><br /><br />
         </div>
 
-        <div class="help-text-format">  
-        
-        <!--          <br><div >
+        <div class="help-text-format">
+          <!--          <br><div >
             <button class="footer_button" id="help_hide" onclick="hideHelpPage()">На главную</button><br><br>          
         </div> -->
 
-          <h3> Описание </h3>
+          <h3>Описание</h3>
 
-            Приложение для подготовки к тестированию ЕКЭ.<br><br>
-            <!-- <u>Источники тестовых вопросов:</u><br><br>
+          Приложение для подготовки к тестированию ЕКЭ.<br /><br />
+          <!-- <u>Источники тестовых вопросов:</u><br><br>
 
             - вопросы разделов "Микротесты" - базы микротестирования экзаменационной платформы "StartExam" (где проходим микротесты и сдаем ЕКЭ). Вопросы относятся к профуровню "База"; <br>
             - вопросы разделов "Охрана труда" - сайт "Конструктор тестов"; <br>
@@ -324,65 +277,79 @@
           
            -->
 
-          
+          <h3>Основные возможности</h3>
 
-            <h3>Основные возможности</h3>  
+          <h4>1. Сохранение истории тестирования.</h4>
 
-            <h4>1. Сохранение истории тестирования. </h4>
+          История прохождения сохраняется для каждого теста отдельно. При остановке тестирования
+          показываются ошибки. После прохождения всего теста история сбрасывается при повторном
+          выборе данного теста.<br />
+          Есть возможность сбросить всю историю тестирования нажав пункт меню "Удалить историю".
+          Удаляется история для всех тестов.
 
-            История прохождения сохраняется для каждого теста отдельно. При остановке тестирования показываются ошибки. После прохождения всего теста история сбрасывается при повторном выборе данного теста.<br> 
-            Есть возможность сбросить всю историю тестирования нажав пункт меню "Удалить историю". Удаляется история для всех тестов.
+          <h4>2. Режимы прохождения тестов.</h4>
+          <ul>
+            <li>
+              "<u>Режим контроля</u>" - включен по умолчанию. В этом режиме результаты прохождения
+              показываются при завершении теста или при остановке тестирования;
+            </li>
+            <li>
+              "<u>Режим обучения</u>" - включается в настройках. При включенном переключателе "Режим
+              обучения", если ответ правильный, происходит автоматический переход на с ледующий
+              вопрос. При неверном ответе - показываются верный и неверный варианты ответа.
+              Результаты показываются при завершении теста или при остановке тестирования.
+            </li>
+          </ul>
 
-
-
-           <h4> 2. Режимы прохождения тестов.</h4>
-            <ul>
-              <li>"<u>Режим контроля</u>" - включен по умолчанию. В этом режиме результаты прохождения показываются при завершении теста или при остановке тестирования;</li>
-              <li>"<u>Режим обучения</u>" - включается в настройках. При включенном переключателе "Режим обучения", если ответ правильный, происходит автоматический переход на с
-                ледующий вопрос. При неверном ответе - показываются верный и неверный варианты ответа. Результаты показываются при завершении теста или при остановке 
-                тестирования.</li>
-                      </ul>
-
-            <!-- <h4>3. Опция перемешивания вопросов. </h4>
+          <!-- <h4>3. Опция перемешивания вопросов. </h4>
 
             "<u>Перемешивание вопросов</u>" - включается в настройках. При включенном переключателе "Перемешивание вопросов" вопросы будут перемешаны при каждом выборе теста. Данный режим позволяет "погонять" вопросы в случайном порядке. При остановке тестирования показываются ошибки.        
             В данном режиме история сохраняется только в рамках текущей сессии тестирования. При повторном выборе теста, история сбрасывается.<br> -->
 
-            <h4>3. Оформление. </h4>
+          <h4>3. Оформление.</h4>
 
-              "<u>Темная тема</u>" - включает темную тему приложение. Выключение переключателя включает тему по-умолчанию;<br>
-              Есть возможность изменить размер шрифта или установить значение по-умолчанию.
+          "<u>Темная тема</u>" - включает темную тему приложение. Выключение переключателя включает
+          тему по-умолчанию;<br />
+          Есть возможность изменить размер шрифта или установить значение по-умолчанию.
 
+          <h3>Поддержка</h3>
 
-            <h3>Поддержка</h3>
+          При возникновении вопросов или проблем с приложением - обращайтесь лично или пишите в
+          WhatsApp:
 
-            При возникновении вопросов или проблем с приложением - обращайтесь лично или пишите в WhatsApp:         
+          <br /><br />
+          <h3>
+            <a href="https://max.ru/u/f9LHodD0cOL8aYZG0BbvntAsmVmbQlqT1IYcg_Xwv6GTi2OcsO3pOZoP4cU"
+              >Ссылка для связи</a
+            >
+          </h3>
+          <br /><br />
+        </div>
+        <br />
 
-
-            <br><br><h3><a href="https://max.ru/u/f9LHodD0cOL8aYZG0BbvntAsmVmbQlqT1IYcg_Xwv6GTi2OcsO3pOZoP4cU">Ссылка для связи</a></h3><br><br>
-          
-        </div> <br>
-               
-        <div >
-            <button padding-bottom="2%" class="navigation-button" id="help_hide_bottom" onclick="hideHelpPage()">На главную</button><br><br>          
+        <div>
+          <button
+            padding-bottom="2%"
+            class="navigation-button"
+            id="help_hide_bottom"
+            onclick="hideHelpPage()"
+          >
+            На главную</button
+          ><br /><br />
         </div>
         <!--         <div >             
          <br><br>
         </div> -->
-       
-        
       </div>
-          </div>
-    
-      <script src="/assets/js/ui.js"></script>    
-      <!-- <script src="/assets/js/ot.js"></script>  -->
-      <script src="/bases/ot_2026.js"></script>   
-      <!-- <script src="/assets/js/st5.js"></script>
+    </div>
+
+    <script src="/assets/js/ui.js"></script>
+    <!-- <script src="/assets/js/ot.js"></script>  -->
+    <script src="/bases/ot_2026.js"></script>
+    <!-- <script src="/assets/js/st5.js"></script>
       <script src="/assets/js/st6.js"></script>
       <script src="/assets/js/ex6.js"></script>
       <script src="/assets/js/ex5.js"></script> -->
-      <script src="/assets/js/settings.js"></script>
-    
-    
+    <script src="/assets/js/settings.js"></script>
   </body>
 </html>
